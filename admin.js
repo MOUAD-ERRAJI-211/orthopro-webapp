@@ -174,7 +174,7 @@ function showNotification(message, type = 'info') {
 // Get API base URL
 function getAPIBaseUrl() {
     // Backend server address, adjust based on environment
-    return 'http://localhost:8081';
+    return 'https://mouad-erraji-211-orthopro-api.hf.space';
 }
 
 // Get app base URL

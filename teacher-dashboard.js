@@ -63,7 +63,7 @@ function openModelViewer(modelId) {
     showToast('Chargement du modèle...', 'info');
     
     // Fetch model details first
-    fetch(`http://localhost:8081/api/models/${modelId}`, {
+    fetch(`https://mouad-erraji-211-orthopro-api.hf.space/api/models/${modelId}`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${token || ''}`
@@ -144,7 +144,7 @@ function loadMyModels() {
     console.log('Loading models with token:', token);
     
     // Fetch user's models from API
-    fetch('http://localhost:8081/api/models/my-models', {
+    fetch('https://mouad-erraji-211-orthopro-api.hf.space/api/models/my-models', {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${token}`
@@ -236,7 +236,7 @@ function checkAuthentication() {
     }
     
     // Test the token with a quick API call
-    fetch('http://localhost:8081/api/teachers/current', {
+    fetch('https://mouad-erraji-211-orthopro-api.hf.space/api/teachers/current', {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${token}`
@@ -472,7 +472,7 @@ function uploadModel() {
     };
     
     // Send API request
-    fetch('http://localhost:8081/api/models', {
+    fetch('https://mouad-erraji-211-orthopro-api.hf.space/api/models', {
         method: 'POST',
         headers: headers,
         body: formData
@@ -559,7 +559,7 @@ function loadPublicModels() {
     `;
     
     // Fetch public models from API (no auth required)
-    fetch('http://localhost:8081/api/models/public')
+    fetch('https://mouad-erraji-211-orthopro-api.hf.space/api/models/public')
     .then(response => {
         if (!response.ok) {
             throw new Error('Erreur lors du chargement des modèles publics');
@@ -717,7 +717,7 @@ function createModelCard(model, isOwner, isPublicSection = false) {
 
 
     function checkModelState(modelId) {
-        fetch(`http://localhost:8081/api/models/debug/${modelId}`)
+        fetch(`https://mouad-erraji-211-orthopro-api.hf.space/api/models/debug/${modelId}`)
             .then(response => response.json())
             .then(data => {
                 console.log('Model state check:', data);
@@ -744,7 +744,7 @@ function toggleModelVisibility(modelId, makePublic) {
     
     // Log the request we're about to send
     console.log('Sending request to update model visibility:', {
-        url: `http://localhost:8081/api/models/${modelId}`,
+        url: `https://mouad-erraji-211-orthopro-api.hf.space/api/models/${modelId}`,
         method: 'PUT',
         headers: {
             'Authorization': 'Bearer [TOKEN]',
@@ -756,7 +756,7 @@ function toggleModelVisibility(modelId, makePublic) {
     });
     
     // Send API request to update the model
-    fetch(`http://localhost:8081/api/models/${modelId}`, {
+    fetch(`https://mouad-erraji-211-orthopro-api.hf.space/api/models/${modelId}`, {
         method: 'PUT',
         headers: {
             'Authorization': `Bearer ${authToken}`,
@@ -932,7 +932,7 @@ function deleteModel(modelId) {
     showToast('Suppression du modèle...', 'info');
     
     // Send API request to delete the model
-    fetch(`http://localhost:8081/api/models/${modelId}`, {
+    fetch(`https://mouad-erraji-211-orthopro-api.hf.space/api/models/${modelId}`, {
         method: 'DELETE',
         headers: {
             'Authorization': `Bearer ${authToken}`
@@ -996,7 +996,7 @@ function downloadModel(modelId) {
     showToast('Préparation du téléchargement...', 'info');
     
     // Construct the download URL
-    const downloadUrl = `http://localhost:8081/api/models/download/${modelId}`;
+    const downloadUrl = `https://mouad-erraji-211-orthopro-api.hf.space/api/models/download/${modelId}`;
     
     // For private models, we need to include the auth token
     if (authToken) {
@@ -1691,7 +1691,7 @@ function loadModel(modelId) {
     showToast('Chargement du modèle...', 'info');
     
     // Construct the download URL - we'll use this to load the STL
-    const downloadUrl = `http://localhost:8081/api/models/download/${modelId}`;
+    const downloadUrl = `https://mouad-erraji-211-orthopro-api.hf.space/api/models/download/${modelId}`;
     console.log("Using download URL:", downloadUrl);
     
     // Initialize Three.js scene if not already done
@@ -3035,7 +3035,7 @@ function uploadDocument() {
     submitBtn.disabled = true;
     
     // Send API request
-    fetch('http://localhost:8081/api/documents', {
+    fetch('https://mouad-erraji-211-orthopro-api.hf.space/api/documents', {
         method: 'POST',
         body: formData
     })
@@ -3111,7 +3111,7 @@ function uploadTest() {
     submitBtn.disabled = true;
     
     // Send API request
-    fetch('http://localhost:8081/api/tests', {
+    fetch('https://mouad-erraji-211-orthopro-api.hf.space/api/tests', {
         method: 'POST',
         body: formData
     })
@@ -3292,7 +3292,7 @@ function loadDocumentsFromDatabase() {
     ];
     
     // Fetch documents from API
-    fetch('http://localhost:8081/api/documents')
+    fetch('https://mouad-erraji-211-orthopro-api.hf.space/api/documents')
         .then(response => {
             if (!response.ok) {
                 throw new Error('Erreur lors du chargement des documents');
@@ -3460,7 +3460,7 @@ function loadTestsFromDatabase() {
     ];
     
     // Fetch tests from API
-    fetch('http://localhost:8081/api/tests')
+    fetch('https://mouad-erraji-211-orthopro-api.hf.space/api/tests')
         .then(response => {
             if (!response.ok) {
                 throw new Error('Erreur lors du chargement des tests');
@@ -3581,7 +3581,7 @@ function getIconForFileType(fileType) {
 function viewDocument(id) {
     // In a real application, this would open the document in a viewer
     // For now, we'll simulate by downloading the document
-    window.open(`http://localhost:8081/api/documents/download/${id}`, '_blank');
+    window.open(`https://mouad-erraji-211-orthopro-api.hf.space/api/documents/download/${id}`, '_blank');
 }
 
 /**
@@ -3589,13 +3589,13 @@ function viewDocument(id) {
  * @param {number} id - The document ID
  */
 function downloadDocument(id) {
-    fetch(`http://localhost:8081/api/documents/download/${id}`)
+    fetch(`https://mouad-erraji-211-orthopro-api.hf.space/api/documents/download/${id}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Erreur lors du téléchargement');
             }
             // Trigger download
-            window.location.href = `http://localhost:8081/api/documents/download/${id}`;
+            window.location.href = `https://mouad-erraji-211-orthopro-api.hf.space/api/documents/download/${id}`;
             showToast('Téléchargement démarré', 'success');
         })
         .catch(error => {
@@ -3609,7 +3609,7 @@ function downloadDocument(id) {
  */
 function startTest(id) {
     // Open test in a new tab
-    window.open(`http://localhost:8081/api/tests/start/${id}`, '_blank');
+    window.open(`https://mouad-erraji-211-orthopro-api.hf.space/api/tests/start/${id}`, '_blank');
 }
 
 /**
@@ -3637,7 +3637,7 @@ function confirmDeleteDocument(id, title) {
  * @param {number} id - The document ID
  */
 function deleteDocument(id) {
-    fetch(`http://localhost:8081/api/documents/${id}`, {
+    fetch(`https://mouad-erraji-211-orthopro-api.hf.space/api/documents/${id}`, {
         method: 'DELETE'
     })
         .then(response => {
@@ -3671,7 +3671,7 @@ function confirmDeleteTest(id, title) {
  * @param {number} id - The test ID
  */
 function deleteTest(id) {
-    fetch(`http://localhost:8081/api/tests/${id}`, {
+    fetch(`https://mouad-erraji-211-orthopro-api.hf.space/api/tests/${id}`, {
         method: 'DELETE'
     })
         .then(response => {

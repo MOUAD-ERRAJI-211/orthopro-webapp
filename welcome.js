@@ -520,7 +520,7 @@ function redirectToDashboard(role) {
 // Obtenir l'URL de base pour l'API backend
 function getAPIBaseUrl() {
     // Adresse du serveur backend, à ajuster selon l'environnement
-    return 'http://localhost:8081';
+    return 'https://mouad-erraji-211-orthopro-api.hf.space';
 }
 
 // Obtenir l'URL de base pour l'application frontend

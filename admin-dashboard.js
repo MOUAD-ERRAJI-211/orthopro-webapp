@@ -708,7 +708,7 @@ function getAuthToken() {
 // Get API base URL
 function getAPIBaseUrl() {
     // Backend server address, adjust based on environment
-    return 'http://localhost:8081';
+    return 'https://mouad-erraji-211-orthopro-api.hf.space';
 }
 
 // Show notification to user

@@ -392,7 +392,7 @@ function showNotification(message, type = 'info') {
 // Get API base URL
 function getAPIBaseUrl() {
     // Backend server address, adjust based on environment
-    return 'http://localhost:8081';
+    return 'https://mouad-erraji-211-orthopro-api.hf.space';
 }
 
 // Get app base URL
@@ -547,7 +547,7 @@ function handleLogin(event) {
     if (typeof getAPIBaseUrl === 'function') {
         apiUrl = `${getAPIBaseUrl()}/api/teachers/login`;
     } else {
-        apiUrl = 'http://localhost:8081/api/teachers/login';
+        apiUrl = 'https://mouad-erraji-211-orthopro-api.hf.space/api/teachers/login';
     }
     
     console.log('Attempting login to:', apiUrl);

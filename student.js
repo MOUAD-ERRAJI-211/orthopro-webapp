@@ -170,7 +170,7 @@ function loadTests() {
  */
 function getApiBaseUrl() {
     // En développement, utilisez le port 8081 (port Spring Boot)
-    return 'http://localhost:8081';
+    return 'https://mouad-erraji-211-orthopro-api.hf.space';
 }
 
 /**
