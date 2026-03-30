@@ -1,0 +1,2033 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OrthoPro+ | Espace Étudiant</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            /* Base variables */
+            --font-primary: 'Montserrat', sans-serif;
+            --font-secondary: 'Nunito', sans-serif;
+            --bg-color: #f8f9fa;
+            --bg-color-light: #ffffff;
+            --bg-color-dark: #e9ecef;
+            --text-color: #212529;
+            --text-color-light: #6c757d;
+            --primary-color: #4361ee;
+            --primary-color-dark: #3a56d4;
+            --shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 12px 24px rgba(0, 0, 0, 0.15);
+            --border-radius-sm: 4px;
+            --border-radius-md: 8px;
+            --border-radius-lg: 12px;
+            --transition-fast: 0.2s ease-in-out;
+            --transition-normal: 0.3s ease-in-out;
+            
+            /* Student section variables */
+            --student-primary: #4CAF50;
+            --student-primary-dark: #388E3C;
+            --student-primary-light: #C8E6C9;
+            --student-accent: #8BC34A;
+            --test-primary: #FF9800;
+            --test-primary-dark: #F57C00;
+            --test-primary-light: #FFE0B2;
+        }
+
+        /* General Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .page-container {
+            position: relative;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Background Shapes */
+        .background-shapes {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.05;
+        }
+
+        .circle {
+            border-radius: 50%;
+        }
+
+        .shape-1 {
+            width: 300px;
+            height: 300px;
+            background-color: var(--student-primary);
+            top: -150px;
+            left: -150px;
+        }
+
+        .square {
+            transform: rotate(45deg);
+        }
+
+        .shape-2 {
+            width: 200px;
+            height: 200px;
+            background-color: var(--student-accent);
+            top: 50%;
+            right: -100px;
+        }
+
+        .triangle {
+            width: 0;
+            height: 0;
+            border-left: 200px solid transparent;
+            border-right: 200px solid transparent;
+            border-bottom: 346px solid var(--test-primary);
+        }
+
+        .shape-3 {
+            bottom: -200px;
+            left: 20%;
+        }
+
+        .shape-4 {
+            width: 250px;
+            height: 250px;
+            background-color: var(--test-primary);
+            bottom: 15%;
+            right: 10%;
+        }
+
+        /* Header Styles */
+        .site-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 3rem;
+            background-color: white;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            z-index: 10;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-text span {
+            line-height: 1.2;
+        }
+
+        .logo-text span:first-child {
+            font-size: 1.5rem;
+            font-weight: 400;
+        }
+
+        .logo-text .tagline {
+            font-size: 0.8rem;
+            color: var(--text-color-light);
+            font-family: var(--font-secondary);
+        }
+
+        .top-nav {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius-md);
+            transition: all var(--transition-fast);
+        }
+
+        .nav-link:hover {
+            color: var(--student-primary);
+            background-color: var(--bg-color-light);
+        }
+
+        .highlight {
+            color: white;
+            background-color: var(--student-primary);
+        }
+
+        .highlight:hover {
+            background-color: var(--student-primary-dark);
+            color: white;
+        }
+
+        /* Text Gradient */
+        .text-gradient {
+            background: linear-gradient(90deg, var(--student-primary), var(--student-accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .teacher-link {
+            background: linear-gradient(90deg, var(--primary-color), var(--primary-color-dark)) !important;
+        }
+
+        /* Student Hero */
+        .student-hero {
+            text-align: center;
+            padding: 6rem 2rem;
+            position: relative;
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(139, 195, 74, 0.1));
+            margin-bottom: 2rem;
+        }
+
+        .student-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('/api/placeholder/1920/600');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.05;
+            z-index: -1;
+        }
+
+        .student-hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .student-hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: var(--text-color-light);
+            margin-bottom: 2rem;
+            font-family: var(--font-secondary);
+            animation: fadeInUp 1s;
+        }
+
+        /* Section Headers */
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            font-size: 1.2rem;
+            color: var(--text-color-light);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Resource and Test Sections - IMPROVED */
+        .resource-section, .tests-section {
+            padding: 5rem 3rem;
+            border-radius: var(--border-radius-lg);
+            margin: 0 2rem 2rem 2rem;
+            box-shadow: var(--shadow-md);
+            background-color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .resource-section::before, .tests-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            z-index: 1;
+        }
+
+        .resource-section::before {
+            background: linear-gradient(90deg, var(--student-primary), var(--student-accent));
+        }
+
+        .tests-section::before {
+            background: linear-gradient(90deg, var(--test-primary), var(--test-primary-dark));
+        }
+
+        .tests-section .text-gradient {
+            background: linear-gradient(90deg, var(--test-primary), var(--test-primary-dark));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* Filter Controls - IMPROVED */
+        .resource-filter {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding: 1.5rem;
+            background-color: var(--bg-color-light);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .filter-group label {
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .filter-group select {
+            padding: 0.8rem 1.5rem;
+            border: 1px solid var(--bg-color-dark);
+            border-radius: var(--border-radius-md);
+            font-family: var(--font-primary);
+            background-color: white;
+            min-width: 180px;
+            cursor: pointer;
+            transition: border-color var(--transition-fast);
+        }
+
+        .filter-group select:focus {
+            outline: none;
+            border-color: var(--student-primary);
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+        }
+
+        .search-group {
+            display: flex;
+            align-items: center;
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .search-group input {
+            padding: 0.8rem 1.5rem;
+            border: 1px solid var(--bg-color-dark);
+            border-radius: var(--border-radius-md) 0 0 var(--border-radius-md);
+            font-family: var(--font-primary);
+            flex: 1;
+            min-width: 220px;
+            transition: border-color var(--transition-fast);
+        }
+
+        .search-group input:focus {
+            outline: none;
+            border-color: var(--student-primary);
+        }
+
+        .search-group button {
+            padding: 0.8rem 1.5rem;
+            background-color: var(--student-primary);
+            color: white;
+            border: none;
+            border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0;
+            cursor: pointer;
+            transition: background-color var(--transition-fast);
+        }
+
+        .search-group button:hover {
+            background-color: var(--student-primary-dark);
+        }
+
+        .tests-section .search-group button {
+            background-color: var(--test-primary);
+        }
+
+        .tests-section .search-group button:hover {
+            background-color: var(--test-primary-dark);
+        }
+
+        /* Resource Grid - IMPROVED */
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .loading-message {
+            grid-column: 1 / -1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
+            color: var(--text-color-light);
+        }
+
+        .loading-message i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--student-primary);
+        }
+
+        .tests-section .loading-message i {
+            color: var(--test-primary);
+        }
+
+        /* Resource Card - COMPLETELY REDESIGNED */
+        .resource-card {
+            background-color: white;
+            border-radius: var(--border-radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            position: relative;
+            border: 1px solid var(--bg-color-dark);
+        }
+
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .resource-card-icon {
+            width: 100%;
+            height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .document-icon {
+            position: relative;
+            z-index: 2;
+        }
+
+        .resource-card-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0,0,0,0.1), rgba(0,0,0,0.2));
+            z-index: 1;
+        }
+
+        .pdf-bg {
+            background: linear-gradient(135deg, #F44336, #D32F2F);
+        }
+
+        .doc-bg {
+            background: linear-gradient(135deg, #2196F3, #1976D2);
+        }
+
+        .ppt-bg {
+            background: linear-gradient(135deg, #FF9800, #F57C00);
+        }
+
+        .beginner-bg {
+            background: linear-gradient(135deg, #4CAF50, #388E3C);
+        }
+
+        .intermediate-bg {
+            background: linear-gradient(135deg, #FF9800, #F57C00);
+        }
+        
+        .advanced-bg {
+            background: linear-gradient(135deg, #F44336, #D32F2F);
+        }
+
+        .resource-card-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.4rem 0.8rem;
+            border-radius: var(--border-radius-md);
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: white;
+            z-index: 3;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .resource-card-content {
+            padding: 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .resource-card-content h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            color: var(--text-color);
+        }
+
+        .resource-card-content p {
+            font-size: 0.95rem;
+            color: var(--text-color-light);
+            margin-bottom: 1.2rem;
+            line-height: 1.5;
+            flex: 1;
+        }
+
+        .resource-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-top: auto;
+            padding-top: 1rem;
+            border-top: 1px solid var(--bg-color-dark);
+            font-size: 0.85rem;
+            color: var(--text-color-light);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 5rem 3rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-color-dark));
+            color: white;
+            text-align: center;
+            margin: 2rem 0 0 0;
+        }
+
+        .cta-content {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .cta-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .cta-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-content .btn-cta {
+            background-color: white;
+            color: var(--primary-color);
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .cta-content .btn-cta:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Document popup - IMPROVED */
+        .document-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition-fast);
+            backdrop-filter: blur(5px);
+        }
+
+        .document-popup.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .popup-content {
+            background-color: white;
+            border-radius: var(--border-radius-lg);
+            width: 90%;
+            max-width: 900px;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: var(--shadow-xl);
+            animation: scaleIn 0.3s;
+        }
+
+        .popup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--bg-color-dark);
+            background-color: var(--bg-color-light);
+        }
+
+        .popup-header h3 {
+            font-size: 1.5rem;
+            color: var(--text-color);
+            margin: 0;
+        }
+
+        .popup-type-icon {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .popup-type-icon i {
+            font-size: 1.5rem;
+            padding: 0.8rem;
+            border-radius: 50%;
+            color: white;
+            width: 3rem;
+            height: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-popup {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-color-light);
+            cursor: pointer;
+            transition: color var(--transition-fast);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .close-popup:hover {
+            color: var(--text-color);
+            background-color: var(--bg-color-dark);
+        }
+
+        .popup-body {
+            padding: 1.5rem;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+
+        .popup-body iframe {
+            width: 100%;
+            height: 65vh;
+            border: none;
+        }
+
+        .popup-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--bg-color-dark);
+        }
+
+        .popup-info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-color-light);
+            font-size: 0.9rem;
+        }
+
+        .popup-footer {
+            padding: 1.5rem;
+            border-top: 1px solid var(--bg-color-dark);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--bg-color-light);
+        }
+
+        .popup-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: var(--border-radius-md);
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            transition: all var(--transition-fast);
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background-color: var(--student-primary);
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--student-primary-dark);
+            transform: translateY(-3px);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--text-color);
+            border: 1px solid var(--bg-color-dark);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--bg-color-dark);
+            transform: translateY(-3px);
+        }
+
+        /* Footer Styles */
+        .site-footer {
+            background-color: var(--bg-color-light);
+            color: var(--text-color);
+            padding-top: 3rem;
+            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 3rem 3rem;
+        }
+
+        .footer-brand {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .footer-brand p {
+            margin-top: 1rem;
+            color: var(--text-color-light);
+            font-size: 0.9rem;
+            max-width: 300px;
+        }
+
+        .footer-logo {
+            margin-bottom: 1rem;
+        }
+
+        .footer-links-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-links-group {
+            min-width: 150px;
+        }
+
+        .footer-links-group h4 {
+            font-size: 1.1rem;
+            margin-bottom: 1.2rem;
+            font-weight: 600;
+        }
+
+        .footer-links-group a {
+            display: block;
+            color: var(--text-color-light);
+            text-decoration: none;
+            margin-bottom: 0.8rem;
+            transition: color var(--transition-fast);
+        }
+
+        .footer-links-group a:hover {
+            color: var(--student-primary);
+        }
+
+        .footer-bottom {
+            padding: 1.5rem 3rem;
+            border-top: 1px solid var(--bg-color-dark);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-bottom p {
+            font-size: 0.9rem;
+            color: var(--text-color-light);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            color: var(--text-color-light);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--bg-color);
+            transition: all var(--transition-fast);
+        }
+
+        .social-links a:hover {
+            background-color: var(--student-primary);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        /* Animation */
+        @keyframes scaleIn {
+            0% {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* New animation for cards */
+        @keyframes pulseHighlight {
+            0% {
+                box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(76, 175, 80, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(76, 175, 80, 0);
+            }
+        }
+
+        /* Empty State */
+        .empty-state {
+            grid-column: 1 / -1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
+            text-align: center;
+            background-color: var(--bg-color-light);
+            border-radius: var(--border-radius-lg);
+            border: 2px dashed var(--bg-color-dark);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: var(--text-color-light);
+            margin-bottom: 1.5rem;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.8rem;
+            color: var(--text-color);
+        }
+
+        .empty-state p {
+            color: var(--text-color-light);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .student-hero h1 {
+                font-size: 2.8rem;
+            }
+            
+            .subtitle {
+                font-size: 1.3rem;
+            }
+            
+            .resource-filter {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .search-group {
+                width: 100%;
+                max-width: none;
+            }
+            
+            .search-group input {
+                flex: 1;
+            }
+
+            .resource-section, .tests-section {
+                margin: 0 1rem 2rem 1rem;
+                padding: 4rem 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .student-hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .student-hero,
+            .resource-section,
+            .tests-section,
+            .cta-section {
+                padding: 3rem 1.5rem;
+            }
+            
+            .section-header h2 {
+                font-size: 2rem;
+            }
+            
+            .cta-content h2 {
+                font-size: 2rem;
+            }
+            
+            .popup-content {
+                width: 95%;
+            }
+
+            .site-header {
+                padding: 1.5rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .top-nav {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .student-hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .filter-group {
+                width: 100%;
+            }
+            
+            .filter-group select {
+                flex: 1;
+            }
+            
+            .popup-header h3 {
+                font-size: 1.2rem;
+            }
+
+            .popup-type-icon i {
+                font-size: 1.2rem;
+                width: 2.5rem;
+                height: 2.5rem;
+            }
+
+            .popup-footer {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .popup-actions {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .resource-section, .tests-section {
+                margin: 0 0.5rem 1.5rem 0.5rem;
+                padding: 3rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <div class="background-shapes">
+            <div class="shape circle shape-1"></div>
+            <div class="shape square shape-2"></div>
+            <div class="shape triangle shape-3"></div>
+            <div class="shape circle shape-4"></div>
+        </div>
+        
+        <header class="site-header">
+            <div class="logo">
+                <svg width="60" height="60" viewBox="0 0 60 60">
+                    <circle cx="30" cy="30" r="25" fill="#4CAF50" fill-opacity="0.2"/>
+                    <path d="M18,30 Q30,12 42,30 T18,30" stroke="#4CAF50" stroke-width="3" fill="none"/>
+                    <circle cx="30" cy="30" r="6" fill="#4CAF50"/>
+                    <circle cx="30" cy="30" r="28" stroke="#4CAF50" stroke-width="1" stroke-dasharray="4 2" fill="none"/>
+                </svg>
+                <div class="logo-text">
+                    <span>Ortho<strong>Pro+</strong></span>
+                    <span class="tagline">Espace Étudiant</span>
+                </div>
+            </div>
+            
+            <nav class="top-nav">
+                <a href="welcome.html" class="nav-link">Accueil</a>
+                <a href="about.html" class="nav-link">À propos</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+                <a href="teacher.html" class="nav-link highlight teacher-link">Espace Enseignant</a>
+            </nav>
+        </header>
+        
+        <main class="main-content">
+            <section class="student-hero">
+                <div class="student-hero-content">
+                    <h1>Bienvenue dans l'<span class="text-gradient">Espace Étudiant</span></h1>
+                    <p class="subtitle">Ressources éducatives et tests d'évaluation pour la formation en orthoprothésie</p>
+                </div>
+            </section>
+            
+            <section class="resource-section" id="resources-section">
+                <div class="section-header">
+                    <h2>Ressources <span class="text-gradient">Éducatives</span></h2>
+                    <p>Consultez nos guides, documents et supports pédagogiques</p>
+                </div>
+                
+                <div class="resource-filter">
+                    <div class="filter-group">
+                        <label for="resource-category-filter">Catégorie:</label>
+                        <select id="resource-category-filter">
+                            <option value="all">Toutes les catégories</option>
+                            <option value="pdf">PDF</option>
+                            <option value="doc">Word</option>
+                            <option value="ppt">PowerPoint</option>
+                        </select>
+                    </div>
+                    
+                    <div class="search-group">
+                        <input type="text" id="resource-search" placeholder="Rechercher...">
+                        <button id="resource-search-btn">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="resource-grid" id="resource-grid">
+                    <!-- Exemples de cartes de ressources avec les nouveaux designs -->
+                    <div class="resource-card">
+                        <div class="resource-card-icon pdf-bg">
+                            <i class="fas fa-file-pdf document-icon"></i>
+                            <span class="resource-card-badge pdf">PDF</span>
+                        </div>
+                        <div class="resource-card-content">
+                            <h3>Guide d'anatomie du pied</h3>
+                            <p>Un guide complet sur l'anatomie du pied pour les étudiants en orthoprothésie.</p>
+                            <div class="resource-meta">
+                                <span class="meta-item"><i class="fas fa-calendar-alt"></i> 12 Mars 2025</span>
+                                <span class="meta-item"><i class="fas fa-eye"></i> 245</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <div class="resource-card-icon doc-bg">
+                            <i class="fas fa-file-word document-icon"></i>
+                            <span class="resource-card-badge doc">DOC</span>
+                        </div>
+                        <div class="resource-card-content">
+                            <h3>Protocole de mesure</h3>
+                            <p>Document détaillant les protocoles standardisés pour la prise de mesures orthopédiques.</p>
+                            <div class="resource-meta">
+                                <span class="meta-item"><i class="fas fa-calendar-alt"></i> 5 Avril 2025</span>
+                                <span class="meta-item"><i class="fas fa-eye"></i> 187</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <div class="resource-card-icon ppt-bg">
+                            <i class="fas fa-file-powerpoint document-icon"></i>
+                            <span class="resource-card-badge ppt">PPT</span>
+                        </div>
+                        <div class="resource-card-content">
+                            <h3>Matériaux innovants</h3>
+                            <p>Présentation sur les nouveaux matériaux utilisés dans la conception d'orthèses et de prothèses.</p>
+                            <div class="resource-meta">
+                                <span class="meta-item"><i class="fas fa-calendar-alt"></i> 22 Avril 2025</span>
+                                <span class="meta-item"><i class="fas fa-eye"></i> 134</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <div class="resource-card-icon pdf-bg">
+                            <i class="fas fa-file-pdf document-icon"></i>
+                            <span class="resource-card-badge pdf">PDF</span>
+                        </div>
+                        <div class="resource-card-content">
+                            <h3>Cas cliniques</h3>
+                            <p>Recueil de cas cliniques avec solutions pour développer votre approche thérapeutique.</p>
+                            <div class="resource-meta">
+                                <span class="meta-item"><i class="fas fa-calendar-alt"></i> 30 Mars 2025</span>
+                                <span class="meta-item"><i class="fas fa-eye"></i> 210</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="tests-section" id="tests-section">
+                <div class="section-header">
+                    <h2>Tests <span class="text-gradient">d'Évaluation</span></h2>
+                    <p>Préparez-vous avec nos tests et évaluations</p>
+                </div>
+                
+                <div class="resource-filter">
+                    <div class="filter-group">
+                        <label for="test-category-filter">Niveau:</label>
+                        <select id="test-category-filter">
+                            <option value="all">Tous les niveaux</option>
+                            <option value="beginner">Débutant</option>
+                            <option value="intermediate">Intermédiaire</option>
+                            <option value="advanced">Avancé</option>
+                        </select>
+                    </div>
+                    
+                    <div class="search-group">
+                        <input type="text" id="test-search" placeholder="Rechercher...">
+                        <button id="test-search-btn">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="resource-grid" id="test-grid">
+                    <!-- Exemples de cartes de tests avec les nouveaux designs -->
+                    <div class="resource-card">
+                        <div class="resource-card-icon beginner-bg">
+                            <i class="fas fa-tasks document-icon"></i>
+                            <span class="resource-card-badge beginner">Débutant</span>
+                        </div>
+                        <div class="resource-card-content">
+                            <h3>Principes fondamentaux</h3>
+                            <p>Test sur les connaissances de base en orthoprothésie et terminologie médicale.</p>
+                            <div class="resource-meta">
+                                <span class="meta-item"><i class="fas fa-clock"></i> 30 min</span>
+                                <span class="meta-item"><i class="fas fa-clipboard-check"></i> 20 questions</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <div class="resource-card-icon intermediate-bg">
+                            <i class="fas fa-tasks document-icon"></i>
+                            <span class="resource-card-badge intermediate">Intermédiaire</span>
+                        </div>
+                        <div class="resource-card-content">
+                            <h3>Analyse de la marche</h3>
+                            <p>Évaluation des connaissances sur le cycle de la marche et pathologies associées.</p>
+                            <div class="resource-meta">
+                                <span class="meta-item"><i class="fas fa-clock"></i> 45 min</span>
+                                <span class="meta-item"><i class="fas fa-clipboard-check"></i> 25 questions</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <div class="resource-card-icon advanced-bg">
+                            <i class="fas fa-tasks document-icon"></i>
+                            <span class="resource-card-badge advanced">Avancé</span>
+                        </div>
+                        <div class="resource-card-content">
+                            <h3>Conception de prothèses</h3>
+                            <p>Test avancé sur les techniques de conception et d'ajustement des prothèses.</p>
+                            <div class="resource-meta">
+                                <span class="meta-item"><i class="fas fa-clock"></i> 60 min</span>
+                                <span class="meta-item"><i class="fas fa-clipboard-check"></i> 30 questions</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <div class="resource-card-icon intermediate-bg">
+                            <i class="fas fa-tasks document-icon"></i>
+                            <span class="resource-card-badge intermediate">Intermédiaire</span>
+                        </div>
+                        <div class="resource-card-content">
+                            <h3>Pathologies du membre inférieur</h3>
+                            <p>Évaluation sur les pathologies courantes et leur prise en charge orthopédique.</p>
+                            <div class="resource-meta">
+                                <span class="meta-item"><i class="fas fa-clock"></i> 45 min</span>
+                                <span class="meta-item"><i class="fas fa-clipboard-check"></i> 25 questions</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="cta-section">
+                <div class="cta-content">
+                    <h2>Vous êtes un enseignant en orthoprothésie?</h2>
+                    <p>Accédez à notre bibliothèque complète et à des outils pédagogiques avancés.</p>
+                    <a href="teacher.html" class="btn btn-primary btn-cta">
+                        <span>Espace Enseignant</span>
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+                </div>
+            </section>
+        </main>
+        
+        <!-- Popup amélioré pour afficher les documents et tests -->
+        <div class="document-popup" id="document-popup">
+            <div class="popup-content">
+                <div class="popup-header">
+                    <div class="popup-type-icon">
+                        <i class="fas fa-file-pdf pdf-bg"></i>
+                        <h3 id="popup-title">Guide d'anatomie du pied</h3>
+                    </div>
+                    <button class="close-popup" id="close-popup">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="popup-body" id="popup-body">
+                    <div class="popup-info">
+                        <div class="popup-info-item">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>Date de publication: 12 Mars 2025</span>
+                        </div>
+                        <div class="popup-info-item">
+                            <i class="fas fa-user"></i>
+                            <span>Auteur: Dr. Sophie Martin</span>
+                        </div>
+                        <div class="popup-info-item">
+                            <i class="fas fa-file-alt"></i>
+                            <span>Format: PDF, 24 pages</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Aperçu du document -->
+                    <iframe src="/api/placeholder/800/600" title="Aperçu du document"></iframe>
+                </div>
+                <div class="popup-footer">
+                    <div class="popup-info-item">
+                        <i class="fas fa-eye"></i>
+                        <span>245 vues</span>
+                    </div>
+                    <div class="popup-actions">
+                        <a href="#" id="print-link" class="btn btn-outline">
+                            <i class="fas fa-print"></i> Imprimer
+                        </a>
+                        <a href="#" id="download-link" class="btn btn-primary">
+                            <i class="fas fa-download"></i> Télécharger
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer class="site-footer">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo footer-logo">
+                        <svg width="40" height="40" viewBox="0 0 60 60">
+                            <circle cx="30" cy="30" r="25" fill="#4CAF50" fill-opacity="0.2"/>
+                            <path d="M18,30 Q30,12 42,30 T18,30" stroke="#4CAF50" stroke-width="3" fill="none"/>
+                            <circle cx="30" cy="30" r="6" fill="#4CAF50"/>
+                        </svg>
+                        <span>Ortho<strong>Pro+</strong></span>
+                    </div>
+                    <p>La référence en orthoprothésie médicale depuis 2020.</p>
+                </div>
+                
+                <div class="footer-links-container">
+                    <div class="footer-links-group">
+                        <h4>Plateforme</h4>
+                        <a href="welcome.html">Accueil</a>
+                        <a href="about.html">À propos</a>
+                        <a href="#">Contact</a>
+                        <a href="#">FAQ</a>
+                    </div>
+                    
+                    <div class="footer-links-group">
+                        <h4>Accès</h4>
+                        <a href="student.html">Espace Étudiant</a>
+                        <a href="teacher.html">Espace Enseignant</a>
+                        <a href="admin.html">Espace Administrateur</a>
+                    </div>
+                    
+                    <div class="footer-links-group">
+                        <h4>Légal</h4>
+                        <a href="#">Confidentialité</a>
+                        <a href="#">Mentions légales</a>
+                        <a href="#">CGU</a>
+                        <a href="#">RGPD</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 OrthoPro+ - Tous droits réservés</p>
+                <div class="social-links">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialiser les fonctionnalités de la page
+            initResourcesAndTests();
+            initPopup();
+        });
+
+        /**
+         * Initialise le chargement des ressources et tests
+         */
+        function initResourcesAndTests() {
+            // Charger les ressources depuis l'API
+            try {
+                loadResources();
+            } catch (error) {
+                console.error("Erreur lors du chargement des ressources:", error);
+                showErrorMessage('resource-grid', "Impossible de charger les ressources. Vérifiez que le serveur est en cours d'exécution.");
+            }
+            
+            // Charger les tests depuis l'API
+            try {
+                loadTests();
+            } catch (error) {
+                console.error("Erreur lors du chargement des tests:", error);
+                showErrorMessage('test-grid', "Impossible de charger les tests. Vérifiez que le serveur est en cours d'exécution.");
+            }
+            
+            // Initialiser les filtres
+            initResourceFilter();
+            initTestFilter();
+        }
+
+        /**
+         * Affiche un message d'erreur dans un conteneur
+         * @param {string} containerId - ID du conteneur
+         * @param {string} message - Message d'erreur
+         */
+        function showErrorMessage(containerId, message) {
+            const container = document.getElementById(containerId);
+            if (container) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>Erreur</h3>
+                        <p>${message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        /**
+         * Charge les ressources depuis l'API avec gestion des erreurs améliorée
+         */
+        function loadResources() {
+            const resourceGrid = document.getElementById('resource-grid');
+            if (!resourceGrid) {
+                console.error("Élément 'resource-grid' non trouvé");
+                return;
+            }
+            
+            resourceGrid.innerHTML = '<div class="loading-message"><i class="fas fa-spinner fa-spin"></i><p>Chargement des ressources...</p></div>';
+            
+            // URL du serveur
+            const baseUrl = getApiBaseUrl();
+            
+            // Appel à l'API pour récupérer les documents
+            fetch(`${baseUrl}/api/documents/list-files`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Erreur HTTP: ${response.status} ${response.statusText}`);
+                    }
+                    return response.json();
+                })
+                .then(resources => {
+                    // Effacer le message de chargement
+                    resourceGrid.innerHTML = '';
+                    
+                    if (!resources || resources.length === 0) {
+                        resourceGrid.innerHTML = `
+                            <div class="empty-state">
+                                <i class="fas fa-folder-open"></i>
+                                <h3>Aucune ressource disponible</h3>
+                                <p>Aucune ressource pédagogique n'est disponible pour le moment.</p>
+                            </div>
+                        `;
+                        return;
+                    }
+                    
+                    // Ajouter les ressources au grid
+                    resources.forEach(resource => {
+                        const card = createResourceCard(resource);
+                        resourceGrid.appendChild(card);
+                    });
+                })
+                .catch(error => {
+                    console.error('Erreur lors du chargement des ressources:', error);
+                    
+                    if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+                        resourceGrid.innerHTML = `
+                            <div class="empty-state">
+                                <i class="fas fa-wifi-slash"></i>
+                                <h3>Erreur de connexion</h3>
+                                <p>Impossible de se connecter au serveur. Vérifiez qu'il est en cours d'exécution sur ${baseUrl}</p>
+                            </div>
+                        `;
+                    } else {
+                        resourceGrid.innerHTML = `
+                            <div class="empty-state">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <h3>Erreur</h3>
+                                <p>Erreur lors du chargement des ressources: ${error.message}</p>
+                            </div>
+                        `;
+                    }
+                });
+        }
+
+        /**
+         * Charge les tests depuis l'API avec gestion des erreurs améliorée
+         */
+        function loadTests() {
+            const testGrid = document.getElementById('test-grid');
+            if (!testGrid) {
+                console.error("Élément 'test-grid' non trouvé");
+                return;
+            }
+            
+            testGrid.innerHTML = '<div class="loading-message"><i class="fas fa-spinner fa-spin"></i><p>Chargement des tests...</p></div>';
+            
+            // URL du serveur
+            const baseUrl = getApiBaseUrl();
+            
+            // Appel à l'API pour récupérer les tests
+            fetch(`${baseUrl}/api/tests/list-files`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Erreur HTTP: ${response.status} ${response.statusText}`);
+                    }
+                    return response.json();
+                })
+                .then(tests => {
+                    // Effacer le message de chargement
+                    testGrid.innerHTML = '';
+                    
+                    if (!tests || tests.length === 0) {
+                        testGrid.innerHTML = `
+                            <div class="empty-state">
+                                <i class="fas fa-clipboard-list"></i>
+                                <h3>Aucun test disponible</h3>
+                                <p>Aucun test d'évaluation n'est disponible pour le moment.</p>
+                            </div>
+                        `;
+                        return;
+                    }
+                    
+                    // Ajouter les tests au grid
+                    tests.forEach(test => {
+                        const card = createTestCard(test);
+                        testGrid.appendChild(card);
+                    });
+                })
+                .catch(error => {
+                    console.error('Erreur lors du chargement des tests:', error);
+                    
+                    if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+                        testGrid.innerHTML = `
+                            <div class="empty-state">
+                                <i class="fas fa-wifi-slash"></i>
+                                <h3>Erreur de connexion</h3>
+                                <p>Impossible de se connecter au serveur. Vérifiez qu'il est en cours d'exécution sur ${baseUrl}</p>
+                            </div>
+                        `;
+                    } else {
+                        testGrid.innerHTML = `
+                            <div class="empty-state">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <h3>Erreur</h3>
+                                <p>Erreur lors du chargement des tests: ${error.message}</p>
+                            </div>
+                        `;
+                    }
+                });
+        }
+
+        /**
+         * Retourne l'URL de base de l'API
+         * @returns {string} URL de base
+         */
+        function getApiBaseUrl() {
+            // En développement, utilisez le port 8081 (port Spring Boot)
+            return 'http://localhost:8081';
+        }
+
+        /**
+         * Crée une carte pour une ressource éducative avec le nouveau design
+         * @param {Object} resource - Informations sur la ressource
+         * @returns {HTMLElement} - Élément DOM de la carte
+         */
+        function createResourceCard(resource) {
+            const card = document.createElement('div');
+            card.className = 'resource-card';
+            card.dataset.type = resource.type;
+            
+            // Déterminer la classe de fond et l'icône en fonction du type de fichier
+            let bgClass = 'pdf-bg';
+            let iconClass = 'fa-file-pdf';
+            let fileType = resource.type.toLowerCase();
+            
+            if (fileType === 'pdf') {
+                bgClass = 'pdf-bg';
+                iconClass = 'fa-file-pdf';
+            } else if (fileType === 'doc' || fileType === 'docx') {
+                bgClass = 'doc-bg';
+                iconClass = 'fa-file-word';
+                fileType = 'doc'; // Normaliser pour l'affichage
+            } else if (fileType === 'ppt' || fileType === 'pptx') {
+                bgClass = 'ppt-bg';
+                iconClass = 'fa-file-powerpoint';
+                fileType = 'ppt'; // Normaliser pour l'affichage
+            } else {
+                bgClass = 'pdf-bg'; // Par défaut
+                iconClass = 'fa-file-alt';
+            }
+            
+            // Extraire le type pour l'affichage
+            let displayType = fileType.toUpperCase();
+            
+            // Formater la date si disponible
+            let dateDisplay = '';
+            if (resource.lastModified) {
+                const date = new Date(resource.lastModified);
+                dateDisplay = date.toLocaleDateString();
+            }
+            
+            card.innerHTML = `
+                <div class="resource-card-icon ${bgClass}">
+                    <i class="fas ${iconClass} document-icon"></i>
+                    <span class="resource-card-badge ${fileType}">${displayType}</span>
+                </div>
+                <div class="resource-card-content">
+                    <h3>${resource.title}</h3>
+                    <p>${resource.description || `Document ${displayType}`}</p>
+                    <div class="resource-meta">
+                        <span class="meta-item"><i class="fas fa-calendar-alt"></i> ${dateDisplay || 'N/A'}</span>
+                        <span class="meta-item"><i class="fas fa-file-alt"></i> ${resource.size || 'N/A'}</span>
+                    </div>
+                </div>
+            `;
+            
+            // Ajouter un événement de clic pour ouvrir le popup
+            card.addEventListener('click', () => {
+                openDocumentPopup({
+                    title: resource.title,
+                    type: fileType,
+                    description: resource.description || `Document ${displayType}`,
+                    fileSize: resource.size,
+                    path: resource.relativePath,
+                    date: dateDisplay,
+                    isResource: true
+                });
+            });
+            
+            return card;
+        }
+
+        /**
+         * Crée une carte pour un test d'évaluation avec le nouveau design
+         * @param {Object} test - Informations sur le test
+         * @returns {HTMLElement} - Élément DOM de la carte
+         */
+        function createTestCard(test) {
+            const card = document.createElement('div');
+            card.className = 'resource-card';
+            card.dataset.level = test.level || 'beginner';
+            
+            let levelText = '';
+            let bgClass = '';
+            
+            switch (test.level) {
+                case 'beginner':
+                    levelText = 'Débutant';
+                    bgClass = 'beginner-bg';
+                    break;
+                case 'intermediate':
+                    levelText = 'Intermédiaire';
+                    bgClass = 'intermediate-bg';
+                    break;
+                case 'advanced':
+                    levelText = 'Avancé';
+                    bgClass = 'advanced-bg';
+                    break;
+                default:
+                    levelText = 'Débutant';
+                    bgClass = 'beginner-bg';
+            }
+            
+            // Formater la date si disponible
+            let dateDisplay = '';
+            if (test.lastModified) {
+                const date = new Date(test.lastModified);
+                dateDisplay = date.toLocaleDateString();
+            }
+            
+            card.innerHTML = `
+                <div class="resource-card-icon ${bgClass}">
+                    <i class="fas fa-tasks document-icon"></i>
+                    <span class="resource-card-badge ${test.level}">${levelText}</span>
+                </div>
+                <div class="resource-card-content">
+                    <h3>${test.title}</h3>
+                    <p>${test.description || `Test d'évaluation - Niveau ${levelText}`}</p>
+                    <div class="resource-meta">
+                        <span class="meta-item"><i class="fas fa-clock"></i> ${test.duration || '30 min'}</span>
+                        <span class="meta-item"><i class="fas fa-question-circle"></i> ${test.questions || '15'} questions</span>
+                    </div>
+                </div>
+            `;
+            
+            // Ajouter un événement de clic pour ouvrir le popup
+            card.addEventListener('click', () => {
+                openDocumentPopup({
+                    title: test.title,
+                    level: test.level,
+                    levelText: levelText,
+                    description: test.description || `Test d'évaluation - Niveau ${levelText}`,
+                    duration: test.duration || '30 min',
+                    questions: test.questions || '15',
+                    path: test.relativePath,
+                    date: dateDisplay,
+                    isResource: false
+                });
+            });
+            
+            return card;
+        }
+
+        /**
+         * Initialise la fonctionnalité de filtre pour les ressources
+         */
+        function initResourceFilter() {
+            const categoryFilter = document.getElementById('resource-category-filter');
+            const searchInput = document.getElementById('resource-search');
+            const searchBtn = document.getElementById('resource-search-btn');
+            
+            if (!categoryFilter || !searchInput || !searchBtn) {
+                console.log("Éléments de filtrage des ressources non trouvés");
+                return;
+            }
+            
+            // Fonction de filtrage
+            function filterResources() {
+                const typeValue = categoryFilter.value;
+                const searchValue = searchInput.value.toLowerCase().trim();
+                const resourceCards = document.querySelectorAll('#resource-grid .resource-card');
+                let matchCount = 0;
+                
+                resourceCards.forEach(card => {
+                    const cardType = card.dataset.type;
+                    const typeMatch = typeValue === 'all' || 
+                        (typeValue === 'pdf' && cardType === 'pdf') ||
+                        (typeValue === 'doc' && (cardType === 'doc' || cardType === 'docx')) ||
+                        (typeValue === 'ppt' && (cardType === 'ppt' || cardType === 'pptx'));
+                    
+                    const cardTitle = card.querySelector('h3').textContent.toLowerCase();
+                    const cardDescription = card.querySelector('p').textContent.toLowerCase();
+                    const searchMatch = searchValue === '' || 
+                        cardTitle.includes(searchValue) || 
+                        cardDescription.includes(searchValue);
+                    
+                    if (typeMatch && searchMatch) {
+                        card.style.display = 'block';
+                        matchCount++;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+                
+                // Afficher un message si aucun résultat n'est trouvé
+                const emptyStateElement = document.querySelector('#resource-grid .empty-state');
+                
+                if (matchCount === 0 && resourceCards.length > 0) {
+                    if (!emptyStateElement) {
+                        const emptyState = document.createElement('div');
+                        emptyState.className = 'empty-state';
+                        emptyState.innerHTML = `
+                            <i class="fas fa-search"></i>
+                            <h3>Aucun résultat trouvé</h3>
+                            <p>Essayez d'autres termes de recherche ou critères de filtrage.</p>
+                        `;
+                        resourceGrid.appendChild(emptyState);
+                    }
+                } else if (emptyStateElement) {
+                    emptyStateElement.remove();
+                }
+            }
+            
+            // Ajouter les écouteurs d'événements
+            categoryFilter.addEventListener('change', filterResources);
+            searchBtn.addEventListener('click', filterResources);
+            
+            // Activer la recherche avec la touche Entrée
+            searchInput.addEventListener('keyup', (e) => {
+                if (e.key === 'Enter') {
+                    filterResources();
+                }
+            });
+        }
+
+        /**
+         * Initialise la fonctionnalité de filtre pour les tests
+         */
+        function initTestFilter() {
+            const categoryFilter = document.getElementById('test-category-filter');
+            const searchInput = document.getElementById('test-search');
+            const searchBtn = document.getElementById('test-search-btn');
+            
+            if (!categoryFilter || !searchInput || !searchBtn) {
+                console.log("Éléments de filtrage des tests non trouvés");
+                return;
+            }
+            
+            // Fonction de filtrage
+            function filterTests() {
+                const levelValue = categoryFilter.value;
+                const searchValue = searchInput.value.toLowerCase().trim();
+                const testCards = document.querySelectorAll('#test-grid .resource-card');
+                let matchCount = 0;
+                
+                testCards.forEach(card => {
+                    const levelMatch = levelValue === 'all' || card.dataset.level === levelValue;
+                    
+                    const cardTitle = card.querySelector('h3').textContent.toLowerCase();
+                    const cardDescription = card.querySelector('p').textContent.toLowerCase();
+                    const searchMatch = searchValue === '' || 
+                        cardTitle.includes(searchValue) || 
+                        cardDescription.includes(searchValue);
+                    
+                    if (levelMatch && searchMatch) {
+                        card.style.display = 'block';
+                        matchCount++;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+                
+                // Afficher un message si aucun résultat n'est trouvé
+                const emptyStateElement = document.querySelector('#test-grid .empty-state');
+                
+                if (matchCount === 0 && testCards.length > 0) {
+                    if (!emptyStateElement) {
+                        const emptyState = document.createElement('div');
+                        emptyState.className = 'empty-state';
+                        emptyState.innerHTML = `
+                            <i class="fas fa-search"></i>
+                            <h3>Aucun résultat trouvé</h3>
+                            <p>Essayez d'autres termes de recherche ou critères de filtrage.</p>
+                        `;
+                        document.getElementById('test-grid').appendChild(emptyState);
+                    }
+                } else if (emptyStateElement) {
+                    emptyStateElement.remove();
+                }
+            }
+            
+            // Ajouter les écouteurs d'événements
+            categoryFilter.addEventListener('change', filterTests);
+            searchBtn.addEventListener('click', filterTests);
+            
+            // Activer la recherche avec la touche Entrée
+            searchInput.addEventListener('keyup', (e) => {
+                if (e.key === 'Enter') {
+                    filterTests();
+                }
+            });
+        }
+
+        /**
+         * Initialise la fonctionnalité de popup pour les documents et tests
+         */
+        function initPopup() {
+            const popup = document.getElementById('document-popup');
+            const closeBtn = document.getElementById('close-popup');
+            
+            if (!popup || !closeBtn) {
+                console.log("Éléments de popup non trouvés");
+                return;
+            }
+            
+            // Fermer le popup au clic sur le bouton de fermeture
+            closeBtn.addEventListener('click', () => {
+                popup.classList.remove('show');
+                document.body.style.overflow = 'auto'; // Réactiver le défilement
+            });
+            
+            // Fermer le popup au clic en dehors du contenu
+            popup.addEventListener('click', (e) => {
+                if (e.target === popup) {
+                    popup.classList.remove('show');
+                    document.body.style.overflow = 'auto'; // Réactiver le défilement
+                }
+            });
+            
+            // Fermer le popup avec la touche Échap
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && popup.classList.contains('show')) {
+                    popup.classList.remove('show');
+                    document.body.style.overflow = 'auto'; // Réactiver le défilement
+                }
+            });
+        }
+
+        /**
+         * Ouvre le popup pour afficher un document ou un test
+         * @param {Object} item - Informations sur l'élément à afficher
+         */
+        function openDocumentPopup(item) {
+            const popup = document.getElementById('document-popup');
+            const popupTitle = document.getElementById('popup-title');
+            const popupBody = document.getElementById('popup-body');
+            const popupTypeIcon = document.querySelector('.popup-type-icon i');
+            const downloadLink = document.getElementById('download-link');
+            const printLink = document.getElementById('print-link');
+            
+            if (!popup || !popupTitle || !popupBody || !popupTypeIcon || !downloadLink) {
+                console.error("Éléments de popup non trouvés");
+                return;
+            }
+            
+            // Définir le titre
+            popupTitle.textContent = item.title;
+            
+            // Changer l'icône selon le type
+            popupTypeIcon.className = ''; // Réinitialiser la classe
+            
+            if (item.isResource) {
+                if (item.type === 'pdf') {
+                    popupTypeIcon.className = 'fas fa-file-pdf pdf-bg';
+                } else if (item.type === 'doc') {
+                    popupTypeIcon.className = 'fas fa-file-word doc-bg';
+                } else if (item.type === 'ppt') {
+                    popupTypeIcon.className = 'fas fa-file-powerpoint ppt-bg';
+                } else {
+                    popupTypeIcon.className = 'fas fa-file-alt pdf-bg';
+                }
+            } else {
+                if (item.level === 'beginner') {
+                    popupTypeIcon.className = 'fas fa-tasks beginner-bg';
+                } else if (item.level === 'intermediate') {
+                    popupTypeIcon.className = 'fas fa-tasks intermediate-bg';
+                } else if (item.level === 'advanced') {
+                    popupTypeIcon.className = 'fas fa-tasks advanced-bg';
+                } else {
+                    popupTypeIcon.className = 'fas fa-tasks beginner-bg';
+                }
+            }
+            
+            // URL du serveur
+            const baseUrl = getApiBaseUrl();
+            
+            // Préparer le contenu du popup
+            let popupInfoContent = '';
+            let previewContent = '';
+            
+            if (item.isResource) {
+                // Informations pour les ressources éducatives
+                popupInfoContent = `
+                    <div class="popup-info-item">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Date de publication: ${item.date || 'Non spécifiée'}</span>
+                    </div>
+                    <div class="popup-info-item">
+                        <i class="fas fa-file-alt"></i>
+                        <span>Format: ${item.type.toUpperCase()}, ${item.fileSize || 'Taille non spécifiée'}</span>
+                    </div>
+                    <div class="popup-info-item">
+                        <i class="fas fa-info-circle"></i>
+                        <span>Description: ${item.description}</span>
+                    </div>
+                `;
+                
+                // Préparation du contenu de prévisualisation
+                switch (item.type) {
+                    case 'pdf':
+                        previewContent = `<iframe src="${baseUrl}${item.path}" title="Aperçu du PDF"></iframe>`;
+                        break;
+                    case 'doc':
+                    case 'docx':
+                        previewContent = `
+                            <div class="preview-placeholder" style="text-align: center; padding: 3rem;">
+                                <i class="fas fa-file-word fa-4x" style="color: #2196F3; margin-bottom: 1rem;"></i>
+                                <                h3 style="margin-bottom: 1rem;">Document</h3>
+                                <p>Aperçu non disponible pour ce type de fichier.</p>
+                                <p>Cliquez sur Télécharger pour ouvrir le fichier.</p>
+                            </div>
+                        `;
+                }
+                
+                // Configurer le lien de téléchargement pour les ressources
+                downloadLink.href = `${baseUrl}${item.path}`;
+                downloadLink.setAttribute('download', '');
+                downloadLink.innerHTML = `<i class="fas fa-download"></i> Télécharger`;
+                
+                // Configurer le lien d'impression
+                if (printLink) {
+                    printLink.style.display = 'flex';
+                    if (item.type === 'pdf') {
+                        printLink.href = `${baseUrl}${item.path}`;
+                        printLink.target = '_blank';
+                        printLink.onclick = () => {
+                            setTimeout(() => window.print(), 1000);
+                            return true;
+                        };
+                    } else {
+                        printLink.href = "#";
+                        printLink.onclick = (e) => {
+                            e.preventDefault();
+                            alert("L'impression n'est disponible que pour les documents PDF.");
+                        };
+                    }
+                }
+            } else {
+                // Informations pour les tests d'évaluation
+                popupInfoContent = `
+                    <div class="popup-info-item">
+                        <i class="fas fa-signal"></i>
+                        <span>Niveau: ${item.levelText}</span>
+                    </div>
+                    <div class="popup-info-item">
+                        <i class="fas fa-clock"></i>
+                        <span>Durée: ${item.duration}</span>
+                    </div>
+                    <div class="popup-info-item">
+                        <i class="fas fa-question-circle"></i>
+                        <span>Questions: ${item.questions}</span>
+                    </div>
+                    ${item.date ? `
+                    <div class="popup-info-item">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Date de publication: ${item.date}</span>
+                    </div>` : ''}
+                    <div class="popup-info-item">
+                        <i class="fas fa-info-circle"></i>
+                        <span>Description: ${item.description}</span>
+                    </div>
+                `;
+                
+                // Préparation du contenu pour l'aperçu du test
+                previewContent = `
+                    <div class="preview-placeholder" style="text-align: center; padding: 3rem;">
+                        <i class="fas fa-clipboard-list fa-4x" style="color: ${item.level === 'advanced' ? '#F44336' : (item.level === 'intermediate' ? '#FF9800' : '#4CAF50')}; margin-bottom: 1rem;"></i>
+                        <h3 style="margin-bottom: 1rem;">Test de niveau ${item.levelText}</h3>
+                        <p>Ce test contient ${item.questions} questions et dure environ ${item.duration}.</p>
+                        <p>Cliquez sur Commencer pour lancer le test.</p>
+                    </div>
+                `;
+                
+                // Configurer le lien pour démarrer le test
+                downloadLink.href = `${baseUrl}${item.path}`;
+                downloadLink.removeAttribute('download');
+                downloadLink.innerHTML = `<i class="fas fa-play"></i> Commencer le test`;
+                
+                // Masquer le bouton d'impression pour les tests
+                if (printLink) {
+                    printLink.style.display = 'none';
+                }
+            }
+            
+            // Mettre à jour le contenu du popup
+            popupBody.innerHTML = `
+                <div class="popup-info">
+                    ${popupInfoContent}
+                </div>
+                ${previewContent}
+            `;
+            
+            // Afficher le popup
+            popup.classList.add('show');
+            document.body.style.overflow = 'hidden'; // Empêcher le défilement pendant que le popup est ouvert
+        }
+    </script>
+</body>
+</html>

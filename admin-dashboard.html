@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OrthoPro+ | Tableau de Bord Administrateur</title>
+    <link rel="stylesheet" href="welcome.css">
+    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="admin-dashboard.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="page-container">
+        <div class="background-shapes">
+            <div class="shape circle shape-1"></div>
+            <div class="shape square shape-2"></div>
+            <div class="shape triangle shape-3"></div>
+            <div class="shape circle shape-4"></div>
+        </div>
+        
+        <header class="site-header">
+            <div class="logo">
+                <svg width="60" height="60" viewBox="0 0 60 60">
+                    <circle cx="30" cy="30" r="25" fill="#7E57C2" fill-opacity="0.2"/>
+                    <path d="M18,30 Q30,12 42,30 T18,30" stroke="#7E57C2" stroke-width="3" fill="none"/>
+                    <circle cx="30" cy="30" r="6" fill="#7E57C2"/>
+                    <circle cx="30" cy="30" r="28" stroke="#7E57C2" stroke-width="1" stroke-dasharray="4 2" fill="none"/>
+                </svg>
+                <div class="logo-text">
+                    <span>Ortho<strong>Pro+</strong></span>
+                    <span class="tagline">Tableau de Bord Administrateur</span>
+                </div>
+            </div>
+            
+            <nav class="top-nav">
+                <a href="welcome.html" class="nav-link">Accueil</a>
+                <a href="about.html" class="nav-link">À propos</a>
+                <div class="user-menu">
+                    <button class="user-menu-btn">
+                        <div class="user-avatar" id="admin-avatar">AD</div>
+                        <span id="admin-name">Admin</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="user-dropdown">
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-user"></i>
+                            <span>Mon profil</span>
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-cog"></i>
+                            <span>Paramètres</span>
+                        </a>
+                        <a href="#" class="dropdown-item" id="logout-btn">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Déconnexion</span>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        
+        <main class="dashboard-main">
+            <div class="dashboard-container">
+                <div class="dashboard-header">
+                    <h1>Tableau de Bord <span class="text-gradient">Administrateur</span></h1>
+                    <p class="last-update">Dernière mise à jour: <span id="last-update-time">Chargement...</span></p>
+                </div>
+                
+                <div class="dashboard-tabs">
+                    <button class="tab-btn" data-tab="passions">
+                        <i class="fas fa-heart"></i>
+                        <span>Patients</span>
+                    </button>
+                    <button class="tab-btn active" data-tab="enseignants">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                        <span>Gestion Enseignants</span>
+                    </button>
+                </div>
+                
+                <div class="dashboard-content">
+                    <!-- Tab Content - Passions -->
+                    <!-- Tab Content - Passions -->
+<div class="tab-content" id="passions-content">
+    <div class="dashboard-header">
+        <h2>Gestion des Rendez-vous</h2>
+        <p class="sub-heading">Voir et gérer les rendez-vous orthoprothésiques</p>
+    </div>
+    
+    <!-- Appointments Statistics Cards -->
+    <div class="stats-cards">
+        <div class="stat-card total">
+            <div class="stat-icon">
+                <i class="fas fa-calendar-check"></i>
+            </div>
+            <div class="stat-info">
+                <h3>Total Rendez-vous</h3>
+                <p class="stat-number" id="total-appointments">-</p>
+            </div>
+        </div>
+        
+        <div class="stat-card approved">
+            <div class="stat-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="stat-info">
+                <h3>Terminés</h3>
+                <p class="stat-number" id="completed-appointments">-</p>
+            </div>
+        </div>
+        
+        <div class="stat-card pending">
+            <div class="stat-icon">
+                <i class="fas fa-clock"></i>
+            </div>
+            <div class="stat-info">
+                <h3>Planifiés</h3>
+                <p class="stat-number" id="scheduled-appointments">-</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Appointments Management Controls -->
+    <div class="management-controls">
+        <div class="search-filters">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="appointment-search" placeholder="Rechercher par nom ou téléphone...">
+            </div>
+            
+            <div class="filter-group">
+                <label for="appointment-status-filter">Statut:</label>
+                <select id="appointment-status-filter">
+                    <option value="all">Tous</option>
+                    <option value="SCHEDULED">Planifiés</option>
+                    <option value="COMPLETED">Terminés</option>
+                    <option value="CANCELLED">Annulés</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label for="department-filter">Service:</label>
+                <select id="department-filter">
+                    <option value="all">Tous</option>
+                    <option value="Orthoprothèses">Orthoprothèses</option>
+                    <option value="Prothèses">Prothèses</option>
+                    <option value="Orthèses plantaires">Orthèses plantaires</option>
+                    <option value="Orthèses de genou">Orthèses de genou</option>
+                    <option value="Orthèses de cheville">Orthèses de cheville</option>
+                    <option value="Orthèses de tronc">Orthèses de tronc</option>
+                    <option value="Réadaptation">Réadaptation</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label for="appointment-sort">Trier par:</label>
+                <select id="appointment-sort">
+                    <option value="date-desc">Date (récent)</option>
+                    <option value="date-asc">Date (ancien)</option>
+                    <option value="name-asc">Nom (A-Z)</option>
+                    <option value="name-desc">Nom (Z-A)</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="action-buttons">
+            <button class="btn btn-outline" id="refresh-appointments-btn">
+                <i class="fas fa-sync-alt"></i>
+                <span>Actualiser</span>
+            </button>
+            <button class="btn btn-primary" id="export-appointments">
+                <i class="fas fa-file-export"></i>
+                <span>Exporter</span>
+            </button>
+            <button class="btn btn-primary" id="new-appointment">
+                <i class="fas fa-plus"></i>
+                <span>Nouveau</span>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Appointments List -->
+    <div class="teachers-container">
+        <div class="teachers-grid" id="appointments-grid">
+            <!-- Appointment cards will be inserted here dynamically -->
+            <div class="loading-indicator">
+                <i class="fas fa-circle-notch fa-spin"></i>
+                <p>Chargement des rendez-vous...</p>
+            </div>
+        </div>
+        
+        <!-- Pagination -->
+        <div class="pagination" id="appointments-pagination">
+            <button class="pagination-btn" id="appointments-prev-page" disabled>
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <div class="pagination-info">
+                Page <span id="appointments-current-page">1</span> sur <span id="appointments-total-pages">1</span>
+            </div>
+            <button class="pagination-btn" id="appointments-next-page">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Appointment Card Template -->
+<template id="appointment-card-template">
+    <div class="teacher-card appointment-card" data-appointment-id="">
+        <div class="card-header">
+            <div class="teacher-avatar">JD</div>
+            <div class="status-indicator">
+                <span class="status-badge pending">Planifié</span>
+            </div>
+        </div>
+        <div class="card-body">
+            <h3 class="teacher-name patient-name">John Doe</h3>
+            <p class="teacher-institution department">Service: Orthoprothèses</p>
+            <div class="teacher-contact">
+                <i class="fas fa-phone"></i>
+                <span class="patient-phone">06 12 34 56 78</span>
+            </div>
+            <div class="teacher-date">
+                <i class="fas fa-calendar-alt"></i>
+                <span class="appointment-date">01/04/2025</span>
+            </div>
+            <div class="teacher-date">
+                <i class="fas fa-clock"></i>
+                <span class="appointment-time">14:30</span>
+            </div>
+        </div>
+        <div class="card-actions">
+            <div class="approval-toggle">
+                <label class="switch">
+                    <input type="checkbox" class="appointment-completed-checkbox">
+                    <span class="slider round"></span>
+                </label>
+                <span class="toggle-label">Terminé</span>
+            </div>
+            <button class="btn-details">
+                <i class="fas fa-chevron-down"></i>
+                <span>Détails</span>
+            </button>
+        </div>
+        <div class="card-details">
+            <div class="details-content">
+                <div class="detail-item">
+                    <span class="detail-label">ID:</span>
+                    <span class="detail-value appointment-id">1234</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Email:</span>
+                    <span class="detail-value patient-email">patient@exemple.com</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Motif:</span>
+                    <span class="detail-value appointment-reason">Consultation initiale</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Notes:</span>
+                    <span class="detail-value appointment-notes">Notes supplémentaires...</span>
+                </div>
+                <div class="detail-actions">
+                    <button class="btn-reject cancel-appointment">
+                        <i class="fas fa-ban"></i>
+                        <span>Annuler</span>
+                    </button>
+                    <button class="btn-edit edit-appointment">
+                        <i class="fas fa-pen"></i>
+                        <span>Modifier</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+                    
+                    <!-- Tab Content - Produits -->
+                    <!-- Tab Content - Produits -->
+<div class="tab-content" id="produits-content">
+    <div class="dashboard-header">
+        <h2>Catalogue Otto Book</h2>
+        <p class="sub-heading">Référence pour les orthoprothésistes</p>
+    </div>
+    
+    <!-- Products Management Controls -->
+    <div class="management-controls">
+        <div class="search-filters">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="product-search" placeholder="Rechercher par nom, référence...">
+            </div>
+            
+            <div class="filter-group">
+                <label for="category-filter">Catégorie:</label>
+                <select id="category-filter">
+                    <option value="all">Toutes</option>
+                    <option value="orthoses">Orthèses</option>
+                    <option value="prostheses">Prothèses</option>
+                    <option value="components">Composants</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label for="material-filter">Matériau:</label>
+                <select id="material-filter">
+                    <option value="all">Tous</option>
+                    <option value="thermoplastic">Thermoplastiques</option>
+                    <option value="metal">Métaux</option>
+                    <option value="foam">Mousses</option>
+                    <option value="fabric">Textiles</option>
+                    <option value="composite">Composites</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label for="products-sort">Trier par:</label>
+                <select id="products-sort">
+                    <option value="name-asc">Nom (A-Z)</option>
+                    <option value="name-desc">Nom (Z-A)</option>
+                    <option value="ref-asc">Référence (croissant)</option>
+                    <option value="ref-desc">Référence (décroissant)</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="action-buttons">
+            <button class="btn btn-outline" id="refresh-products-btn">
+                <i class="fas fa-sync-alt"></i>
+                <span>Actualiser</span>
+            </button>
+            <button class="btn btn-primary" id="export-products">
+                <i class="fas fa-file-export"></i>
+                <span>Exporter</span>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Products List -->
+</div>
+
+                    
+                    <!-- Tab Content - Gestion Enseignants -->
+                    <div class="tab-content active" id="enseignants-content">
+                        <!-- Statistics Cards -->
+                        <div class="stats-cards">
+                            <div class="stat-card total">
+                                <div class="stat-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3>Total Enseignants</h3>
+                                    <p class="stat-number" id="total-teachers">-</p>
+                                </div>
+                            </div>
+                            
+                            <div class="stat-card approved">
+                                <div class="stat-icon">
+                                    <i class="fas fa-user-check"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3>Approuvés</h3>
+                                    <p class="stat-number" id="approved-teachers">-</p>
+                                </div>
+                            </div>
+                            
+                            <div class="stat-card pending">
+                                <div class="stat-icon">
+                                    <i class="fas fa-user-clock"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3>En attente</h3>
+                                    <p class="stat-number" id="pending-teachers">-</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Teachers Management Controls -->
+                        <div class="management-controls">
+                            <div class="search-filters">
+                                <div class="search-box">
+                                    <i class="fas fa-search"></i>
+                                    <input type="text" id="teacher-search" placeholder="Rechercher par nom ou email...">
+                                </div>
+                                
+                                <div class="filter-group">
+                                    <label for="status-filter">Statut:</label>
+                                    <select id="status-filter">
+                                        <option value="all">Tous</option>
+                                        <option value="approved">Approuvés</option>
+                                        <option value="pending">En attente</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="filter-group">
+                                    <label for="sort-by">Trier par:</label>
+                                    <select id="sort-by">
+                                        <option value="date-desc">Date (récent)</option>
+                                        <option value="date-asc">Date (ancien)</option>
+                                        <option value="name-asc">Nom (A-Z)</option>
+                                        <option value="name-desc">Nom (Z-A)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button class="btn btn-outline" id="refresh-btn">
+                                    <i class="fas fa-sync-alt"></i>
+                                    <span>Actualiser</span>
+                                </button>
+                                <button class="btn btn-primary" id="export-csv">
+                                    <i class="fas fa-file-export"></i>
+                                    <span>Exporter CSV</span>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Teachers List -->
+                        <div class="teachers-container">
+                            <div class="teachers-grid" id="teachers-grid">
+                                <!-- Teacher cards will be inserted here dynamically -->
+                                <div class="loading-indicator">
+                                    <i class="fas fa-circle-notch fa-spin"></i>
+                                    <p>Chargement des données...</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Pagination -->
+                            <div class="pagination" id="pagination">
+                                <button class="pagination-btn" id="prev-page" disabled>
+                                    <i class="fas fa-chevron-left"></i>
+                                </button>
+                                <div class="pagination-info">
+                                    Page <span id="current-page">1</span> sur <span id="total-pages">1</span>
+                                </div>
+                                <button class="pagination-btn" id="next-page">
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <footer class="site-footer">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo footer-logo">
+                        <svg width="40" height="40" viewBox="0 0 60 60">
+                            <circle cx="30" cy="30" r="25" fill="#7E57C2" fill-opacity="0.2"/>
+                            <path d="M18,30 Q30,12 42,30 T18,30" stroke="#7E57C2" stroke-width="3" fill="none"/>
+                            <circle cx="30" cy="30" r="6" fill="#7E57C2"/>
+                        </svg>
+                        <span>Ortho<strong>Pro+</strong></span>
+                    </div>
+                    <p>La référence en orthoprothésie médicale depuis 2020.</p>
+                </div>
+                
+                <div class="footer-links-container">
+                    <div class="footer-links-group">
+                        <h4>Plateforme</h4>
+                        <a href="welcome.html">Accueil</a>
+                        <a href="about.html">À propos</a>
+                        <a href="#">Contact</a>
+                        <a href="#">FAQ</a>
+                    </div>
+                    
+                    <div class="footer-links-group">
+                        <h4>Accès</h4>
+                        <a href="student.html">Espace Étudiant</a>
+                        <a href="teacher.html">Espace Enseignant</a>
+                        <a href="admin.html">Espace Administrateur</a>
+                    </div>
+                    
+                    <div class="footer-links-group">
+                        <h4>Légal</h4>
+                        <a href="#">Confidentialité</a>
+                        <a href="#">Mentions légales</a>
+                        <a href="#">CGU</a>
+                        <a href="#">RGPD</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 OrthoPro+ - Tous droits réservés</p>
+                <div class="social-links">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- Notification -->
+    <div id="notification" class="notification">
+        <div class="notification-icon">
+            <i class="fas fa-info-circle"></i>
+        </div>
+        <div class="notification-message"></div>
+        <button class="notification-close">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    
+    <!-- Confirmation Modal -->
+    <div class="modal" id="confirmation-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Confirmation</h3>
+                <button class="modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="modal-message">Êtes-vous sûr de vouloir effectuer cette action ?</p>
+                <div class="form-group" id="comments-group">
+                    <label for="rejection-comments">Commentaires (optionnel):</label>
+                    <textarea id="rejection-comments" rows="3" placeholder="Expliquez la raison du rejet..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="modal-cancel">Annuler</button>
+                <button class="btn btn-primary" id="modal-confirm">Confirmer</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Teacher Card Template -->
+    <template id="teacher-card-template">
+        <div class="teacher-card" data-teacher-id="">
+            <div class="card-header">
+                <div class="teacher-avatar">JD</div>
+                <div class="status-indicator">
+                    <span class="status-badge pending">En attente</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <h3 class="teacher-name">John Doe</h3>
+                <p class="teacher-institution">Université Paris</p>
+                <div class="teacher-contact">
+                    <i class="fas fa-envelope"></i>
+                    <span class="teacher-email">john.doe@universite.fr</span>
+                </div>
+                <div class="teacher-date">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span class="registration-date">Inscrit le 01/03/2025</span>
+                </div>
+            </div>
+            <div class="card-actions">
+                <div class="approval-toggle">
+                    <label class="switch">
+                        <input type="checkbox" class="approval-checkbox">
+                        <span class="slider round"></span>
+                    </label>
+                    <span class="toggle-label">Approuver</span>
+                </div>
+                <button class="btn-details">
+                    <i class="fas fa-chevron-down"></i>
+                    <span>Détails</span>
+                </button>
+            </div>
+            <div class="card-details">
+                <div class="details-content">
+                    <div class="detail-item">
+                        <span class="detail-label">ID:</span>
+                        <span class="detail-value teacher-id">1234</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Dernière connexion:</span>
+                        <span class="detail-value last-login">Jamais</span>
+                    </div>
+                    <div class="detail-actions">
+                        <button class="btn-reject">
+                            <i class="fas fa-ban"></i>
+                            <span>Rejeter</span>
+                        </button>
+                        <button class="btn-edit">
+                            <i class="fas fa-pen"></i>
+                            <span>Modifier</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+    
+    <script src="admin.js"></script>
+    <script src="admin-dashboard.js"></script>
+
+    <!-- New Appointment Modal -->
+<div class="modal" id="new-appointment-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Nouveau Rendez-vous</h3>
+            <button class="modal-close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="new-appointment-form">
+                <!-- Patient Information -->
+                <div class="form-section">
+                    <h4>Informations du patient</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="patient-name">Nom complet*</label>
+                            <input type="text" id="patient-name" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="patient-phone">Téléphone*</label>
+                            <input type="tel" id="patient-phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="patient-email">Email</label>
+                            <input type="email" id="patient-email">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Appointment Details -->
+                <div class="form-section">
+                    <h4>Détails du rendez-vous</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="appointment-date">Date*</label>
+                            <input type="date" id="appointment-date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="appointment-time">Heure*</label>
+                            <input type="time" id="appointment-time" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="department-select">Service*</label>
+                            <select id="department-select" required>
+                                <option value="">Sélectionnez un service</option>
+                                <option value="Orthoprothèses">Orthoprothèses</option>
+                                <option value="Prothèses">Prothèses</option>
+                                <option value="Orthèses plantaires">Orthèses plantaires</option>
+                                <option value="Orthèses de genou">Orthèses de genou</option>
+                                <option value="Orthèses de cheville">Orthèses de cheville</option>
+                                <option value="Orthèses de tronc">Orthèses de tronc</option>
+                                <option value="Réadaptation">Réadaptation</option>
+                                <option value="Consultation générale">Consultation générale</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group full-width">
+                            <label for="appointment-reason">Motif du rendez-vous*</label>
+                            <input type="text" id="appointment-reason" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group full-width">
+                            <label for="appointment-notes">Notes supplémentaires</label>
+                            <textarea id="appointment-notes" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-message" id="form-message"></div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" id="modal-cancel-appointment">Annuler</button>
+            <button class="btn btn-primary" id="modal-save-appointment">
+                <i class="fas fa-save"></i>
+                <span>Enregistrer</span>
+            </button>
+        </div>
+    </div>
+</div>
+</body>
+</html>

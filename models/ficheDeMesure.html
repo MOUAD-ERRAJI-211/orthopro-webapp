@@ -1,0 +1,2814 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OrthoPro+ | Fiche de Mesure 3D</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset & Base Styles */
+        :root {
+            --primary: #33a6b8;
+            --primary-light: #4fc3d5;
+            --primary-dark: #2a8a9a;
+            --secondary: #ff7e5f;
+            --accent: #7c4dff;
+            --background: #f8f9fa;
+            --surface: #ffffff;
+            --surface-variant: #f0f2f5;
+            --divider: #e0e5ec;
+            --text-primary: #2d3748;
+            --text-secondary: #64748b;
+            --text-tertiary: #94a3b8;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --info: #3b82f6;
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.05), 0 4px 6px rgba(0, 0, 0, 0.05);
+            --radius-sm: 0.25rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --transition-fast: 150ms ease;
+            --transition-normal: 250ms ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background);
+            color: var(--text-primary);
+            overflow: hidden;
+        }
+
+        /* Main Container */
+        .measurement-container {
+            display: flex;
+            height: 100vh;
+            position: relative;
+        }
+
+        /* Header */
+        .measurement-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background-color: var(--surface);
+            border-bottom: 1px solid var(--divider);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo h1 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .logo span {
+            color: var(--primary);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: var(--radius-md);
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all var(--transition-fast);
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-secondary {
+            background-color: var(--surface-variant);
+            color: var(--text-secondary);
+            border: 1px solid var(--divider);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--surface);
+            color: var(--text-primary);
+        }
+
+        /* 3D Viewer */
+        .model-viewer {
+            flex: 1;
+            margin-top: 70px;
+            position: relative;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+        }
+
+        #model-canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        .viewer-controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .control-btn {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            color: var(--text-primary);
+        }
+
+        .control-btn:hover {
+            background-color: var(--primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        /* Measurement Interface */
+        .measurement-interface {
+            position: absolute;
+            top: 70px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        .measurement-point {
+            position: absolute;
+            background-color: var(--primary);
+            border: 3px solid white;
+            border-radius: 50%;
+            width: 12px;
+            height: 12px;
+            transform: translate(-50%, -50%);
+            box-shadow: var(--shadow-md);
+            pointer-events: auto;
+            cursor: pointer;
+        }
+
+        .measurement-line {
+            position: absolute;
+            background-color: var(--primary);
+            height: 2px;
+            transform-origin: left center;
+            pointer-events: none;
+            box-shadow: 0 0 4px rgba(51, 166, 184, 0.5);
+        }
+
+        .measurement-label {
+            position: absolute;
+            background-color: var(--surface);
+            border: 1px solid var(--divider);
+            border-radius: var(--radius-md);
+            padding: 0.5rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            box-shadow: var(--shadow-md);
+            pointer-events: auto;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .measurement-input {
+            width: 60px;
+            padding: 0.25rem;
+            border: 1px solid var(--divider);
+            border-radius: var(--radius-sm);
+            text-align: center;
+            font-size: 0.8rem;
+            margin: 0 0.25rem;
+        }
+
+        .measurement-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(51, 166, 184, 0.2);
+        }
+
+        /* Measurement Panel */
+        .measurement-panel {
+            position: fixed;
+            right: 20px;
+            top: 120px;
+            width: 300px;
+            background-color: var(--surface);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--divider);
+            z-index: 60;
+            max-height: calc(100vh - 140px);
+            overflow-y: auto;
+        }
+
+        .panel-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--divider);
+            background-color: var(--surface-variant);
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+        }
+
+        .panel-header h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .panel-header p {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .panel-body {
+            padding: 1.5rem;
+        }
+
+        .measurement-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .measurement-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .group-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .measurement-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem;
+            background-color: var(--surface-variant);
+            border-radius: var(--radius-md);
+            margin-bottom: 0.5rem;
+            transition: all var(--transition-fast);
+        }
+
+        .measurement-item:hover {
+            background-color: var(--divider);
+        }
+
+        .measurement-item.active {
+            background-color: rgba(51, 166, 184, 0.1);
+            border: 1px solid var(--primary);
+        }
+
+        .measurement-name {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .measurement-value {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .value-input {
+            width: 70px;
+            padding: 0.25rem 0.5rem;
+            border: 1px solid var(--divider);
+            border-radius: var(--radius-sm);
+            text-align: center;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .value-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(51, 166, 184, 0.2);
+        }
+
+        .unit {
+            font-size: 0.7rem;
+            color: var(--text-tertiary);
+            font-weight: 500;
+        }
+
+        .sync-indicator {
+            width: 8px;
+            height: 8px;
+            background-color: var(--success);
+            border-radius: 50%;
+            margin-left: 0.5rem;
+        }
+
+        .sync-indicator.warning {
+            background-color: var(--warning);
+        }
+
+        /* Export Panel */
+        .export-panel {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--divider);
+        }
+
+        .export-info {
+            background-color: var(--surface-variant);
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            margin-bottom: 1rem;
+        }
+
+        .export-info h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .info-label {
+            color: var(--text-secondary);
+        }
+
+        .info-value {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        /* File Upload */
+        .upload-area {
+            border: 2px dashed var(--divider);
+            border-radius: var(--radius-md);
+            padding: 2rem;
+            text-align: center;
+            background-color: var(--surface-variant);
+            margin-bottom: 2rem;
+            transition: all var(--transition-fast);
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary);
+            background-color: rgba(51, 166, 184, 0.05);
+        }
+
+        .upload-area.dragover {
+            border-color: var(--primary);
+            background-color: rgba(51, 166, 184, 0.1);
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .upload-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-subtext {
+            font-size: 0.8rem;
+            color: var(--text-tertiary);
+        }
+
+        #file-input {
+            display: none;
+        }
+
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--surface);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            max-width: 400px;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all var(--transition-normal);
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success {
+            border-left: 4px solid var(--success);
+        }
+
+        .toast.error {
+            border-left: 4px solid var(--error);
+        }
+
+        .toast.info {
+            border-left: 4px solid var(--info);
+        }
+
+        .toast-icon {
+                        font-size: 1.2rem;
+        }
+
+        .toast.success .toast-icon {
+            color: var(--success);
+        }
+
+        .toast.error .toast-icon {
+            color: var(--error);
+        }
+
+        .toast.info .toast-icon {
+            color: var(--info);
+        }
+
+        .toast-message {
+            flex: 1;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            color: var(--text-tertiary);
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        /* Interactive measurement styles */
+        .measurement-editor {
+            position: fixed;
+            z-index: 10000;
+            background: white;
+            border: 3px solid var(--primary);
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Poppins', sans-serif;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .measurement-editor input {
+            width: 80px;
+            padding: 5px 8px;
+            border: 1px solid var(--divider);
+            border-radius: 4px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .measurement-editor input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(51, 166, 184, 0.2);
+        }
+
+        .measurement-editor button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all var(--transition-fast);
+        }
+
+        .measurement-editor .confirm-btn {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .measurement-editor .confirm-btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .measurement-editor .cancel-btn {
+            background-color: var(--surface-variant);
+            color: var(--text-secondary);
+        }
+
+        .measurement-editor .cancel-btn:hover {
+            background-color: var(--divider);
+        }
+
+        /* Cursor styles for 3D canvas */
+        #model-canvas canvas {
+            cursor: default;
+        }
+
+        #model-canvas canvas.pointer {
+            cursor: pointer;
+        }
+
+        /* Hover effects for measurements */
+        .measurement-hover {
+            opacity: 0.8;
+            transform: scale(1.05);
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid var(--primary);
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="measurement-header">
+        <div class="header-title">
+            <div class="logo">
+                <svg width="40" height="40" viewBox="0 0 60 60">
+                    <circle cx="30" cy="30" r="25" fill="#33a6b8" fill-opacity="0.2"/>
+                    <path d="M18,30 Q30,12 42,30 T18,30" stroke="#33a6b8" stroke-width="3" fill="none"/>
+                    <circle cx="30" cy="30" r="6" fill="#33a6b8"/>
+                </svg>
+                <h1>OrthoPro<span>+</span></h1>
+            </div>
+            <h2>Fiche de Mesure 3D</h2>
+        </div>
+        <div class="header-actions">
+            <button class="btn btn-secondary" id="import-btn">
+                <i class="fas fa-upload"></i>
+                Importer STL
+            </button>
+            <button class="btn btn-primary" id="export-btn" disabled>
+                <i class="fas fa-download"></i>
+                Exporter STL
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="measurement-container">
+        <!-- 3D Model Viewer -->
+        <div class="model-viewer">
+            <!-- Upload Area (shown when no model loaded) -->
+            <div class="upload-area" id="upload-area">
+                <i class="fas fa-cube upload-icon"></i>
+                <div class="upload-text">Glissez votre fichier STL ici ou cliquez pour parcourir</div>
+                <div class="upload-subtext">Formats supportés: .stl (max 50MB)</div>
+            </div>
+
+            <!-- 3D Canvas -->
+            <div id="model-canvas" style="display: none;">
+                <!-- Loading spinner will be added dynamically like in teacher dashboard -->
+            </div>
+
+            <!-- Viewer Controls -->
+            <div class="viewer-controls">
+                <button class="control-btn" id="reset-view" title="Réinitialiser la vue">
+                    <i class="fas fa-home"></i>
+                </button>
+                <button class="control-btn" id="toggle-wireframe" title="Mode filaire">
+                    <i class="fas fa-border-none"></i>
+                </button>
+                <button class="control-btn" id="toggle-grid" title="Afficher/Masquer la grille">
+                    <i class="fas fa-border-all"></i>
+                </button>
+                <button class="control-btn" id="screenshot" title="Capture d'écran">
+                    <i class="fas fa-camera"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Measurement Interface Overlay -->
+        <div class="measurement-interface" id="measurement-interface">
+            <!-- Measurement points and lines will be dynamically added here -->
+        </div>
+
+        <!-- Measurement Panel -->
+        <div class="measurement-panel" id="measurement-panel" style="display: none;">
+            <div class="panel-header">
+                <h3>Fiche de Mesure</h3>
+                <p>Ajustez les dimensions de votre modèle</p>
+            </div>
+            <div class="panel-body">
+                <!-- Dimensions principales -->
+                <div class="measurement-group">
+                    <div class="group-title">
+                        <i class="fas fa-rulers"></i>
+                        Dimensions principales
+                    </div>
+                    <div class="measurement-item" data-measurement="length">
+                        <span class="measurement-name">Longueur</span>
+                        <div class="measurement-value">
+                            <input type="number" class="value-input" id="length-input" step="0.1" min="0">
+                            <span class="unit">mm</span>
+                            <div class="sync-indicator"></div>
+                        </div>
+                    </div>
+                    <div class="measurement-item" data-measurement="width">
+                        <span class="measurement-name">Largeur</span>
+                        <div class="measurement-value">
+                            <input type="number" class="value-input" id="width-input" step="0.1" min="0">
+                            <span class="unit">mm</span>
+                            <div class="sync-indicator"></div>
+                        </div>
+                    </div>
+                    <div class="measurement-item" data-measurement="height">
+                        <span class="measurement-name">Hauteur</span>
+                        <div class="measurement-value">
+                            <input type="number" class="value-input" id="height-input" step="0.1" min="0">
+                            <span class="unit">mm</span>
+                            <div class="sync-indicator"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mesures spécialisées -->
+                <div class="measurement-group">
+                    <div class="group-title">
+                        <i class="fas fa-drafting-compass"></i>
+                        Mesures spécialisées
+                    </div>
+                    <div class="measurement-item" data-measurement="arch-height">
+                        <span class="measurement-name">Hauteur voûte</span>
+                        <div class="measurement-value">
+                            <input type="number" class="value-input" id="arch-height-input" step="0.1" min="0">
+                            <span class="unit">mm</span>
+                            <div class="sync-indicator"></div>
+                        </div>
+                    </div>
+                    <div class="measurement-item" data-measurement="heel-width">
+                        <span class="measurement-name">Largeur talon</span>
+                        <div class="measurement-value">
+                            <input type="number" class="value-input" id="heel-width-input" step="0.1" min="0">
+                            <span class="unit">mm</span>
+                            <div class="sync-indicator"></div>
+                        </div>
+                    </div>
+                    <div class="measurement-item" data-measurement="forefoot-width">
+                        <span class="measurement-name">Largeur avant-pied</span>
+                        <div class="measurement-value">
+                            <input type="number" class="value-input" id="forefoot-width-input" step="0.1" min="0">
+                            <span class="unit">mm</span>
+                            <div class="sync-indicator"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Export Panel -->
+                <div class="export-panel">
+                    <div class="export-info">
+                        <h4>Informations d'export</h4>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <span class="info-label">Format:</span>
+                                <span class="info-value">STL</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Échelle:</span>
+                                <span class="info-value" id="scale-info">1:1</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Volume:</span>
+                                <span class="info-value" id="volume-info">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Taille:</span>
+                                <span class="info-value" id="file-size-info">-</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" id="export-model-btn" style="width: 100%;" disabled>
+                        <i class="fas fa-download"></i>
+                        Exporter avec nouvelles dimensions
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden File Input -->
+    <input type="file" id="file-input" accept=".stl" />
+
+    <!-- Toast Container -->
+    <div id="toast-container" style="position: fixed; bottom: 20px; right: 20px; z-index: 10000;"></div>
+
+    <!-- Three.js Libraries - Using same CDN as teacher dashboard -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/exporters/STLExporter.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/exporters/OBJExporter.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/exporters/GLTFExporter.min.js"></script>
+
+    <script>
+        // Global variables
+        let scene, camera, renderer, controls;
+        let currentModel = null;
+        let originalGeometry = null;
+        let originalDimensions = {};
+        let measurementPoints = [];
+        let measurementLines = [];
+        let isWireframe = false;
+        let showGrid = true;
+        let activeEditor = null;
+
+
+        // Measurement relationships for synchronized scaling
+        const measurementRelations = {
+            'length': { 
+                base: true, 
+                factor: 1.0,
+                affects: ['arch-height', 'heel-width', 'forefoot-width']
+            },
+            'width': { 
+                base: true, 
+                factor: 1.0,
+                affects: ['heel-width', 'forefoot-width'] 
+            },
+            'height': { 
+                base: true, 
+                factor: 1.0,
+                affects: ['arch-height'] 
+            },
+            'arch-height': { 
+                base: false, 
+                factor: 0.75, 
+                relativeTo: 'height',
+                affects: []
+            },
+            'heel-width': { 
+                base: false, 
+                factor: 0.6, 
+                relativeTo: 'width',
+                affects: []
+            },
+            'forefoot-width': { 
+                base: false, 
+                factor: 0.9, 
+                relativeTo: 'width',
+                affects: []
+            }
+        };
+
+        // Initialize the application - Using approach from teacher dashboard
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM Content Loaded');
+            initSidebar();
+            initNavigation();
+            initResourcesSection();
+            initModelsSection();
+            initModals();
+            initDashboardCards();
+        });
+
+        function initModelsSection() {
+            console.log('Initializing models section...');
+            
+            // Initialize Three.js for 3D viewing
+            initThreeJS();
+            initEventListeners();
+            initDragAndDrop();
+            
+            console.log('Models section initialized');
+        }
+
+        // Placeholder functions from teacher dashboard pattern
+        function initSidebar() {
+            console.log('Sidebar initialized (placeholder)');
+        }
+
+        function initNavigation() {
+            console.log('Navigation initialized (placeholder)');
+        }
+
+        function initResourcesSection() {
+            console.log('Resources section initialized (placeholder)');
+        }
+
+        function initModals() {
+            console.log('Modals initialized (placeholder)');
+        }
+
+        function initDashboardCards() {
+            console.log('Dashboard cards initialized (placeholder)');
+        }
+
+                function onCanvasClick(event) {
+            // Calculate mouse position
+            const rect = renderer.domElement.getBoundingClientRect();
+            mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+            mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+            
+            // Set raycaster
+            raycaster.setFromCamera(mouse, camera);
+            
+            // Get intersections with clickable objects
+            
+
+            const clickableObjects = [];
+    scene.traverse((child) => {
+        if (child.userData && child.userData.isClickable) {
+            clickableObjects.push(child);
+            console.log('Found clickable object:', child.name || 'unnamed');
+        }
+    });
+            
+            const intersects = raycaster.intersectObjects(clickableObjects);
+            
+            if (intersects.length > 0) {
+                const clickedObject = intersects[0].object;
+                if (clickedObject.userData.type === 'measurement-text') {
+                    openMeasurementEditor(clickedObject);
+                }
+            }
+        }
+
+        function onCanvasMouseMove(event) {
+            // Calculate mouse position
+            const rect = renderer.domElement.getBoundingClientRect();
+            mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+            mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+            
+            // Set raycaster
+            raycaster.setFromCamera(mouse, camera);
+            
+            // Get intersections with clickable objects
+            const clickableObjects = [];
+            scene.traverse((child) => {
+                if (child.userData && child.userData.isClickable) {
+                    clickableObjects.push(child);
+                }
+            });
+            
+            const intersects = raycaster.intersectObjects(clickableObjects);
+            
+            // Update cursor and hover effects
+            if (intersects.length > 0) {
+                const hoveredObject = intersects[0].object;
+                renderer.domElement.style.cursor = 'pointer';
+                
+                // Add hover effect
+                if (hoveredObject.userData.type === 'measurement-text') {
+                    if (hoveredObject !== window.lastHoveredObject) {
+                        // Reset previous hover
+                        if (window.lastHoveredObject) {
+                            window.lastHoveredObject.material.opacity = 1.0;
+                        }
+                        // Set new hover
+                        hoveredObject.material.opacity = 0.8;
+                        window.lastHoveredObject = hoveredObject;
+                    }
+                }
+            } else {
+                renderer.domElement.style.cursor = 'default';
+                // Reset hover
+                if (window.lastHoveredObject) {
+                    window.lastHoveredObject.material.opacity = 1.0;
+                    window.lastHoveredObject = null;
+                }
+            }
+        }
+
+        function openMeasurementEditor(textMesh) {
+            const measurement = textMesh.userData.measurement;
+            const currentValue = textMesh.userData.currentValue;
+            
+            // Close any existing editor
+            closeMeasurementEditor();
+            
+            // Create floating input editor with better styling
+            const editor = document.createElement('div');
+            editor.id = 'measurement-editor';
+            editor.className = 'measurement-editor';
+            editor.style.cssText = `
+                position: fixed;
+                z-index: 10000;
+                background: white;
+                border: 4px solid #33a6b8;
+                border-radius: 12px;
+                padding: 15px;
+                box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+                display: flex;
+                align-items: center;
+                gap: 15px;
+                font-family: 'Poppins', sans-serif;
+                min-width: 320px;
+            `;
+            
+            // Position near the clicked measurement
+            const rect = renderer.domElement.getBoundingClientRect();
+            const screenPosition = getScreenPosition(textMesh.position);
+            editor.style.left = Math.max(10, Math.min(window.innerWidth - 350, rect.left + screenPosition.x - 160)) + 'px';
+            editor.style.top = Math.max(10, Math.min(window.innerHeight - 100, rect.top + screenPosition.y - 40)) + 'px';
+            
+            editor.innerHTML = `
+                <label style="font-weight: bold; color: #33a6b8; font-size: 16px;">${getMeasurementName(measurement)}:</label>
+                <input type="number" id="editor-input" value="${currentValue.toFixed(1)}" 
+                       step="0.1" min="0.1" style="width: 100px; padding: 8px; border: 2px solid #ccc; border-radius: 6px; font-size: 16px; text-align: center;">
+                <span style="color: #666; font-weight: bold;">mm</span>
+                <button id="editor-confirm" class="confirm-btn" style="background: #33a6b8; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 16px;">✓</button>
+                <button id="editor-cancel" class="cancel-btn" style="background: #ccc; color: #333; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 16px;">✕</button>
+            `;
+            
+            document.body.appendChild(editor);
+            activeEditor = editor;
+            
+            // Focus and select input
+            const input = editor.querySelector('#editor-input');
+            input.focus();
+            input.select();
+            
+            // Event listeners
+            editor.querySelector('#editor-confirm').addEventListener('click', () => {
+                const newValue = parseFloat(input.value);
+                if (!isNaN(newValue) && newValue > 0) {
+                    applyMeasurementChange(measurement, newValue);
+                }
+                closeMeasurementEditor();
+            });
+            
+            editor.querySelector('#editor-cancel').addEventListener('click', closeMeasurementEditor);
+            
+            // Enter to confirm, Escape to cancel
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    const newValue = parseFloat(input.value);
+                    if (!isNaN(newValue) && newValue > 0) {
+                        applyMeasurementChange(measurement, newValue);
+                    }
+                    closeMeasurementEditor();
+                } else if (e.key === 'Escape') {
+                    closeMeasurementEditor();
+                }
+            });
+            
+            // Close when clicking outside
+            setTimeout(() => {
+                document.addEventListener('click', function closeOnClickOutside(e) {
+                    if (!editor.contains(e.target) && e.target !== renderer.domElement) {
+                        closeMeasurementEditor();
+                        document.removeEventListener('click', closeOnClickOutside);
+                    }
+                });
+            }, 100);
+        }
+
+        function getScreenPosition(position) {
+            const vector = position.clone();
+            vector.project(camera);
+            
+            const x = (vector.x * 0.5 + 0.5) * renderer.domElement.width;
+            const y = (vector.y * -0.5 + 0.5) * renderer.domElement.height;
+            
+            return { x: x, y: y };
+        }
+
+        function closeMeasurementEditor() {
+            if (activeEditor) {
+                activeEditor.remove();
+                activeEditor = null;
+            }
+        }
+
+        function applyMeasurementChange(measurement, newValue) {
+            // Update the corresponding input in the panel
+            const input = document.getElementById(measurement + '-input');
+            if (input) {
+                input.value = newValue.toFixed(1);
+            }
+            
+            // Apply the change using existing logic
+            updateModelDimensions(measurement, newValue);
+            synchronizeMeasurements(measurement, newValue);
+            updateSyncIndicators();
+            updateExportInfo();
+            updateMeasurementVisualizations();
+            
+            showToast(getMeasurementName(measurement) + ' mis à jour: ' + newValue.toFixed(1) + 'mm', 'success');
+        }
+
+        function initThreeJS() {
+            console.log('Initializing Three.js - using teacher dashboard approach...');
+            
+            const canvas = document.getElementById('model-canvas');
+            if (!canvas) {
+                console.error('Model canvas not found');
+                return;
+            }
+            
+            try {
+                // Check if Three.js is available
+                if (typeof THREE === 'undefined') {
+                    console.error('THREE is not defined');
+                    showToast('Three.js non disponible', 'error');
+                    return;
+                }
+                
+                console.log('Three.js version:', THREE.REVISION);
+                
+                // Scene with light background like UltraCura
+                scene = new THREE.Scene();
+                scene.background = new THREE.Color(0xf0f0f0); // Light gray instead of black
+
+                // Camera
+                const width = canvas.clientWidth || window.innerWidth;
+                const height = canvas.clientHeight || (window.innerHeight - 70);
+                camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+                camera.position.set(0, 5, 10);
+
+                // Renderer - using same approach as teacher dashboard
+                renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+                renderer.setSize(width, height);
+                renderer.shadowMap.enabled = true;
+                renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+                // OrbitControls - using same approach as teacher dashboard
+                // In the initThreeJS function, after initializing controls
+if (typeof THREE.OrbitControls !== 'undefined') {
+    controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.25;
+    controls.enablePan = true;
+    controls.enableZoom = true;
+    controls.enableRotate = true;
+    console.log('OrbitControls initialized successfully');
+    
+    // Setup scroll rotation after controls are initialized
+    setupScrollRotation();
+} else {
+    console.warn('OrbitControls not available, using basic controls');
+    controls = createBasicControls();
+}
+
+
+                // Initialize raycaster and mouse for interaction
+                raycaster = new THREE.Raycaster();
+                mouse = new THREE.Vector2();
+
+                // Add click event listener for 3D interactions
+renderer.domElement.addEventListener('click', (event) => {
+    console.log('Canvas clicked at', event.clientX, event.clientY);
+    onCanvasClick(event);
+});
+                renderer.domElement.addEventListener('mousemove', onCanvasMouseMove);
+                
+                // Change cursor when hovering over clickable elements
+                renderer.domElement.style.cursor = 'default';
+
+                // Lighting
+                setupLighting();
+
+                // Grid - optional, can be toggled
+                setupGrid();
+
+                // Don't add renderer to canvas yet - will be done when model loads
+                // This matches the teacher dashboard pattern
+                
+                // Animation loop
+                animate();
+
+                // Handle window resize
+                window.addEventListener('resize', onWindowResize);
+                
+                console.log('Three.js initialized successfully');
+                showToast('Viewer 3D initialisé', 'success');
+                
+            } catch (error) {
+                console.error('Error initializing Three.js:', error);
+                showToast('Erreur d\'initialisation du viewer 3D: ' + error.message, 'error');
+            }
+        }
+
+        // Basic camera controls fallback
+        function createBasicControls() {
+            const controls = {
+                enableDamping: true,
+                dampingFactor: 0.25,
+                enablePan: true,
+                enableZoom: true,
+                enableRotate: true,
+                target: new THREE.Vector3(0, 0, 0),
+                update: function() {
+                    // Basic update function
+                }
+            };
+            
+            // Add basic mouse controls
+            let mouseDown = false;
+            let mouseX = 0;
+            let mouseY = 0;
+            
+            renderer.domElement.addEventListener('mousedown', (event) => {
+                mouseDown = true;
+                mouseX = event.clientX;
+                mouseY = event.clientY;
+            });
+            
+            renderer.domElement.addEventListener('mouseup', () => {
+                mouseDown = false;
+            });
+            
+            renderer.domElement.addEventListener('mousemove', (event) => {
+                if (!mouseDown) return;
+                
+                const deltaX = event.clientX - mouseX;
+                const deltaY = event.clientY - mouseY;
+                
+                // Rotate camera around the target
+                const spherical = new THREE.Spherical();
+                spherical.setFromVector3(camera.position.clone().sub(controls.target));
+                spherical.theta -= deltaX * 0.01;
+                spherical.phi += deltaY * 0.01;
+                spherical.phi = Math.max(0.1, Math.min(Math.PI - 0.1, spherical.phi));
+                
+                camera.position.setFromSpherical(spherical).add(controls.target);
+                camera.lookAt(controls.target);
+                
+                mouseX = event.clientX;
+                mouseY = event.clientY;
+            });
+            
+            // Zoom with mouse wheel
+            renderer.domElement.addEventListener('wheel', (event) => {
+                const distance = camera.position.distanceTo(controls.target);
+                const newDistance = Math.max(1, Math.min(100, distance + event.deltaY * 0.01));
+                const direction = camera.position.clone().sub(controls.target).normalize();
+                camera.position.copy(controls.target.clone().add(direction.multiplyScalar(newDistance)));
+            });
+            
+            return controls;
+        }
+
+        function setupLighting() {
+            // Ambient light
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            scene.add(ambientLight);
+
+            // Directional light
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(10, 10, 5);
+            directionalLight.castShadow = true;
+            directionalLight.shadow.mapSize.width = 2048;
+            directionalLight.shadow.mapSize.height = 2048;
+            scene.add(directionalLight);
+
+            // Fill lights
+            const fillLight1 = new THREE.DirectionalLight(0xffffff, 0.4);
+            fillLight1.position.set(-10, 5, -5);
+            scene.add(fillLight1);
+
+            const fillLight2 = new THREE.DirectionalLight(0xffffff, 0.3);
+            fillLight2.position.set(0, -10, 5);
+            scene.add(fillLight2);
+        }
+
+        function setupGrid() {
+    // Comment out or remove the grid helper
+    // const gridHelper = new THREE.GridHelper(20, 20, 0x444444, 0x222222);
+    // gridHelper.name = 'grid';
+    // scene.add(gridHelper);
+
+    // Keep the axes helper for orientation if desired
+    const axesHelper = new THREE.AxesHelper(5);
+    axesHelper.name = 'axes';
+    scene.add(axesHelper);
+}
+
+
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / (window.innerHeight - 70);
+            camera.updateProjectionMatrix();
+                        renderer.setSize(window.innerWidth, window.innerHeight - 70);
+        }
+
+        function setupScrollRotation() {
+    // Remove the default wheel listener from OrbitControls
+    if (controls && controls.domElement) {
+        controls.domElement.removeEventListener('wheel', controls.onMouseWheel);
+        
+        // Add our custom wheel listener
+        controls.domElement.addEventListener('wheel', handleScrollRotation, { passive: false });
+    }
+}
+
+
+function handleScrollRotation(event) {
+    event.preventDefault();
+    
+    if (!scrollRotationEnabled || !currentModel) return;
+    
+    // Determine rotation direction and amount
+    const deltaX = event.deltaX;
+    const deltaY = event.deltaY;
+    
+    // Adjust rotation speed - lower value for smoother rotation
+    const rotationSpeed = 0.005;
+    
+    // Vertical scrolling (up/down) - rotate around X axis
+    if (Math.abs(deltaY) > Math.abs(deltaX)) {
+        // Rotate model around X axis (up/down)
+        currentModel.rotation.x += deltaY * rotationSpeed;
+    } else {
+        // Horizontal scrolling (left/right) - rotate around Y axis
+        currentModel.rotation.y += deltaX * rotationSpeed;
+    }
+    
+    // Update measurement visualizations to face camera
+    updateMeasurementVisualizations();
+}
+
+// Add a toggle function for scroll rotation
+function toggleScrollRotation() {
+    scrollRotationEnabled = !scrollRotationEnabled;
+    showToast(scrollRotationEnabled ? 
+        'Rotation par défilement activée' : 
+        'Rotation par défilement désactivée', 'info');
+}
+        
+
+function addScrollRotationToggle() {
+    const viewerControls = document.querySelector('.viewer-controls');
+    if (viewerControls) {
+        const toggleBtn = document.createElement('button');
+        toggleBtn.className = 'control-btn';
+        toggleBtn.id = 'toggle-scroll-rotation';
+        toggleBtn.title = 'Activer/Désactiver la rotation par défilement';
+        toggleBtn.innerHTML = '<i class="fas fa-sync-alt"></i>';
+        toggleBtn.addEventListener('click', toggleScrollRotation);
+        viewerControls.appendChild(toggleBtn);
+    }
+}
+        function initEventListeners() {
+            console.log('Initializing event listeners...');
+            
+            
+            // Import button
+            const importBtn = document.getElementById('import-btn');
+            if (importBtn) {
+                importBtn.addEventListener('click', () => {
+                    console.log('Import button clicked');
+                    const fileInput = document.getElementById('file-input');
+                    if (fileInput) {
+                        fileInput.click();
+                    } else {
+                        console.error('File input not found');
+                        showToast('Erreur: Sélecteur de fichier non trouvé', 'error');
+                    }
+                });
+                console.log('Import button listener added');
+            } else {
+                console.error('Import button not found');
+            }
+
+            // File input
+            const fileInput = document.getElementById('file-input');
+            if (fileInput) {
+                fileInput.addEventListener('change', handleFileSelect);
+                console.log('File input listener added');
+            } else {
+                console.error('File input not found');
+            }
+
+            // Export buttons
+            const exportBtn = document.getElementById('export-btn');
+            const exportModelBtn = document.getElementById('export-model-btn');
+            if (exportBtn) {
+                exportBtn.addEventListener('click', exportModel);
+                console.log('Export button listener added');
+            }
+            if (exportModelBtn) {
+                exportModelBtn.addEventListener('click', exportModel);
+                console.log('Export model button listener added');
+            }
+
+            // Viewer controls
+            const resetViewBtn = document.getElementById('reset-view');
+            const toggleWireframeBtn = document.getElementById('toggle-wireframe');
+            const toggleGridBtn = document.getElementById('toggle-grid');
+            const screenshotBtn = document.getElementById('screenshot');
+            
+            if (resetViewBtn) resetViewBtn.addEventListener('click', resetView);
+            if (toggleWireframeBtn) toggleWireframeBtn.addEventListener('click', toggleWireframe);
+            if (toggleGridBtn) toggleGridBtn.addEventListener('click', toggleGrid);
+            if (screenshotBtn) screenshotBtn.addEventListener('click', takeScreenshot);
+
+            // Upload area
+            const uploadArea = document.getElementById('upload-area');
+            if (uploadArea) {
+                uploadArea.addEventListener('click', () => {
+                    console.log('Upload area clicked');
+                    const fileInput = document.getElementById('file-input');
+                    if (fileInput) {
+                        fileInput.click();
+                    } else {
+                        console.error('File input not found when upload area clicked');
+                    }
+                });
+                console.log('Upload area listener added');
+            } else {
+                console.error('Upload area not found');
+            }
+
+            // Measurement inputs
+            const measurementInputs = document.querySelectorAll('.value-input');
+            console.log('Found', measurementInputs.length, 'measurement inputs');
+            measurementInputs.forEach(input => {
+                input.addEventListener('input', handleMeasurementChange);
+                input.addEventListener('focus', highlightMeasurement);
+                input.addEventListener('blur', unhighlightMeasurement);
+            });
+            
+            console.log('Event listeners initialized successfully');
+        }
+
+        function initDragAndDrop() {
+            const uploadArea = document.getElementById('upload-area');
+            
+            if (!uploadArea) {
+                console.error('Upload area not found for drag and drop');
+                return;
+            }
+            
+            console.log('Initializing drag and drop...');
+            
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+
+            uploadArea.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+            });
+
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    console.log('File dropped:', files[0].name);
+                    handleFile(files[0]);
+                } else {
+                    console.log('No files in drop event');
+                }
+            });
+            
+            console.log('Drag and drop initialized');
+        }
+
+        function handleFile(file) {
+            console.log('Handling file:', file.name, 'Size:', file.size);
+            
+            if (!file.name.toLowerCase().endsWith('.stl')) {
+                showToast('Seuls les fichiers STL sont acceptés', 'error');
+                return;
+            }
+
+            if (file.size > 50 * 1024 * 1024) { // 50MB limit
+                showToast('Le fichier est trop volumineux (max 50MB)', 'error');
+                return;
+            }
+
+            // Check if Three.js is ready
+            if (typeof THREE === 'undefined') {
+                showToast('Le viewer 3D n\'est pas encore prêt, veuillez patienter...', 'warning');
+                setTimeout(() => handleFile(file), 1000);
+                return;
+            }
+
+            // Check if scene is initialized
+            if (!scene || !renderer) {
+                showToast('Le viewer 3D n\'est pas initialisé, tentative de réinitialisation...', 'warning');
+                try {
+                    initThreeJS();
+                    setTimeout(() => loadSTLFile(file), 500);
+                } catch (error) {
+                    showToast('Erreur d\'initialisation du viewer 3D', 'error');
+                }
+                return;
+            }
+
+            loadSTLFile(file);
+        }
+
+        function handleFileSelect(event) {
+            console.log('File selected via input');
+            const file = event.target.files[0];
+            if (file) {
+                handleFile(file);
+            } else {
+                console.log('No file selected');
+            }
+        }
+
+        function loadSTLFile(file) {
+            console.log('Loading STL file:', file.name);
+
+            // Get DOM elements with null checks - using teacher dashboard approach
+            const uploadArea = document.getElementById('upload-area');
+            const canvas = document.getElementById('model-canvas');
+            const measurementPanel = document.getElementById('measurement-panel');
+
+            // Check if required elements exist
+            if (!uploadArea || !canvas || !measurementPanel) {
+                console.error('Required DOM elements not found:', {
+                    uploadArea: !!uploadArea,
+                    canvas: !!canvas,
+                    measurementPanel: !!measurementPanel
+                });
+                showToast('Erreur: Éléments de l\'interface non trouvés', 'error');
+                return;
+            }
+
+            // Show loading using teacher dashboard approach
+            uploadArea.style.display = 'none';
+            canvas.style.display = 'block';
+            
+            // Create loading spinner dynamically like in teacher dashboard
+            canvas.innerHTML = `
+                <div class="loading-spinner" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: white;">
+                    <div class="spinner" style="width: 40px; height: 40px; border: 4px solid rgba(255, 255, 255, 0.3); border-radius: 50%; border-top: 4px solid var(--primary); animation: spin 1s linear infinite; margin: 0 auto 1rem;"></div>
+                    <p>Chargement du modèle...</p>
+                </div>
+            `;
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                try {
+                    console.log('File read successfully, parsing STL...');
+                    
+                    // Check if STLLoader is available - using same approach as teacher dashboard
+                    if (typeof THREE.STLLoader === 'undefined') {
+                        throw new Error('STLLoader not available');
+                    }
+                    
+                    // Create STL loader
+                    const loader = new THREE.STLLoader();
+                    const geometry = loader.parse(event.target.result);
+                    
+                    console.log('STL parsed successfully');
+                    
+                    // Store original geometry
+                    originalGeometry = geometry.clone();
+                    
+                    // Create mesh using same material approach as teacher dashboard
+                    const material = new THREE.MeshStandardMaterial({ 
+                        color: 0x4fc3d5,
+                        metalness: 0.1,
+                        roughness: 0.4,
+                        side: THREE.DoubleSide 
+                    });
+                    
+                    // Remove existing model
+                    if (currentModel) {
+                        scene.remove(currentModel);
+                    }
+                    
+                    currentModel = new THREE.Mesh(geometry, material);
+                    currentModel.castShadow = true;
+                    currentModel.receiveShadow = true;
+                    
+                    // Center and scale model
+                    centerAndScaleModel();
+                    
+                    // Add to scene
+                    scene.add(currentModel);
+                    
+                    console.log('Model added to scene');
+                    
+                    // Calculate original dimensions
+                    calculateOriginalDimensions();
+                    
+                    // Setup measurement interface
+                    setupMeasurementInterface();
+                    
+                    // Clear loading and add renderer to canvas like teacher dashboard
+                    canvas.innerHTML = '';
+                    canvas.appendChild(renderer.domElement);
+                    
+                    // Show measurement panel
+                    measurementPanel.style.display = 'block';
+                    
+                    // Enable export buttons
+                    const exportBtn = document.getElementById('export-btn');
+                    const exportModelBtn = document.getElementById('export-model-btn');
+                    if (exportBtn) exportBtn.disabled = false;
+                    if (exportModelBtn) exportModelBtn.disabled = false;
+                    
+                    // Reset view
+                    resetView();
+                    
+                    showToast('Modèle chargé avec succès', 'success');
+                    
+                } catch (error) {
+                    console.error('Error loading STL:', error);
+                    showToast('Erreur lors du chargement du fichier STL: ' + error.message, 'error');
+                    
+                    // Safe fallback - show error in canvas
+                    canvas.innerHTML = `
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: white;">
+                            <i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 1rem; color: #ff4444;"></i>
+                            <p>Erreur lors du chargement</p>
+                            <p style="font-size: 0.8rem; margin-top: 0.5rem;">Cliquez pour réessayer</p>
+                        </div>
+                    `;
+                    
+                    // Make canvas clickable to retry
+                    canvas.style.cursor = 'pointer';
+                    canvas.onclick = () => {
+                        uploadArea.style.display = 'block';
+                        canvas.style.display = 'none';
+                        canvas.onclick = null;
+                        canvas.style.cursor = 'default';
+                    };
+                }
+            };
+            
+            reader.onerror = function(error) {
+                console.error('File reading error:', error);
+                showToast('Erreur lors de la lecture du fichier', 'error');
+                
+                // Safe fallback
+                uploadArea.style.display = 'block';
+                canvas.style.display = 'none';
+            };
+            
+            reader.readAsArrayBuffer(file);
+        }
+
+        function centerAndScaleModel() {
+            if (!currentModel) return;
+            
+            // Compute bounding box
+            const box = new THREE.Box3().setFromObject(currentModel);
+            const center = new THREE.Vector3();
+            const size = new THREE.Vector3();
+            
+            box.getCenter(center);
+            box.getSize(size);
+            
+            // Center the model
+            currentModel.position.set(-center.x, -center.y, -center.z);
+            
+            // Scale to fit view (optional, can be adjusted)
+            const maxDim = Math.max(size.x, size.y, size.z);
+            if (maxDim > 10) {
+                const scale = 10 / maxDim;
+                currentModel.scale.set(scale, scale, scale);
+            }
+        }
+
+        function calculateOriginalDimensions() {
+            if (!currentModel) return;
+            
+            const box = new THREE.Box3().setFromObject(currentModel);
+            const size = new THREE.Vector3();
+            box.getSize(size);
+            
+            // Convert to millimeters (assuming model units are in mm)
+            originalDimensions = {
+                length: Math.round(size.z * 10) / 10,
+                width: Math.round(size.x * 10) / 10,
+                height: Math.round(size.y * 10) / 10
+            };
+            
+            // Calculate specialized measurements based on anatomical proportions
+            originalDimensions['arch-height'] = Math.round(originalDimensions.height * 0.75 * 10) / 10;
+            originalDimensions['heel-width'] = Math.round(originalDimensions.width * 0.6 * 10) / 10;
+            originalDimensions['forefoot-width'] = Math.round(originalDimensions.width * 0.9 * 10) / 10;
+            
+            console.log('Calculated original dimensions:', originalDimensions);
+            
+            // Update input fields
+            updateMeasurementInputs();
+            updateExportInfo();
+        }
+
+        function updateMeasurementInputs() {
+            Object.keys(originalDimensions).forEach(key => {
+                const input = document.getElementById(key.replace('-', '-') + '-input');
+                if (input) {
+                    input.value = originalDimensions[key];
+                }
+            });
+        }
+
+        function setupMeasurementInterface() {
+            // Clear existing measurement visualizations
+            clearMeasurementVisualizations();
+            
+            // Add measurement points and lines to the 3D view
+            addMeasurementVisualizations();
+        }
+
+        function addMeasurementVisualizations() {
+    if (!currentModel) return;
+    
+    const box = new THREE.Box3().setFromObject(currentModel);
+    const center = new THREE.Vector3();
+    const size = new THREE.Vector3();
+    box.getCenter(center);
+    box.getSize(size);
+    
+    // Increased offset for better spacing from model
+    const baseOffset = Math.max(size.x, size.y, size.z) * 0.8;
+    
+    // Length (Z-axis) - Right side with proper extension lines
+    createTechnicalDimension('length', 
+        new THREE.Vector3(box.min.x, box.min.y, box.min.z), // Model start point
+        new THREE.Vector3(box.min.x, box.min.y, box.max.z), // Model end point
+        new THREE.Vector3(box.max.x + baseOffset, center.y, box.min.z), // Dimension start
+        new THREE.Vector3(box.max.x + baseOffset, center.y, box.max.z), // Dimension end
+        'z', size.z
+    );
+    
+    // Width (X-axis) - Bottom with proper extension lines
+    createTechnicalDimension('width', 
+        new THREE.Vector3(box.min.x, box.min.y, box.min.z), // Model start point
+        new THREE.Vector3(box.max.x, box.min.y, box.min.z), // Model end point
+        new THREE.Vector3(box.min.x, box.min.y - baseOffset, center.z), // Dimension start
+        new THREE.Vector3(box.max.x, box.min.y - baseOffset, center.z), // Dimension end
+        'x', size.x
+    );
+    
+    // Height (Y-axis) - Left side with proper extension lines
+    createTechnicalDimension('height', 
+        new THREE.Vector3(box.min.x, box.min.y, box.max.z), // Model start point
+        new THREE.Vector3(box.min.x, box.max.y, box.max.z), // Model end point
+        new THREE.Vector3(box.min.x - baseOffset, box.min.y, center.z), // Dimension start
+        new THREE.Vector3(box.min.x - baseOffset, box.max.y, center.z), // Dimension end
+        'y', size.y
+    );
+
+ function addMeasurementVisualizations() {
+    if (!currentModel) return;
+    
+    const box = new THREE.Box3().setFromObject(currentModel);
+    const center = new THREE.Vector3();
+    const size = new THREE.Vector3();
+    box.getCenter(center);
+    box.getSize(size);
+    
+    // Base offset distance from model
+    const offset = Math.max(size.x, size.y, size.z) * 0.6;
+    
+    // Length (Z-axis) - Right side, vertical dimension line
+    createTechnicalDimensionLine('length', 
+        box.max.x + offset, // X position of dimension line
+        center.y, // Y position 
+        box.min.z, box.max.z, // Z start and end
+        'vertical-right', size.z
+    );
+    
+    // Width (X-axis) - Bottom, horizontal dimension line  
+    createTechnicalDimensionLine('width',
+        box.min.x, box.max.x, // X start and end
+        box.min.y - offset, // Y position of dimension line
+        center.z, // Z position
+        'horizontal-bottom', size.x
+    );
+    
+    // Height (Y-axis) - Left side, vertical dimension line
+    createTechnicalDimensionLine('height',
+        box.min.x - offset, // X position of dimension line
+        box.min.y, box.max.y, // Y start and end  
+        center.z, // Z position
+        'vertical-left', size.y
+    );
+    
+    // Specialized measurements with smaller offset
+    const innerOffset = offset * 0.7;
+    
+    // Arch height - Right side, inner position
+    const archHeight = size.y * 0.75;
+    createTechnicalDimensionLine('arch-height',
+        box.max.x + innerOffset,
+        box.min.y, box.min.y + archHeight,
+        center.z,
+        'vertical-right', archHeight
+    );
+    
+    // Heel width - Bottom, back section
+    const heelWidth = size.x * 0.6;
+    const heelStart = center.x - (heelWidth / 2);
+    createTechnicalDimensionLine('heel-width',
+        heelStart, heelStart + heelWidth,
+        box.min.y - innerOffset,
+        box.min.z,
+        'horizontal-bottom', heelWidth
+    );
+    
+    // Forefoot width - Bottom, front section  
+    const forefootWidth = size.x * 0.9;
+    const forefootStart = center.x - (forefootWidth / 2);
+    createTechnicalDimensionLine('forefoot-width',
+        forefootStart, forefootStart + forefootWidth,
+        box.min.y - innerOffset,
+        box.max.z,
+        'horizontal-bottom', forefootWidth
+    );
+}
+
+function createTechnicalDimensionLine(measurement, pos1, pos2, pos3, pos4, orientation, dimension) {
+    const group = new THREE.Group();
+    group.name = `measurement-${measurement}`;
+    
+    const box = new THREE.Box3().setFromObject(currentModel);
+    let dimStart, dimEnd, modelStart, modelEnd;
+    
+    // Set up points based on orientation exactly like technical drawings
+    switch(orientation) {
+        case 'vertical-right':
+            // Dimension line is vertical on the right side
+            dimStart = new THREE.Vector3(pos1, pos2, pos3); // X fixed, Y middle, Z start
+            dimEnd = new THREE.Vector3(pos1, pos2, pos4);   // X fixed, Y middle, Z end
+            modelStart = new THREE.Vector3(box.max.x, pos2, pos3); // Model edge
+            modelEnd = new THREE.Vector3(box.max.x, pos2, pos4);   // Model edge
+            break;
+            
+        case 'vertical-left':
+            // Dimension line is vertical on the left side
+            dimStart = new THREE.Vector3(pos1, pos2, pos4); // X fixed, Y start, Z middle
+            dimEnd = new THREE.Vector3(pos1, pos3, pos4);   // X fixed, Y end, Z middle  
+            modelStart = new THREE.Vector3(box.min.x, pos2, pos4); // Model edge
+            modelEnd = new THREE.Vector3(box.min.x, pos3, pos4);   // Model edge
+            break;
+            
+        case 'horizontal-bottom':
+            // Dimension line is horizontal at the bottom
+            dimStart = new THREE.Vector3(pos1, pos3, pos4); // X start, Y fixed, Z position
+            dimEnd = new THREE.Vector3(pos2, pos3, pos4);   // X end, Y fixed, Z position
+            modelStart = new THREE.Vector3(pos1, box.min.y, pos4); // Model edge
+            modelEnd = new THREE.Vector3(pos2, box.min.y, pos4);   // Model edge
+            break;
+    }
+    
+    // Extension lines (perpendicular from model to dimension line)
+    addStraightExtensionLine(group, modelStart, dimStart);
+    addStraightExtensionLine(group, modelEnd, dimEnd);
+    
+    // Main dimension line
+    const lineGeometry = new THREE.BufferGeometry().setFromPoints([dimStart, dimEnd]);
+    const lineMaterial = new THREE.LineBasicMaterial({ 
+        color: 0x2d3748,
+        linewidth: 2
+    });
+    const line = new THREE.Line(lineGeometry, lineMaterial);
+    group.add(line);
+    
+    // Arrow heads - smaller and precise like technical drawings
+    const arrowSize = 0.08;
+    addTechnicalArrows(group, dimStart, dimEnd, arrowSize, orientation);
+    
+    // Dimension text
+    const textMesh = createCleanDimensionText(measurement, dimension, dimStart, dimEnd, orientation);
+    group.add(textMesh);
+    
+    scene.add(group);
+}
+
+function addStraightExtensionLine(group, modelPoint, dimPoint) {
+    const extGeometry = new THREE.BufferGeometry().setFromPoints([modelPoint, dimPoint]);
+    const extMaterial = new THREE.LineBasicMaterial({ 
+        color: 0x666666,
+        linewidth: 1,
+        transparent: true,
+        opacity: 0.7
+    });
+    const extLine = new THREE.Line(extGeometry, extMaterial);
+    group.add(extLine);
+}
+
+function addTechnicalArrows(group, start, end, size, orientation) {
+    const arrowGeometry = new THREE.ConeGeometry(size * 0.5, size, 6);
+    const arrowMaterial = new THREE.MeshBasicMaterial({ color: 0x2d3748 });
+    
+    // Start arrow
+    const startArrow = new THREE.Mesh(arrowGeometry, arrowMaterial);
+    startArrow.position.copy(start);
+    
+    // End arrow  
+    const endArrow = new THREE.Mesh(arrowGeometry, arrowMaterial);
+    endArrow.position.copy(end);
+    
+    // Orient arrows based on dimension orientation
+    if (orientation.includes('vertical')) {
+        if (orientation === 'vertical-left') {
+            startArrow.rotation.x = Math.PI; // Point up
+            // endArrow points down (default)
+        } else {
+            startArrow.rotation.x = Math.PI; // Point towards start of measurement
+            // endArrow points down (default) 
+        }
+    } else if (orientation.includes('horizontal')) {
+        startArrow.rotation.z = Math.PI / 2; // Point left
+        endArrow.rotation.z = -Math.PI / 2; // Point right
+    }
+    
+    group.add(startArrow);
+    group.add(endArrow);
+}
+
+function createCleanDimensionText(measurement, dimension, startPoint, endPoint, orientation) {
+    // Small, clean text box like technical drawings
+    const textGeometry = new THREE.PlaneGeometry(0.8, 0.25);
+    const canvas = document.createElement('canvas');
+    canvas.width = 200;
+    canvas.height = 60;
+    const context = canvas.getContext('2d');
+    
+    // White background
+    context.fillStyle = '#ffffff';
+    context.fillRect(0, 0, 200, 60);
+    
+    // Clean black text
+    context.fillStyle = '#2d3748';
+    context.font = 'bold 16px Arial';
+    context.textAlign = 'center';
+    context.textBaseline = 'middle';
+    
+    // Get current value
+    const input = document.getElementById(measurement.replace('-', '-') + '-input');
+    const currentValue = input ? parseFloat(input.value) : Math.round(dimension * 10) / 10;
+    context.fillText(`${currentValue.toFixed(1)}`, 100, 30);
+    
+    const textTexture = new THREE.CanvasTexture(canvas);
+    const textMaterial = new THREE.MeshBasicMaterial({ 
+        map: textTexture, 
+        transparent: true,
+        side: THREE.DoubleSide
+    });
+    const textMesh = new THREE.Mesh(textGeometry, textMaterial);
+    
+    // Interactive properties
+    textMesh.userData = {
+        type: 'measurement-text',
+        measurement: measurement,
+        currentValue: currentValue,
+        isClickable: true
+    };
+    
+    // Position text at middle of dimension line
+    const midPoint = new THREE.Vector3().addVectors(startPoint, endPoint).multiplyScalar(0.5);
+    textMesh.position.copy(midPoint);
+    
+    // Small offset to avoid line overlap
+    if (orientation.includes('vertical')) {
+        textMesh.position.x += 0.15; // Offset from vertical line
+    } else {
+        textMesh.position.y += 0.15; // Offset from horizontal line  
+    }
+    
+    return textMesh;
+}
+    
+
+function createTechnicalDimension(measurement, modelStart, modelEnd, dimStart, dimEnd, axis, dimension) {
+    const group = new THREE.Group();
+    group.name = `measurement-${measurement}`;
+    
+    // Extension lines from model to dimension line (like technical drawings)
+    addExtensionLine(group, modelStart, dimStart);
+    addExtensionLine(group, modelEnd, dimEnd);
+    
+    // Main dimension line - thicker and more prominent
+    const lineGeometry = new THREE.BufferGeometry().setFromPoints([dimStart, dimEnd]);
+    const lineMaterial = new THREE.LineBasicMaterial({ 
+        color: 0x33a6b8,
+        linewidth: 3
+    });
+    const line = new THREE.Line(lineGeometry, lineMaterial);
+    group.add(line);
+    
+    // Arrow heads at both ends
+    const arrowSize = Math.max(dimension * 0.05, 0.1);
+    const arrowGeometry = new THREE.ConeGeometry(arrowSize * 0.4, arrowSize * 1.0, 8);
+    const arrowMaterial = new THREE.MeshBasicMaterial({ color: 0x33a6b8 });
+    
+    // Calculate direction for arrows
+    const direction = new THREE.Vector3().subVectors(dimEnd, dimStart).normalize();
+    
+    // Start arrow (pointing towards end)
+    const startArrow = new THREE.Mesh(arrowGeometry, arrowMaterial);
+    startArrow.position.copy(dimStart);
+    
+    // End arrow (pointing towards start)
+    const endArrow = new THREE.Mesh(arrowGeometry, arrowMaterial);
+    endArrow.position.copy(dimEnd);
+    
+    // Orient arrows based on dimension direction
+    if (axis === 'x') {
+        startArrow.rotation.z = Math.PI / 2;
+        endArrow.rotation.z = -Math.PI / 2;
+    } else if (axis === 'y') {
+        startArrow.rotation.x = Math.PI;
+        // endArrow uses default orientation
+    } else if (axis === 'z') {
+        startArrow.rotation.x = Math.PI / 2;
+        endArrow.rotation.x = -Math.PI / 2;
+    }
+    
+    group.add(startArrow);
+    group.add(endArrow);
+    
+    // Dimension text in the middle
+    const textMesh = createTechnicalDimensionText(measurement, dimension, dimStart, dimEnd);
+    group.add(textMesh);
+    
+    scene.add(group);
+}
+function createTechnicalDimensionText(measurement, dimension, startPoint, endPoint) {
+    // Smaller, cleaner text boxes for technical look
+    const textGeometry = new THREE.PlaneGeometry(1.2, 0.3);
+    const canvas = document.createElement('canvas');
+    canvas.width = 300;
+    canvas.height = 80;
+    const context = canvas.getContext('2d');
+    
+    // Clean white background with thin border
+    context.fillStyle = '#ffffff';
+    context.fillRect(0, 0, 300, 80);
+    context.strokeStyle = '#33a6b8';
+    context.lineWidth = 2;
+    context.strokeRect(2, 2, 296, 76);
+    
+    // Clean, technical text
+    context.fillStyle = '#2d3748';
+    context.font = 'bold 24px Arial';
+    context.textAlign = 'center';
+    context.textBaseline = 'middle';
+    
+    // Get current value from input
+    const input = document.getElementById(measurement.replace('-', '-') + '-input');
+    const currentValue = input ? parseFloat(input.value) : Math.round(dimension * 10) / 10;
+    context.fillText(`${currentValue.toFixed(1)}`, 150, 40);
+    
+    // Add small edit indicator
+    context.font = 'bold 12px Arial';
+    context.fillStyle = '#666';
+    context.fillText('CLIC', 150, 65);
+    
+    const textTexture = new THREE.CanvasTexture(canvas);
+    textTexture.needsUpdate = true;
+    const textMaterial = new THREE.MeshBasicMaterial({ 
+        map: textTexture, 
+        transparent: true,
+        side: THREE.DoubleSide
+    });
+    const textMesh = new THREE.Mesh(textGeometry, textMaterial);
+    
+    // Make it interactive
+    textMesh.userData = {
+        type: 'measurement-text',
+        measurement: measurement,
+        currentValue: currentValue,
+        isClickable: true
+    };
+    
+    // Position text at middle of dimension line, slightly offset
+    const midPoint = new THREE.Vector3().addVectors(startPoint, endPoint).multiplyScalar(0.5);
+    textMesh.position.copy(midPoint);
+    
+    // Small offset to avoid line overlap
+    const offset = 0.2;
+    const direction = new THREE.Vector3().subVectors(endPoint, startPoint).normalize();
+    const perpendicular = new THREE.Vector3(-direction.y, direction.x, direction.z).normalize();
+    textMesh.position.add(perpendicular.multiplyScalar(offset));
+    
+    return textMesh;
+}
+    // Specialized measurements with smaller offset
+    const specialOffset = baseOffset * 0.6;
+    
+    // Arch height (partial height) - Right side, inner position
+    const archHeight = size.y * 0.75;
+    createTechnicalDimension('arch-height', 
+        new THREE.Vector3(box.max.x, box.min.y, box.max.z),
+        new THREE.Vector3(box.max.x, box.min.y + archHeight, box.max.z),
+        new THREE.Vector3(box.max.x + specialOffset, box.min.y, center.z),
+        new THREE.Vector3(box.max.x + specialOffset, box.min.y + archHeight, center.z),
+        'y', archHeight
+    );
+    
+    // Heel width (partial width at back) - Bottom, back position
+    const heelWidth = size.x * 0.6;
+    const heelStart = center.x - (heelWidth / 2);
+    createTechnicalDimension('heel-width', 
+        new THREE.Vector3(heelStart, box.min.y, box.min.z),
+        new THREE.Vector3(heelStart + heelWidth, box.min.y, box.min.z),
+        new THREE.Vector3(heelStart, box.min.y - specialOffset, box.min.z + 0.5),
+        new THREE.Vector3(heelStart + heelWidth, box.min.y - specialOffset, box.min.z + 0.5),
+        'x', heelWidth
+    );
+    
+    // Forefoot width (partial width at front) - Bottom, front position
+    const forefootWidth = size.x * 0.9;
+    const forefootStart = center.x - (forefootWidth / 2);
+    createTechnicalDimension('forefoot-width', 
+        new THREE.Vector3(forefootStart, box.min.y, box.max.z),
+        new THREE.Vector3(forefootStart + forefootWidth, box.min.y, box.max.z),
+        new THREE.Vector3(forefootStart, box.min.y - specialOffset, box.max.z - 0.5),
+        new THREE.Vector3(forefootStart + forefootWidth, box.min.y - specialOffset, box.max.z - 0.5),
+        'x', forefootWidth
+    );
+}
+
+        function createDimensionArrow(measurement, startPoint, endPoint, axis, dimension, position) {
+            const group = new THREE.Group();
+            group.name = `measurement-${measurement}`;
+            
+            // Create extension lines from model to measurement points (like in technical drawings)
+            const modelBox = new THREE.Box3().setFromObject(currentModel);
+            const extensionLength = 0.4; // Slightly longer for better visibility
+            
+            // Extension lines with better visibility
+            if (position === 'right' || position === 'right-inner') {
+                const extStart1 = new THREE.Vector3(modelBox.max.x, startPoint.y, startPoint.z);
+                const extEnd1 = new THREE.Vector3(startPoint.x + extensionLength, startPoint.y, startPoint.z);
+                const extStart2 = new THREE.Vector3(modelBox.max.x, endPoint.y, endPoint.z);
+                const extEnd2 = new THREE.Vector3(endPoint.x + extensionLength, endPoint.y, endPoint.z);
+                
+                addExtensionLine(group, extStart1, extEnd1);
+                addExtensionLine(group, extStart2, extEnd2);
+            } else if (position === 'left') {
+                const extStart1 = new THREE.Vector3(modelBox.min.x, startPoint.y, startPoint.z);
+                const extEnd1 = new THREE.Vector3(startPoint.x - extensionLength, startPoint.y, startPoint.z);
+                const extStart2 = new THREE.Vector3(modelBox.min.x, endPoint.y, endPoint.z);
+                const extEnd2 = new THREE.Vector3(endPoint.x - extensionLength, endPoint.y, endPoint.z);
+                
+                addExtensionLine(group, extStart1, extEnd1);
+                addExtensionLine(group, extStart2, extEnd2);
+            } else if (position === 'back' || position === 'front' || position === 'front-inner') {
+                const extStart1 = new THREE.Vector3(startPoint.x, startPoint.y, modelBox.max.z);
+                const extEnd1 = new THREE.Vector3(startPoint.x, startPoint.y, startPoint.z + (position === 'front' ? extensionLength : -extensionLength));
+                const extStart2 = new THREE.Vector3(endPoint.x, endPoint.y, modelBox.max.z);
+                const extEnd2 = new THREE.Vector3(endPoint.x, endPoint.y, endPoint.z + (position === 'front' ? extensionLength : -extensionLength));
+                
+                addExtensionLine(group, extStart1, extEnd1);
+                addExtensionLine(group, extStart2, extEnd2);
+            }
+            
+            // Main dimension line - thicker for better visibility
+            const lineGeometry = new THREE.BufferGeometry().setFromPoints([startPoint, endPoint]);
+            const lineMaterial = new THREE.LineBasicMaterial({ 
+                color: 0x33a6b8,
+                linewidth: 4 // Thicker lines
+            });
+            const line = new THREE.Line(lineGeometry, lineMaterial);
+            group.add(line);
+            
+            // Larger arrow heads for better visibility
+            const arrowSize = Math.max(dimension * 0.03, 0.08); // Larger arrows
+            const arrowGeometry = new THREE.ConeGeometry(arrowSize * 0.6, arrowSize * 1.2, 8);
+            const arrowMaterial = new THREE.MeshBasicMaterial({ color: 0x33a6b8 });
+            
+            // Start arrow
+            const startArrow = new THREE.Mesh(arrowGeometry, arrowMaterial);
+            startArrow.position.copy(startPoint);
+            if (axis === 'x') {
+                startArrow.rotation.z = Math.PI / 2;
+            } else if (axis === 'y') {
+                startArrow.rotation.x = Math.PI;
+            } else if (axis === 'z') {
+                startArrow.rotation.x = Math.PI / 2;
+            }
+            group.add(startArrow);
+            
+            // End arrow
+            const endArrow = new THREE.Mesh(arrowGeometry, arrowMaterial);
+            endArrow.position.copy(endPoint);
+            if (axis === 'x') {
+                endArrow.rotation.z = -Math.PI / 2;
+            } else if (axis === 'y') {
+                // Default orientation for Y
+            } else if (axis === 'z') {
+                endArrow.rotation.x = -Math.PI / 2;
+            }
+            group.add(endArrow);
+            
+            // Larger dimension text
+            const textMesh = createDimensionText(measurement, dimension, startPoint, endPoint, position);
+            group.add(textMesh);
+            
+            scene.add(group);
+        }
+
+        function addExtensionLine(group, start, end) {
+    const extGeometry = new THREE.BufferGeometry().setFromPoints([start, end]);
+    const extMaterial = new THREE.LineBasicMaterial({ 
+        color: 0x888888,
+        linewidth: 1,
+        transparent: true,
+        opacity: 0.6
+    });
+    const extLine = new THREE.Line(extGeometry, extMaterial);
+    group.add(extLine);
+}
+
+        function createDimensionText(measurement, dimension, startPoint, endPoint, position) {
+            // Make text significantly larger for better visibility
+            const textGeometry = new THREE.PlaneGeometry(1.8, 0.45); // Increased from 1.0 x 0.25
+            const canvas = document.createElement('canvas');
+            canvas.width = 400; // Increased from 250
+            canvas.height = 100; // Increased from 60
+            const context = canvas.getContext('2d');
+            
+            // White background with thick border - make it very clickable
+            context.fillStyle = '#ffffff';
+            context.fillRect(0, 0, 400, 100);
+            context.strokeStyle = '#33a6b8';
+            context.lineWidth = 4; // Thicker border
+            context.strokeRect(3, 3, 394, 94);
+            
+            // Add subtle gradient for 3D effect
+            const gradient = context.createLinearGradient(0, 0, 0, 100);
+            gradient.addColorStop(0, '#f8f9fa');
+            gradient.addColorStop(1, '#ffffff');
+            context.fillStyle = gradient;
+            context.fillRect(6, 6, 388, 88);
+            
+            // Larger text for better visibility
+            context.fillStyle = '#33a6b8';
+            context.font = 'bold 28px Arial'; // Increased from 18px
+            context.textAlign = 'center';
+            context.textBaseline = 'middle';
+            
+            // Get current value from input
+            const input = document.getElementById(measurement.replace('-', '-') + '-input');
+            const currentValue = input ? parseFloat(input.value) : Math.round(dimension * 10) / 10;
+            context.fillText(`${currentValue.toFixed(1)} mm`, 200, 50); // Centered in larger canvas
+            
+            // Add larger edit icon to indicate it's clickable
+            context.font = 'bold 16px Arial';
+            context.fillText('✏️ CLIQUER', 200, 80); // Clear instruction
+            
+            const textTexture = new THREE.CanvasTexture(canvas);
+            textTexture.needsUpdate = true;
+            const textMaterial = new THREE.MeshBasicMaterial({ 
+                map: textTexture, 
+                transparent: true,
+                side: THREE.DoubleSide
+            });
+            const textMesh = new THREE.Mesh(textGeometry, textMaterial);
+            
+            // Make it interactive with larger hit area
+            textMesh.userData = {
+                type: 'measurement-text',
+                measurement: measurement,
+                currentValue: currentValue,
+                isClickable: true
+            };
+            
+            // Position text at middle of dimension line
+            const midPoint = new THREE.Vector3().addVectors(startPoint, endPoint).multiplyScalar(0.5);
+            textMesh.position.copy(midPoint);
+            
+            // Increased offset for larger text boxes
+            switch(position) {
+                case 'right':
+                case 'right-inner':
+                    textMesh.position.x += 1.2; // Increased offset
+                    break;
+                case 'left':
+                    textMesh.position.x -= 1.2;
+                    break;
+                case 'back':
+                    textMesh.position.z += 1.2;
+                    break;
+                case 'front':
+                case 'front-inner':
+                    textMesh.position.z -= 1.2;
+                    break;
+            }
+            
+            return textMesh;
+        }
+
+        function clearMeasurementVisualizations() {
+            const objectsToRemove = [];
+            scene.traverse((child) => {
+                if (child.name && child.name.includes('measurement-')) {
+                    objectsToRemove.push(child);
+                }
+            });
+            
+            objectsToRemove.forEach(obj => {
+                scene.remove(obj);
+                if (obj.geometry) obj.geometry.dispose();
+                if (obj.material) {
+                    if (obj.material.map) obj.material.map.dispose();
+                    obj.material.dispose();
+                }
+                // Clean up group children
+                if (obj.children) {
+                    obj.children.forEach(child => {
+                        if (child.geometry) child.geometry.dispose();
+                        if (child.material) {
+                            if (child.material.map) child.material.map.dispose();
+                            child.material.dispose();
+                        }
+                    });
+                }
+            });
+        }
+
+        function handleMeasurementChange(event) {
+            const input = event.target;
+            const measurementType = input.id.replace('-input', '');
+            const newValue = parseFloat(input.value);
+            
+            if (isNaN(newValue) || newValue <= 0) {
+                showToast('Valeur invalide', 'error');
+                return;
+            }
+            
+            // Update model dimensions
+            updateModelDimensions(measurementType, newValue);
+            
+            // Synchronize related measurements
+            synchronizeMeasurements(measurementType, newValue);
+            
+            // Update visual indicators
+            updateSyncIndicators();
+            updateExportInfo();
+            updateMeasurementVisualizations();
+            
+            // Show toast
+            showToast(`${getMeasurementName(measurementType)} mis à jour: ${newValue}mm`, 'success');
+        }
+
+        function synchronizeMeasurements(changedMeasurement, newValue) {
+    const relation = measurementRelations[changedMeasurement];
+    
+    if (!relation) return;
+    
+    // Get original aspect ratios
+    const originalLength = originalDimensions['length'];
+    const originalWidth = originalDimensions['width'];
+    const originalHeight = originalDimensions['height'];
+    
+    // Calculate scale factor for the changed dimension
+    const originalValue = originalDimensions[changedMeasurement];
+    const scaleFactor = newValue / originalValue;
+    
+    // If this is a primary dimension (length, width, height), maintain proportions
+    if (changedMeasurement === 'length' || changedMeasurement === 'width' || changedMeasurement === 'height') {
+        // Determine if we should maintain proportions
+        const maintainProportions = true; // Set to false if you want independent scaling
+        
+        if (maintainProportions) {
+            // Update all primary dimensions proportionally
+            if (changedMeasurement !== 'length') {
+                const newLength = originalLength * scaleFactor;
+                const lengthInput = document.getElementById('length-input');
+                if (lengthInput) {
+                    lengthInput.value = Math.round(newLength * 10) / 10;
+                    updateModelDimensions('length', newLength);
+                }
+            }
+            
+            if (changedMeasurement !== 'width') {
+                const newWidth = originalWidth * scaleFactor;
+                const widthInput = document.getElementById('width-input');
+                if (widthInput) {
+                    widthInput.value = Math.round(newWidth * 10) / 10;
+                    updateModelDimensions('width', newWidth);
+                }
+            }
+            
+            if (changedMeasurement !== 'height') {
+                const newHeight = originalHeight * scaleFactor;
+                const heightInput = document.getElementById('height-input');
+                if (heightInput) {
+                    heightInput.value = Math.round(newHeight * 10) / 10;
+                    updateModelDimensions('height', newHeight);
+                }
+            }
+        }
+    }
+    
+    // Update all derived measurements
+    if (relation.base && relation.affects) {
+        relation.affects.forEach(affectedMeasurement => {
+            const affectedRelation = measurementRelations[affectedMeasurement];
+            if (affectedRelation && affectedRelation.relativeTo === changedMeasurement) {
+                const newAffectedValue = originalDimensions[affectedMeasurement] * scaleFactor;
+                const input = document.getElementById(affectedMeasurement + '-input');
+                if (input) {
+                    input.value = Math.round(newAffectedValue * 10) / 10;
+                    updateModelDimensions(affectedMeasurement, newAffectedValue);
+                }
+            }
+        });
+    }
+    
+    // If this is a derived measurement, update its base and other related measurements
+    if (!relation.base && relation.relativeTo) {
+        // This is more complex and might need custom handling based on your specific requirements
+        // For now, we'll just update the direct base measurement
+        const baseScaleFactor = newValue / (originalDimensions[changedMeasurement]);
+        const newBaseValue = originalDimensions[relation.relativeTo] * baseScaleFactor;
+        
+        const baseInput = document.getElementById(relation.relativeTo + '-input');
+        if (baseInput) {
+            baseInput.value = Math.round(newBaseValue * 10) / 10;
+            // This will trigger another synchronization for the base measurement
+            updateModelDimensions(relation.relativeTo, newBaseValue);
+            // Recursively synchronize from the base measurement
+            synchronizeMeasurements(relation.relativeTo, newBaseValue);
+        }
+    }
+}
+
+
+        function updateModelDimensions(measurementType, newValue) {
+    if (!currentModel || !originalDimensions[measurementType]) return;
+    
+    const originalValue = originalDimensions[measurementType];
+    const scaleFactor = newValue / originalValue;
+    
+    // For primary dimensions, apply uniform scaling to maintain proportions
+    if (measurementType === 'length') {
+        currentModel.scale.z = scaleFactor;
+    } else if (measurementType === 'width') {
+        currentModel.scale.x = scaleFactor;
+    } else if (measurementType === 'height') {
+        currentModel.scale.y = scaleFactor;
+    } else {
+        // For specialized measurements, use the existing logic
+        switch (measurementType) {
+            case 'arch-height':
+                const heightRatio = newValue / (originalDimensions.height * 0.75);
+                currentModel.scale.y = Math.max(heightRatio, 0.1);
+                break;
+            case 'heel-width':
+                const widthRatio = newValue / (originalDimensions.width * 0.6);
+                currentModel.scale.x = Math.max(widthRatio, 0.1);
+                break;
+            case 'forefoot-width':
+                const forefootRatio = newValue / (originalDimensions.width * 0.9);
+                currentModel.scale.x = Math.max(forefootRatio, 0.1);
+                break;
+        }
+    }
+    
+    // Store scaling information for visualization updates
+    currentModel.userData.lastScaledDimension = measurementType;
+    currentModel.userData.scaleFactor = scaleFactor;
+}
+
+
+        function updateRelatedMeasurements(baseMeasurement, newValue) {
+            if (!measurementRelations[baseMeasurement]?.base) return;
+            
+            const baseOriginal = originalDimensions[baseMeasurement];
+            const scaleFactor = newValue / baseOriginal;
+            
+            Object.keys(measurementRelations).forEach(measurement => {
+                if (measurement !== baseMeasurement && !measurementRelations[measurement].base) {
+                    const newRelatedValue = Math.round(originalDimensions[measurement] * scaleFactor * 10) / 10;
+                    const input = document.getElementById(measurement.replace('-', '-') + '-input');
+                    if (input) {
+                        input.value = newRelatedValue;
+                    }
+                }
+            });
+        }
+
+        function updateMeasurementVisualizations() {
+            // Clear and recreate measurement visualizations with updated values
+            clearMeasurementVisualizations();
+            addMeasurementVisualizations();
+            
+            // Update text to always face camera
+            scene.traverse((child) => {
+                if (child.material && child.material.map && child.material.map.isCanvasTexture) {
+                    child.lookAt(camera.position);
+                }
+            });
+        }
+
+        function updateSyncIndicators() {
+            const indicators = document.querySelectorAll('.sync-indicator');
+            indicators.forEach(indicator => {
+                indicator.classList.remove('warning');
+                // Add logic to show warning if measurements are out of sync
+            });
+        }
+
+        function updateExportInfo() {
+            if (!currentModel) return;
+            
+            // Calculate current volume
+            const box = new THREE.Box3().setFromObject(currentModel);
+            const size = new THREE.Vector3();
+            box.getSize(size);
+            
+            const volume = (size.x * size.y * size.z).toFixed(2);
+            document.getElementById('volume-info').textContent = `${volume} cm³`;
+            
+            // Calculate scale factor
+            const originalVolume = originalDimensions.length * originalDimensions.width * originalDimensions.height;
+            const currentVolume = size.x * size.y * size.z;
+            const scaleFactor = Math.pow(currentVolume / originalVolume, 1/3).toFixed(2);
+            document.getElementById('scale-info').textContent = `${scaleFactor}:1`;
+            
+            // Estimate file size
+            const estimatedSize = Math.round(volume * 0.1); // Rough estimation
+            document.getElementById('file-size-info').textContent = `~${estimatedSize} KB`;
+        }
+
+        function highlightMeasurement(event) {
+            const input = event.target;
+            const measurementType = input.id.replace('-input', '');
+            const measurementItem = input.closest('.measurement-item');
+            
+            if (measurementItem) {
+                measurementItem.classList.add('active');
+            }
+            
+            // Highlight corresponding measurement line in 3D view
+            const line = scene.getObjectByName(`measurement-${measurementType}`);
+            if (line && line.material) {
+                line.material.color.setHex(0xff7e5f);
+                line.material.needsUpdate = true;
+            }
+        }
+
+        function unhighlightMeasurement(event) {
+            const input = event.target;
+            const measurementType = input.id.replace('-input', '');
+            const measurementItem = input.closest('.measurement-item');
+            
+            if (measurementItem) {
+                measurementItem.classList.remove('active');
+            }
+            
+            // Reset measurement line color
+            const line = scene.getObjectByName(`measurement-${measurementType}`);
+            if (line && line.material) {
+                line.material.color.setHex(0x33a6b8);
+                line.material.needsUpdate = true;
+            }
+        }
+
+        function getMeasurementName(type) {
+            const names = {
+                'length': 'Longueur',
+                'width': 'Largeur',
+                'height': 'Hauteur',
+                'arch-height': 'Hauteur voûte',
+                'heel-width': 'Largeur talon',
+                'forefoot-width': 'Largeur avant-pied'
+            };
+            return names[type] || type;
+        }
+
+        function resetView() {
+            if (!currentModel) return;
+            
+            const box = new THREE.Box3().setFromObject(currentModel);
+            const center = new THREE.Vector3();
+            const size = new THREE.Vector3();
+            
+            box.getCenter(center);
+            box.getSize(size);
+            
+            // Reset camera position
+            const maxDim = Math.max(size.x, size.y, size.z);
+            const distance = maxDim * 2;
+            
+            camera.position.set(distance, distance, distance);
+            controls.target.copy(center);
+            controls.update();
+            
+            showToast('Vue réinitialisée', 'info');
+        }
+
+        function toggleWireframe() {
+            if (!currentModel) return;
+            
+            isWireframe = !isWireframe;
+            currentModel.material.wireframe = isWireframe;
+            
+            const btn = document.getElementById('toggle-wireframe');
+            btn.style.backgroundColor = isWireframe ? 'var(--primary)' : '';
+            btn.style.color = isWireframe ? 'white' : '';
+            
+            showToast(isWireframe ? 'Mode filaire activé' : 'Mode filaire désactivé', 'info');
+        }
+
+        function toggleGrid() {
+    showToast('Grille désactivée - modèle en mode flottant', 'info');
+}
+
+
+        function takeScreenshot() {
+            if (!renderer) return;
+            
+            try {
+                renderer.render(scene, camera);
+                
+                const link = document.createElement('a');
+                link.download = 'model-measurement-screenshot.png';
+                link.href = renderer.domElement.toDataURL('image/png');
+                link.click();
+                
+                showToast('Capture d\'écran enregistrée', 'success');
+            } catch (error) {
+                console.error('Screenshot error:', error);
+                showToast('Erreur lors de la capture d\'écran', 'error');
+            }
+        }
+
+        function exportModel() {
+            if (!currentModel) {
+                showToast('Aucun modèle à exporter', 'error');
+                return;
+            }
+            
+            try {
+                let exporter;
+                
+                // Try to create STLExporter
+                if (THREE.STLExporter) {
+                    exporter = new THREE.STLExporter();
+                } else if (window.STLExporter) {
+                    exporter = new window.STLExporter();
+                } else {
+                    throw new Error('STLExporter not available');
+                }
+                
+                const result = exporter.parse(currentModel, { binary: true });
+                
+                const blob = new Blob([result], { type: 'application/octet-stream' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = 'model-modified.stl';
+                link.click();
+                
+                URL.revokeObjectURL(link.href);
+                
+                showToast('Modèle exporté avec succès', 'success');
+                
+            } catch (error) {
+                console.error('Export error:', error);
+                showToast('Erreur lors de l\'exportation: ' + error.message, 'error');
+                
+                // Fallback: try to export geometry as text
+                try {
+                    exportAsTextSTL();
+                } catch (fallbackError) {
+                    showToast('Export impossible - STLExporter non disponible', 'error');
+                }
+            }
+        }
+
+        function exportAsTextSTL() {
+            if (!currentModel) return;
+            
+            const geometry = currentModel.geometry;
+            const vertices = geometry.attributes.position.array;
+            const indices = geometry.index ? geometry.index.array : null;
+            
+            let stlContent = 'solid model\n';
+            
+            if (indices) {
+                // Indexed geometry
+                for (let i = 0; i < indices.length; i += 3) {
+                    const i1 = indices[i] * 3;
+                    const i2 = indices[i + 1] * 3;
+                    const i3 = indices[i + 2] * 3;
+                    
+                    const v1 = new THREE.Vector3(vertices[i1], vertices[i1 + 1], vertices[i1 + 2]);
+                    const v2 = new THREE.Vector3(vertices[i2], vertices[i2 + 1], vertices[i2 + 2]);
+                    const v3 = new THREE.Vector3(vertices[i3], vertices[i3 + 1], vertices[i3 + 2]);
+                    
+                    // Apply model transformations
+                    v1.applyMatrix4(currentModel.matrixWorld);
+                    v2.applyMatrix4(currentModel.matrixWorld);
+                    v3.applyMatrix4(currentModel.matrixWorld);
+                    
+                    // Calculate normal
+                    const normal = new THREE.Vector3().crossVectors(
+                        new THREE.Vector3().subVectors(v2, v1),
+                        new THREE.Vector3().subVectors(v3, v1)
+                    ).normalize();
+                    
+                    stlContent += `  facet normal ${normal.x.toFixed(6)} ${normal.y.toFixed(6)} ${normal.z.toFixed(6)}\n`;
+                    stlContent += '    outer loop\n';
+                    stlContent += `      vertex ${v1.x.toFixed(6)} ${v1.y.toFixed(6)} ${v1.z.toFixed(6)}\n`;
+                    stlContent += `      vertex ${v2.x.toFixed(6)} ${v2.y.toFixed(6)} ${v2.z.toFixed(6)}\n`;
+                    stlContent += `      vertex ${v3.x.toFixed(6)} ${v3.y.toFixed(6)} ${v3.z.toFixed(6)}\n`;
+                    stlContent += '    endloop\n';
+                    stlContent += '  endfacet\n';
+                }
+            } else {
+                // Non-indexed geometry
+                for (let i = 0; i < vertices.length; i += 9) {
+                    const v1 = new THREE.Vector3(vertices[i], vertices[i + 1], vertices[i + 2]);
+                    const v2 = new THREE.Vector3(vertices[i + 3], vertices[i + 4], vertices[i + 5]);
+                    const v3 = new THREE.Vector3(vertices[i + 6], vertices[i + 7], vertices[i + 8]);
+                    
+                    // Apply model transformations
+                    v1.applyMatrix4(currentModel.matrixWorld);
+                    v2.applyMatrix4(currentModel.matrixWorld);
+                    v3.applyMatrix4(currentModel.matrixWorld);
+                    
+                    // Calculate normal
+                    const normal = new THREE.Vector3().crossVectors(
+                        new THREE.Vector3().subVectors(v2, v1),
+                        new THREE.Vector3().subVectors(v3, v1)
+                    ).normalize();
+                    
+                    stlContent += `  facet normal ${normal.x.toFixed(6)} ${normal.y.toFixed(6)} ${normal.z.toFixed(6)}\n`;
+                    stlContent += '    outer loop\n';
+                    stlContent += `      vertex ${v1.x.toFixed(6)} ${v1.y.toFixed(6)} ${v1.z.toFixed(6)}\n`;
+                    stlContent += `      vertex ${v2.x.toFixed(6)} ${v2.y.toFixed(6)} ${v2.z.toFixed(6)}\n`;
+                    stlContent += `      vertex ${v3.x.toFixed(6)} ${v3.y.toFixed(6)} ${v3.z.toFixed(6)}\n`;
+                    stlContent += '    endloop\n';
+                    stlContent += '  endfacet\n';
+                }
+            }
+            
+            stlContent += 'endsolid model\n';
+            
+            const blob = new Blob([stlContent], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'model-modified.stl';
+            link.click();
+            
+            URL.revokeObjectURL(link.href);
+            
+            showToast('Modèle exporté avec succès (format texte)', 'success');
+        }
+
+        function showToast(message, type = 'info') {
+            // Create toast container if it doesn't exist
+            let container = document.getElementById('toast-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.id = 'toast-container';
+                container.style.cssText = `
+                    position: fixed;
+                    bottom: 20px;
+                    right: 20px;
+                    z-index: 10000;
+                    pointer-events: none;
+                `;
+                document.body.appendChild(container);
+            }
+            
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.style.pointerEvents = 'auto';
+            
+            const icon = type === 'success' ? 'fa-check-circle' : 
+                        type === 'error' ? 'fa-times-circle' : 
+                        type === 'warning' ? 'fa-exclamation-triangle' : 'fa-info-circle';
+            
+            toast.innerHTML = `
+                <i class="fas ${icon} toast-icon"></i>
+                <span class="toast-message">${message}</span>
+                                <button class="toast-close"><i class="fas fa-times"></i></button>
+            `;
+            
+            container.appendChild(toast);
+            
+            // Show toast
+            setTimeout(() => toast.classList.add('show'), 100);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                }, 300);
+            }, 5000);
+            
+            // Close button
+            const closeBtn = toast.querySelector('.toast-close');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', () => {
+                    toast.classList.remove('show');
+                    setTimeout(() => {
+                        if (toast.parentNode) {
+                            toast.parentNode.removeChild(toast);
+                        }
+                    }, 300);
+                });
+            }
+            
+            // Console log for debugging
+            console.log(`Toast [${type}]: ${message}`);
+        }
+    </script>
+</body>
+</html>
+
+

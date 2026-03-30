@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OrthoPro+ | Espace Enseignant</title>
+    <link rel="stylesheet" href="teacher-dashboard.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <svg width="40" height="40" viewBox="0 0 60 60">
+                        <circle cx="30" cy="30" r="25" fill="#33a6b8" fill-opacity="0.2"/>
+                        <path d="M18,30 Q30,12 42,30 T18,30" stroke="#33a6b8" stroke-width="3" fill="none"/>
+                        <circle cx="30" cy="30" r="6" fill="#33a6b8"/>
+                    </svg>
+                    <h1>OrthoPro<span>+</span></h1>
+                </div>
+                <button class="mobile-toggle" id="mobile-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="nav-section">
+                        <span class="nav-section-title">PRINCIPAL</span>
+                        <ul>
+                            <li>
+                                <a href="#" class="nav-item" data-section="dashboard">
+                                    <i class="fas fa-home"></i>
+                                    <span>Tableau de bord</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="nav-item active" data-section="resources">
+                                    <i class="fas fa-file-alt"></i>
+                                    <span>Ressources</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="nav-item" data-section="models">
+                                    <i class="fas fa-cubes"></i>
+                                    <span>Bibliothèque 3D</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    
+                    <li class="nav-section">
+                        <span class="nav-section-title">PARAMÈTRES</span>
+                        <ul>
+                            <li>
+                                <a href="#" id="logout-btn" class="nav-item">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                    <span>Déconnexion</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="sidebar-footer">
+                <p>OrthoPro+ v2.5.0</p>
+                <p>&copy; 2025 Tous droits réservés</p>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="content-header">
+                <div class="header-title">
+                    <h1>Espace Enseignant</h1>
+                    <p class="breadcrumbs">
+                        <a href="#">Accueil</a> / 
+                        <span class="current-page">Ressources</span>
+                    </p>
+                </div>
+            </header>
+
+            <!-- Dashboard Section -->
+            <section id="dashboard-section" class="content-section active">
+                <div class="section-header">
+                    <h2>Tableau de bord</h2>
+                </div>
+                
+                <div class="dashboard-cards">
+                    <div class="dashboard-card" id="resources-card">
+                        <div class="card-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Ressources pédagogiques</h3>
+                            <p>Gérez et partagez les documents d'orthoprothésie avec vos étudiants.</p>
+                            <button class="primary-btn">Accéder</button>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card" id="tests-card">
+                        <div class="card-icon">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Tests et évaluations</h3>
+                            <p>Créez et supervisez des tests pour évaluer les connaissances des étudiants.</p>
+                            <button class="primary-btn">Accéder</button>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card" id="models-card">
+                        <div class="card-icon">
+                            <i class="fas fa-cubes"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Bibliothèque 3D</h3>
+                            <p>Explorez et utilisez des modèles 3D pour l'enseignement de l'orthoprothésie.</p>
+                            <button class="primary-btn">Accéder</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Resources Section -->
+<section id="resources-section" class="content-section">
+    <div class="section-header">
+        <h2>Ressources pédagogiques</h2>
+        <div class="section-actions">
+            <button class="primary-btn" id="upload-document-btn">
+                <i class="fas fa-file-upload"></i>
+                Nouveau document
+            </button>
+            <button class="primary-btn" id="upload-test-btn">
+                <i class="fas fa-tasks"></i>
+                Nouveau test
+            </button>
+        </div>
+    </div>
+
+    <div class="resources-tabs">
+        <button class="tab-btn active" data-tab="documents-tab">Documents</button>
+        <button class="tab-btn" data-tab="tests-tab">Tests et évaluations</button>
+    </div>
+
+    <div class="resources-tabs-content">
+        <!-- Documents Tab -->
+        <div id="documents-tab" class="tab-content active">
+            <div class="filter-wrapper">
+                <div class="resources-categories">
+                    <button class="category-btn active" data-category="all">Tous</button>
+                    <button class="category-btn" data-category="Documentation">Documentation</button>
+                    <button class="category-btn" data-category="Guide">Guides</button>
+                    <button class="category-btn" data-category="Présentation">Présentations</button>
+                    <button class="category-btn" data-category="Données">Données</button>
+                </div>
+            </div>
+
+            <div class="resources-grid" id="documents-grid">
+                <!-- Documents will be loaded here -->
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>Chargement des documents...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tests Tab -->
+        <div id="tests-tab" class="tab-content">
+            <div class="filter-wrapper">
+                <div class="resources-categories">
+                    <button class="level-btn active" data-level="all">Tous les niveaux</button>
+                    <button class="level-btn" data-level="beginner">Débutant</button>
+                    <button class="level-btn" data-level="intermediate">Intermédiaire</button>
+                    <button class="level-btn" data-level="advanced">Avancé</button>
+                </div>
+            </div>
+
+            <div class="resources-grid" id="tests-grid">
+                <!-- Tests will be loaded here -->
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>Chargement des tests...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+            <!-- 3D Models Library Section -->
+            <!-- Update to the models section in teacher-dashboard.html -->
+
+<section id="models-section" class="content-section">
+    <div class="section-header">
+        <h2>Bibliothèque de modèles 3D</h2>
+        <div class="section-actions">
+            <div class="filter-dropdown">
+                <select id="model-category-filter">
+                    <option value="all">Toutes catégories</option>
+                    <option value="orthese">Orthèses</option>
+                    <option value="prothese">Prothèses</option>
+                    <option value="support">Supports</option>
+                    <option value="exosquelette">Exosquelettes</option>
+                </select>
+            </div>
+            <div class="filter-dropdown">
+                <select id="model-sort">
+                    <option value="name-asc">Nom (A-Z)</option>
+                    <option value="name-desc">Nom (Z-A)</option>
+                    <option value="date-desc">Date (récent)</option>
+                    <option value="date-asc">Date (ancien)</option>
+                </select>
+            </div>
+            <button class="primary-btn" id="upload-model-btn">
+                <i class="fas fa-upload"></i>
+                Importer un modèle
+            </button>
+        </div>
+    </div>
+
+    <div class="resources-tabs">
+        <button class="tab-btn active" data-tab="my-models-tab">Mes modèles</button>
+        <button class="tab-btn" data-tab="public-models-tab">Bibliothèque publique</button>
+    </div>
+
+    <div class="resources-tabs-content">
+        <!-- My Models Tab -->
+        <div id="my-models-tab" class="tab-content active">
+            <div class="filter-wrapper">
+                <div class="resources-categories">
+                    <button class="visibility-btn active" data-visibility="all">Tous</button>
+                    <button class="visibility-btn" data-visibility="private">Privés</button>
+                    <button class="visibility-btn" data-visibility="public">Publics</button>
+                </div>
+            </div>
+
+            <div class="models-grid" id="my-models-grid">
+                <!-- User's models will be loaded here -->
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>Chargement de vos modèles...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Public Models Tab -->
+        <div id="public-models-tab" class="tab-content">
+            <div class="models-grid" id="public-models-grid">
+                <!-- Public models will be loaded here -->
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>Chargement des modèles publics...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Upload Model Modal -->
+<div class="modal" id="upload-model-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Ajouter un modèle 3D</h2>
+            <button class="close-modal">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="model-upload-form">
+                <div class="form-group">
+                    <label for="model-name">Nom du modèle</label>
+                    <input type="text" id="model-name" placeholder="Nom du modèle" required>
+                </div>
+                <div class="form-group">
+                    <label for="model-category">Catégorie</label>
+                    <select id="model-category" required>
+                        <option value="">Sélectionner une catégorie</option>
+                        <option value="orthese">Orthèse</option>
+                        <option value="prothese">Prothèse</option>
+                        <option value="support">Support</option>
+                        <option value="exosquelette">Exosquelette</option>
+                        <option value="autre">Autre</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="model-description">Description</label>
+                    <textarea id="model-description" placeholder="Description du modèle" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Visibilité</label>
+                    <div class="visibility-options">
+                        <div class="radio-option">
+                            <input type="radio" id="visibility-private" name="model-visibility" value="private" checked>
+                            <label for="visibility-private">
+                                <i class="fas fa-lock"></i>
+                                Privé (uniquement visible par vous)
+                            </label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="visibility-public" name="model-visibility" value="public">
+                            <label for="visibility-public">
+                                <i class="fas fa-globe"></i>
+                                Public (visible par tous les enseignants)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Fichier STL</label>
+                    <div class="file-upload-container">
+                        <input type="file" id="model-file" class="file-input" accept=".stl">
+                        <label for="model-file" class="file-label">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <span>Déposer un fichier STL ou cliquer pour parcourir</span>
+                        </label>
+                        <div class="file-info" id="model-file-info">Aucun fichier sélectionné</div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="secondary-btn" id="cancel-model-upload">Annuler</button>
+            <button class="primary-btn" id="submit-model">
+                <i class="fas fa-upload"></i>
+                Télécharger
+            </button>
+        </div>
+    </div>
+</div>
+        </main>
+    </div>
+
+    <!-- Upload Resource Modal -->
+    <div class="modal" id="upload-resource-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Ajouter une ressource</h2>
+                <button class="close-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="resource-upload-form">
+                    <div class="form-group">
+                        <label for="resource-title">Titre</label>
+                        <input type="text" id="resource-title" placeholder="Titre de la ressource" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="resource-type">Type de ressource</label>
+                        <select id="resource-type" required>
+                            <option value="">Sélectionner un type</option>
+                            <option value="document">Document</option>
+                            <option value="presentation">Présentation</option>
+                            <option value="video">Vidéo</option>
+                            <option value="other">Autre</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="resource-description">Description</label>
+                        <textarea id="resource-description" placeholder="Description de la ressource" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Fichier</label>
+                        <div class="file-upload-container">
+                            <input type="file" id="resource-file" class="file-input">
+                            <label for="resource-file" class="file-label">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <span>Déposer un fichier ou cliquer pour parcourir</span>
+                            </label>
+                            <div class="file-info" id="file-info">Aucun fichier sélectionné</div>
+                            <button type="button" class="upload-btn" id="browse-file-btn">
+                                <i class="fas fa-folder-open"></i>
+                                Parcourir
+                            </button>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="secondary-btn" id="cancel-upload">Annuler</button>
+                            <button class="primary-btn" id="submit-resource">
+                                <i class="fas fa-upload"></i>
+                                Télécharger le fichier
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="secondary-btn" id="cancel-upload">Annuler</button>
+                <button class="primary-btn" id="submit-resource">Ajouter</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Document Upload Modal -->
+<div class="modal" id="upload-document-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Ajouter un document</h2>
+            <button class="close-modal">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="document-upload-form">
+                <div class="form-group">
+                    <label for="document-title">Titre</label>
+                    <input type="text" id="document-title" placeholder="Titre du document" required>
+                </div>
+                <div class="form-group">
+                    <label for="document-category">Catégorie</label>
+                    <select id="document-category" required>
+                        <option value="">Sélectionner une catégorie</option>
+                        <option value="Documentation">Documentation</option>
+                        <option value="Guide">Guide</option>
+                        <option value="Présentation">Présentation</option>
+                        <option value="Données">Données</option>
+                        <option value="Divers">Divers</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="document-description">Description</label>
+                    <textarea id="document-description" placeholder="Description du document" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Fichier</label>
+                    <div class="file-upload-container">
+                        <input type="file" id="document-file" class="file-input" accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx">
+                        <label for="document-file" class="file-label">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <span>Déposer un fichier ou cliquer pour parcourir</span>
+                        </label>
+                        <div class="file-info" id="document-file-info">Aucun fichier sélectionné</div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="secondary-btn" id="cancel-document-upload">Annuler</button>
+            <button class="primary-btn" id="submit-document">
+                <i class="fas fa-upload"></i>
+                Télécharger
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Test Upload Modal -->
+<div class="modal" id="upload-test-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Ajouter un test</h2>
+            <button class="close-modal">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="test-upload-form">
+                <div class="form-group">
+                    <label for="test-title">Titre</label>
+                    <input type="text" id="test-title" placeholder="Titre du test" required>
+                </div>
+                <div class="form-group">
+                    <label for="test-level">Niveau</label>
+                    <select id="test-level" required>
+                        <option value="">Sélectionner un niveau</option>
+                        <option value="beginner">Débutant</option>
+                        <option value="intermediate">Intermédiaire</option>
+                        <option value="advanced">Avancé</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="test-duration">Durée</label>
+                    <input type="text" id="test-duration" placeholder="ex: 30 min" required>
+                </div>
+                <div class="form-group">
+                    <label for="test-questions">Nombre de questions</label>
+                    <input type="number" id="test-questions" min="1" placeholder="ex: 20" required>
+                </div>
+                <div class="form-group">
+                    <label for="test-description">Description</label>
+                    <textarea id="test-description" placeholder="Description du test" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Fichier</label>
+                    <div class="file-upload-container">
+                        <input type="file" id="test-file" class="file-input" accept=".html">
+                        <label for="test-file" class="file-label">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <span>Déposer un fichier ou cliquer pour parcourir</span>
+                        </label>
+                        <div class="file-info" id="test-file-info">Aucun fichier sélectionné</div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="secondary-btn" id="cancel-test-upload">Annuler</button>
+            <button class="primary-btn" id="submit-test">
+                <i class="fas fa-upload"></i>
+                Télécharger
+            </button>
+        </div>
+    </div>
+</div>
+
+    <!-- 3D Model Viewer Modal -->
+    <div class="model-viewer-modal" id="model-viewer-modal">
+        <div class="model-viewer-container">
+            <div class="model-viewer-header">
+                <h2 id="model-name">Nom du modèle</h2>
+                <button class="close-viewer" id="close-viewer">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="model-viewer-content">
+                <div class="model-display" id="model-display">
+                    <!-- 3D model will be rendered here -->
+                    <div class="loading-spinner">
+                        <div class="spinner"></div>
+                        <p>Chargement du modèle...</p>
+                    </div>
+                </div>
+                <div class="model-controls">
+                    <div class="controls-section">
+                        <h3>Dimensions</h3>
+                        <div class="control-group">
+                            <label for="width">Largeur (mm)</label>
+                            <div class="spinner-input">
+                                <button class="spinner-btn minus">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <input type="number" id="width" value="100" min="1">
+                                <button class="spinner-btn plus">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="height">Hauteur (mm)</label>
+                            <div class="spinner-input">
+                                <button class="spinner-btn minus">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <input type="number" id="height" value="100" min="1">
+                                <button class="spinner-btn plus">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="depth">Profondeur (mm)</label>
+                            <div class="spinner-input">
+                                <button class="spinner-btn minus">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <input type="number" id="depth" value="100" min="1">
+                                <button class="spinner-btn plus">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="scale">Échelle (%)</label>
+                            <input type="range" id="scale" min="50" max="200" value="100" class="range-slider">
+                            <div class="range-value">100%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="controls-section">
+                        <h3>Apparence</h3>
+                        <div class="control-group">
+                            <label>Matériau</label>
+                            <div class="material-options">
+                                <button class="material-btn active" data-material="plastic">
+                                    <span class="material-swatch plastic"></span>
+                                    <span>Plastique</span>
+                                </button>
+                                <button class="material-btn" data-material="metal">
+                                    <span class="material-swatch metal"></span>
+                                    <span>Métal</span>
+                                </button>
+                                <button class="material-btn" data-material="rubber">
+                                    <span class="material-swatch rubber"></span>
+                                    <span>Caoutchouc</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label>Couleur</label>
+                            <div class="color-swatches">
+                                <button class="color-swatch active" style="--color: #4a90e2" data-color="#4a90e2"></button>
+                                <button class="color-swatch" style="--color: #50e3c2" data-color="#50e3c2"></button>
+                                <button class="color-swatch" style="--color: #e3506e" data-color="#e3506e"></button>
+                                <button class="color-swatch" style="--color: #fcb150" data-color="#fcb150"></button>
+                                <button class="color-swatch" style="--color: #8560e3" data-color="#8560e3"></button>
+                                <button class="color-swatch" style="--color: #ffffff" data-color="#ffffff"></button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="controls-section">
+                        <h3>Outils</h3>
+                        <div class="tools-grid">
+                            <button class="tool-btn" id="reset-view-btn">
+                                <i class="fas fa-sync-alt"></i>
+                                <span>Réinitialiser</span>
+                            </button>
+                            <button class="tool-btn" id="measure-btn">
+                                <i class="fas fa-ruler"></i>
+                                <span>Mesurer</span>
+                            </button>
+                            <button class="tool-btn" id="section-btn">
+                                <i class="fas fa-cut"></i>
+                                <span>Coupe</span>
+                            </button>
+                            <button class="tool-btn" id="screenshot-btn">
+                                <i class="fas fa-camera"></i>
+                                <span>Capture</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="controls-section">
+                        <h3>Exporter</h3>
+                        <div class="export-options">
+                            <button class="export-btn" data-format="stl">
+                                <i class="fas fa-download"></i>
+                                <span>STL</span>
+                            </button>
+                            <button class="export-btn" data-format="obj">
+                                <i class="fas fa-download"></i>
+                                <span>OBJ</span>
+                            </button>
+                            <button class="export-btn" data-format="gltf">
+                                <i class="fas fa-download"></i>
+                                <span>GLTF</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="controls-section info-section">
+                        <h3>Informations</h3>
+                        <div class="info-list">
+                            <div class="info-item">
+                                <span class="info-label">Catégorie:</span>
+                                <span class="info-value" id="model-category">Orthèse</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Taille du fichier:</span>
+                                <span class="info-value" id="model-size">1.2 MB</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Date d'ajout:</span>
+                                <span class="info-value" id="model-date">15/03/2025</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Format:</span>
+                                <span class="info-value" id="model-format">STL</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="toast" id="toast">
+        <div class="toast-icon">
+            <i class="fas fa-info-circle"></i>
+        </div>
+        <div class="toast-content">
+            <p class="toast-message"></p>
+        </div>
+        <button class="toast-close">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <!-- Load Three.js for 3D Model Viewing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/exporters/STLExporter.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/exporters/OBJExporter.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/exporters/GLTFExporter.min.js"></script>
+<!-- Load Three.js for 3D Model Viewing -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.min.js"></script>
+    
+    
+    <!-- Custom JavaScript -->
+    <script src="teacher-dashboard.js"></script>
+</body>
+</html>

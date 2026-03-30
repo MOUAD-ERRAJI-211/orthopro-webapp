@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OrthoPro+ | Espace Administrateur</title>
+    <link rel="stylesheet" href="welcome.css">
+    <link rel="stylesheet" href="admin.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="page-container">
+        <div class="background-shapes">
+            <div class="shape circle shape-1"></div>
+            <div class="shape square shape-2"></div>
+            <div class="shape triangle shape-3"></div>
+            <div class="shape circle shape-4"></div>
+        </div>
+        
+        <header class="site-header">
+            <div class="logo">
+                <svg width="60" height="60" viewBox="0 0 60 60">
+                    <circle cx="30" cy="30" r="25" fill="#7E57C2" fill-opacity="0.2"/>
+                    <path d="M18,30 Q30,12 42,30 T18,30" stroke="#7E57C2" stroke-width="3" fill="none"/>
+                    <circle cx="30" cy="30" r="6" fill="#7E57C2"/>
+                    <circle cx="30" cy="30" r="28" stroke="#7E57C2" stroke-width="1" stroke-dasharray="4 2" fill="none"/>
+                </svg>
+                <div class="logo-text">
+                    <span>Ortho<strong>Pro+</strong></span>
+                    <span class="tagline">Espace Administrateur</span>
+                </div>
+            </div>
+            
+            <nav class="top-nav">
+                <a href="welcome.html" class="nav-link">Accueil</a>
+                <a href="about.html" class="nav-link">À propos</a>
+                <a href="student.html" class="nav-link">Espace Étudiant</a>
+                <a href="#login-section" class="nav-link highlight">Connexion</a>
+            </nav>
+        </header>
+        
+        <main class="main-content">
+            <section class="admin-hero">
+                <div class="admin-hero-content">
+                    <h1>Espace <span class="text-gradient">Administrateur</span></h1>
+                    <p class="subtitle">Gérez les utilisateurs, approuvez les enseignants et accédez aux outils d'administration</p>
+                </div>
+            </section>
+            
+            <section id="login-section" class="auth-section">
+                <div class="auth-card">
+                    <div class="auth-card-inner">
+                        <div class="auth-header">
+                            <h2>Connexion Administrateur</h2>
+                            <p>Accédez à votre espace d'administration sécurisé</p>
+                        </div>
+                        
+                        <form id="admin-login-form">
+                            <div class="form-group">
+                                <label for="admin-email">Adresse email</label>
+                                <div class="input-group">
+                                    <i class="fas fa-envelope"></i>
+                                    <input type="email" id="admin-email" placeholder="votre@email.com" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="admin-password">Mot de passe</label>
+                                <div class="input-group">
+                                    <i class="fas fa-lock"></i>
+                                    <input type="password" id="admin-password" placeholder="••••••••" required>
+                                    <button type="button" class="toggle-password">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="form-options">
+                                <div class="remember-me">
+                                    <input type="checkbox" id="remember-me">
+                                    <label for="remember-me">Se souvenir de moi</label>
+                                </div>
+                                <a href="#" class="forgot-link">Mot de passe oublié?</a>
+                            </div>
+                            
+                            <div class="secure-note">
+                                <i class="fas fa-shield-alt"></i>
+                                <p>L'accès à l'espace administrateur est strictement réservé au personnel autorisé. Toutes les tentatives de connexion sont enregistrées.</p>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary btn-auth">
+                                <span>Se connecter</span>
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="admin-features-section">
+                <h2 class="section-title">Fonctionnalités <span class="text-gradient">Administrateur</span></h2>
+                
+                <div class="admin-features">
+                    <div class="admin-feature">
+                        <div class="feature-icon">
+                            <i class="fas fa-user-check"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h3>Gestion des enseignants</h3>
+                            <p>Approuver les nouveaux comptes enseignants, gérer les droits d'accès et superviser les utilisateurs.</p>
+                            <ul class="feature-details">
+                                <li><i class="fas fa-check"></i> Validation des comptes</li>
+                                <li><i class="fas fa-check"></i> Attribution des autorisations</li>
+                                <li><i class="fas fa-check"></i> Suivi des activités</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="admin-feature">
+                        <div class="feature-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h3>Outil d'approvisionnement</h3>
+                            <p>Rechercher et comparer les fournisseurs de matériel d'impression 3D pour obtenir les meilleurs prix et conditions.</p>
+                            <ul class="feature-details">
+                                <li><i class="fas fa-check"></i> Comparaison des prix</li>
+                                <li><i class="fas fa-check"></i> Suivi des commandes</li>
+                                <li><i class="fas fa-check"></i> Négociation avec les fournisseurs</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="admin-feature">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h3>Tableau de bord analytique</h3>
+                            <p>Suivre l'utilisation de la plateforme, analyser les performances et générer des rapports détaillés.</p>
+                            <ul class="feature-details">
+                                <li><i class="fas fa-check"></i> Statistiques d'utilisation</li>
+                                <li><i class="fas fa-check"></i> Rapports personnalisables</li>
+                                <li><i class="fas fa-check"></i> Métriques de performance</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+         
+            
+            <section class="approval-workflow">
+                <div class="section-header">
+                    <h2>Processus d'<span class="text-gradient">Approbation</span></h2>
+                    <p>Comment fonctionne le système de validation des comptes enseignants</p>
+                </div>
+                
+                <div class="workflow-diagram">
+                    <div class="workflow-step">
+                        <div class="step-icon">
+                            <i class="fas fa-clipboard-list"></i>
+                        </div>
+                        <h3>Vérification du compte</h3>
+                        <p>L'administrateur examine les informations et vérifie l'identité.</p>
+                    </div>
+                    
+                    <div class="workflow-arrow">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                    
+                    <div class="workflow-step">
+                        <div class="step-icon">
+                            <i class="fas fa-user-check"></i>
+                        </div>
+                        <h3>Approbation du compte</h3>
+                        <p>L'administrateur approuve le compte et définit les droits d'accès.</p>
+                    </div>
+                    
+                    <div class="workflow-arrow">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                    
+                    <div class="workflow-step">
+                        <div class="step-icon">
+                            <i class="fas fa-envelope-open-text"></i>
+                        </div>
+                        <h3>Notification à l'enseignant</h3>
+                        <p>L'enseignant reçoit un email lui indiquant que son compte est actif.</p>
+                    </div>
+                </div>
+                
+                <div class="admin-cta">
+                    <p>Gérez efficacement la plateforme et assurez la sécurité des données</p>
+                    <a href="#login-section" class="btn btn-primary">
+                        <span>Accéder à l'espace administrateur</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </section>
+        </main>
+        
+        <footer class="site-footer">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo footer-logo">
+                        <svg width="40" height="40" viewBox="0 0 60 60">
+                            <circle cx="30" cy="30" r="25" fill="#7E57C2" fill-opacity="0.2"/>
+                            <path d="M18,30 Q30,12 42,30 T18,30" stroke="#7E57C2" stroke-width="3" fill="none"/>
+                            <circle cx="30" cy="30" r="6" fill="#7E57C2"/>
+                        </svg>
+                        <span>Ortho<strong>Pro+</strong></span>
+                    </div>
+                    <p>La référence en orthoprothésie médicale depuis 2020.</p>
+                </div>
+                
+                <div class="footer-links-container">
+                    <div class="footer-links-group">
+                        <h4>Plateforme</h4>
+                        <a href="welcome.html">Accueil</a>
+                        <a href="about.html">À propos</a>
+                        <a href="#">Contact</a>
+                        <a href="#">FAQ</a>
+                    </div>
+                    
+                    <div class="footer-links-group">
+                        <h4>Accès</h4>
+                        <a href="student.html">Espace Étudiant</a>
+                        <a href="teacher.html">Espace Enseignant</a>
+                        <a href="admin.html">Espace Administrateur</a>
+                    </div>
+                    
+                    <div class="footer-links-group">
+                        <h4>Légal</h4>
+                        <a href="#">Confidentialité</a>
+                        <a href="#">Mentions légales</a>
+                        <a href="#">CGU</a>
+                        <a href="#">RGPD</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 OrthoPro+ - Tous droits réservés</p>
+                <div class="social-links">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- Notification -->
+    <div id="notification" class="notification">
+        <div class="notification-icon">
+            <i class="fas fa-info-circle"></i>
+        </div>
+        <div class="notification-message"></div>
+        <button class="notification-close">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    
+    <script src="welcome.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>
+                
