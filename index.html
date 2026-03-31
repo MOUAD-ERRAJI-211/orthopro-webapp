@@ -1,343 +1,229 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OrthoPro+ | Plateforme d'orthoprothésie médicale</title>
-    <link rel="stylesheet" href="welcome.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OrthoPro+ | Plateforme d'orthoprothésie médicale</title>
+  <link rel="stylesheet" href="assets/css/design-system.css">
+  <link rel="stylesheet" href="assets/css/welcome.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="page-container">
-        <div class="background-shapes">
-            <div class="shape circle shape-1"></div>
-            <div class="shape square shape-2"></div>
-            <div class="shape triangle shape-3"></div>
-            <div class="shape circle shape-4"></div>
-            <div class="shape square shape-5"></div>
+
+  <!-- Animated background -->
+  <div class="bg-pattern">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">
+        <div class="logo-icon">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+            <circle cx="16" cy="16" r="14" stroke="white" stroke-width="2" stroke-opacity="0.4"/>
+            <path d="M8,16 Q16,6 24,16 T8,16" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <circle cx="16" cy="16" r="4" fill="white"/>
+          </svg>
         </div>
-        
-        <header class="site-header">
-            <div class="logo">
-                <svg width="60" height="60" viewBox="0 0 60 60">
-                    <circle cx="30" cy="30" r="25" fill="#33a6b8" fill-opacity="0.2"/>
-                    <path d="M18,30 Q30,12 42,30 T18,30" stroke="#33a6b8" stroke-width="3" fill="none"/>
-                    <circle cx="30" cy="30" r="6" fill="#33a6b8"/>
-                    <circle cx="30" cy="30" r="28" stroke="#33a6b8" stroke-width="1" stroke-dasharray="4 2" fill="none"/>
-                </svg>
-                <div class="logo-text">
-                    <span>Ortho<strong>Pro+</strong></span>
-                    <span class="tagline">Excellence en orthoprothésie</span>
-                </div>
-            </div>
-            
-            <nav class="top-nav">
-                <a href="about.html" class="nav-link">À propos</a>
-                <a href="contact.html" class="nav-link">Contact</a>
-            </nav>
-        </header>
-        
-        <main class="main-content">
-            <section class="hero-section">
-                <div class="hero-content">
-                    <h1 class="animated-heading">Bienvenue dans l'avenir de <span class="text-gradient">l'orthoprothésie médicale</span></h1>
-                    <p class="hero-paragraph">Une plateforme innovante qui révolutionne la gestion et le suivi des soins orthoprothétiques. Accédez à des outils de pointe dans un environnement sécurisé et intuitif.</p>
-                    
-                    <div class="stats-container">
-                        <div class="stat-item">
-                            <div class="stat-number">3000+</div>
-                            <div class="stat-label">Utilisateurs</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number">98%</div>
-                            <div class="stat-label">Satisfaction</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number">24/7</div>
-                            <div class="stat-label">Support</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="hero-image">
-                    <div class="image-wrapper">
-                        <div class="floating-elements">
-                            <div class="floating-element fe-1">
-                                <i class="fas fa-shield-alt"></i>
-                                <span>Sécurité</span>
-                            </div>
-                            <div class="floating-element fe-2">
-                                <i class="fas fa-flask"></i>
-                                <span>Innovation</span>
-                            </div>
-                            <div class="floating-element fe-3">
-                                <i class="fas fa-users"></i>
-                                <span>Collaboration</span>
-                            </div>
-                        </div>
-                        <div class="main-illustration">
-                            <svg width="380" height="300" viewBox="0 0 380 300" class="medical-illustration">
-                                <!-- Stylized medical illustration with waves -->
-                                <defs>
-                                    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
-                                        <stop offset="0%" style="stop-color:#33a6b8;stop-opacity:1" />
-                                        <stop offset="100%" style="stop-color:#4fc3d5;stop-opacity:1" />
-                                    </linearGradient>
-                                    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="0%">
-                                        <stop offset="0%" style="stop-color:#ff7e5f;stop-opacity:1" />
-                                        <stop offset="100%" style="stop-color:#feb47b;stop-opacity:1" />
-                                    </linearGradient>
-                                </defs>
-                                
-                                <!-- Stylized body outline -->
-                                <path d="M190,50 C240,50 270,80 270,140 C270,200 240,250 190,250 C140,250 110,200 110,140 C110,80 140,50 190,50 Z" fill="none" stroke="#33a6b8" stroke-width="2" />
-                                
-                                <!-- Stylized knee brace -->
-                                <rect x="150" y="120" width="80" height="60" rx="10" fill="url(#grad1)" fill-opacity="0.2" />
-                                <path d="M150,140 L230,140" stroke="#33a6b8" stroke-width="2" />
-                                <path d="M150,160 L230,160" stroke="#33a6b8" stroke-width="2" />
-                                <circle cx="190" cy="140" r="5" fill="#33a6b8" />
-                                <circle cx="190" cy="160" r="5" fill="#33a6b8" />
-                                
-                                <!-- Data points and connections -->
-                                <circle cx="100" cy="80" r="8" fill="url(#grad2)" />
-                                <circle cx="280" cy="80" r="8" fill="url(#grad2)" />
-                                <circle cx="100" cy="220" r="8" fill="url(#grad2)" />
-                                <circle cx="280" cy="220" r="8" fill="url(#grad2)" />
-                                
-                                <path d="M100,80 L150,120" stroke="#ff7e5f" stroke-width="1" stroke-dasharray="4 2" />
-                                <path d="M280,80 L230,120" stroke="#ff7e5f" stroke-width="1" stroke-dasharray="4 2" />
-                                <path d="M100,220 L150,180" stroke="#ff7e5f" stroke-width="1" stroke-dasharray="4 2" />
-                                <path d="M280,220 L230,180" stroke="#ff7e5f" stroke-width="1" stroke-dasharray="4 2" />
-                                
-                                <!-- Digital waves -->
-                                <path d="M30,100 Q45,80 60,100 Q75,120 90,100 Q105,80 120,100" stroke="#33a6b8" stroke-width="2" fill="none" />
-                                <path d="M260,100 Q275,80 290,100 Q305,120 320,100 Q335,80 350,100" stroke="#33a6b8" stroke-width="2" fill="none" />
-                                <path d="M30,200 Q45,180 60,200 Q75,220 90,200 Q105,180 120,200" stroke="#33a6b8" stroke-width="2" fill="none" />
-                                <path d="M260,200 Q275,180 290,200 Q305,220 320,200 Q335,180 350,200" stroke="#33a6b8" stroke-width="2" fill="none" />
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            
-            <section class="portal-section">
-                <h2 class="section-title">Accédez à notre <span class="text-gradient">Plateforme</span></h2>
-                
-                <div class="portal-cards">
-                    <div class="portal-card student-portal">
-                        <div class="portal-icon">
-                            <i class="fas fa-graduation-cap"></i>
-                        </div>
-                        <div class="portal-content">
-                            <h3>Espace Étudiant</h3>
-                            <p>Accédez aux ressources éducatives, tutoriels et guides sur l'orthoprothésie et l'impression 3D.</p>
-                            <a href="student.html" class="btn btn-portal">
-                                <span>Accéder</span>
-                                <i class="fas fa-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                    
-                    <div class="portal-card teacher-portal">
-                        <div class="portal-icon">
-                            <i class="fas fa-chalkboard-teacher"></i>
-                        </div>
-                        <div class="portal-content">
-                            <h3>Espace Enseignant</h3>
-                            <p>Gérez vos cours, accédez à la bibliothèque de modèles 3D et suivez les progrès de vos étudiants.</p>
-                            <a href="teacher.html" class="btn btn-portal">
-                                <span>Accéder</span>
-                                <i class="fas fa-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                    
-                    <div class="portal-card admin-portal">
-                        <div class="portal-icon">
-                            <i class="fas fa-user-shield"></i>
-                        </div>
-                        <div class="portal-content">
-                            <h3>Espace Administrateur</h3>
-                            <p>Gérez les comptes enseignants, accédez aux outils d'approvisionnement et supervisez la plateforme.</p>
-                            <a href="admin.html" class="btn btn-portal">
-                                <span>Accéder</span>
-                                <i class="fas fa-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            
-            <section class="features-section">
-                <h2 class="section-title">Fonctionnalités <span class="text-gradient">innovantes</span></h2>
-                
-                <div class="feature-cards">
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-user-md"></i>
-                        </div>
-                        <div class="feature-text">
-                            <h3>Expertise professionnelle</h3>
-                            <p>Accédez aux ressources et outils spécialisés adaptés à votre profil et vos besoins spécifiques</p>
-                        </div>
-                        <div class="feature-hover">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
-                    </div>
-                    
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-cube"></i>
-                        </div>
-                        <div class="feature-text">
-                            <h3>Modèles 3D avancés</h3>
-                            <p>Bibliothèque complète de modèles 3D pour l'orthoprothésie avec des outils de personnalisation</p>
-                        </div>
-                        <div class="feature-hover">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
-                    </div>
-                    
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-graduation-cap"></i>
-                        </div>
-                        <div class="feature-text">
-                            <h3>Formation continue</h3>
-                            <p>Ressources pédagogiques de pointe pour étudiants et enseignants avec certification</p>
-                        </div>
-                        <div class="feature-hover">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
-                    </div>
-                    
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-print"></i>
-                        </div>
-                        <div class="feature-text">
-                            <h3>Guides d'impression 3D</h3>
-                            <p>Tutoriels détaillés et conseils pour optimiser l'impression 3D de vos modèles orthoprothétiques</p>
-                        </div>
-                        <div class="feature-hover">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            
-            <section class="testimonial-section">
-                <h2 class="section-title">Ce que disent nos <span class="text-gradient">utilisateurs</span></h2>
-                
-                <div class="testimonial-carousel">
-                    <div class="testimonial-card">
-                        <div class="testimonial-quote">
-                            <i class="fas fa-quote-left"></i>
-                        </div>
-                        <p class="testimonial-text">OrthoPro+ a complètement transformé ma pratique. L'interface intuitive et les outils avancés me permettent de suivre mes patients avec une précision inégalée.</p>
-                        <div class="testimonial-author">
-                            <div class="author-avatar">
-                                <i class="fas fa-user-circle"></i>
-                            </div>
-                            <div class="author-info">
-                                <h4>Dr. Sophie Lemaire</h4>
-                                <p>Orthoprothésiste, CHU de Lyon</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="testimonial-card">
-                        <div class="testimonial-quote">
-                            <i class="fas fa-quote-left"></i>
-                        </div>
-                        <p class="testimonial-text">En tant qu'étudiant, j'apprécie particulièrement les ressources de formation. Les modules interactifs et le suivi pédagogique sont d'une qualité exceptionnelle.</p>
-                        <div class="testimonial-author">
-                            <div class="author-avatar">
-                                <i class="fas fa-user-circle"></i>
-                            </div>
-                            <div class="author-info">
-                                <h4>Thomas Dubois</h4>
-                                <p>Étudiant en 3ème année</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="testimonial-indicator">
-                        <span class="indicator active"></span>
-                        <span class="indicator"></span>
-                        <span class="indicator"></span>
-                    </div>
-                </div>
-            </section>
-        </main>
-        
-        <footer class="site-footer">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <div class="logo footer-logo">
-                        <svg width="40" height="40" viewBox="0 0 60 60">
-                            <circle cx="30" cy="30" r="25" fill="#33a6b8" fill-opacity="0.2"/>
-                            <path d="M18,30 Q30,12 42,30 T18,30" stroke="#33a6b8" stroke-width="3" fill="none"/>
-                            <circle cx="30" cy="30" r="6" fill="#33a6b8"/>
-                        </svg>
-                        <span>Ortho<strong>Pro+</strong></span>
-                    </div>
-                    <p>La référence en orthoprothésie médicale depuis 2020.</p>
-                </div>
-                
-                <div class="footer-links-container">
-                    <div class="footer-links-group">
-                        <h4>Plateforme</h4>
-                        <a href="index.html">Accueil</a>
-                        <a href="about.html">À propos</a>
-                        <a href="contact.html">Contact</a>
-                        <a href="#">FAQ</a>
-                    </div>
-                    
-                    <div class="footer-links-group">
-                        <h4>Accès</h4>
-                        <a href="student.html">Espace Étudiant</a>
-                        <a href="teacher.html">Espace Enseignant</a>
-                        <a href="admin.html">Espace Administrateur</a>
-                    </div>
-                    
-                    <div class="footer-links-group">
-                        <h4>Légal</h4>
-                        <a href="#">Confidentialité</a>
-                        <a href="#">Mentions légales</a>
-                        <a href="#">CGU</a>
-                        <a href="#">RGPD</a>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="footer-bottom">
-                <p>&copy; 2025 OrthoPro+ - Tous droits réservés</p>
-                <div class="social-links">
-                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                </div>
-            </div>
-        </footer>
-    </div>
-    
-    <!-- Notification -->
-    <div id="notification" class="notification">
-        <div class="notification-icon">
-            <i class="fas fa-info-circle"></i>
+        <div>
+          <div class="logo-name">Ortho<strong>Pro+</strong></div>
+          <div class="logo-tagline">Excellence en orthoprothésie</div>
         </div>
-        <div class="notification-message"></div>
-        <button class="notification-close">
-            <i class="fas fa-times"></i>
-        </button>
+      </div>
+      <nav class="top-nav">
+        <a href="about.html" class="nav-link"><i class="fas fa-info-circle"></i> À propos</a>
+        <a href="contact.html" class="nav-link"><i class="fas fa-envelope"></i> Contact</a>
+      </nav>
     </div>
-    
-    <script src="welcome.js"></script>
+  </header>
+
+  <!-- Hero -->
+  <main>
+    <section class="hero">
+      <div class="hero-content">
+        <div class="hero-badge"><i class="fas fa-shield-alt"></i> Plateforme médicale certifiée</div>
+        <h1>Bienvenue dans l'avenir de <span class="highlight">l'orthoprothésie</span></h1>
+        <p class="hero-desc">Une plateforme innovante qui révolutionne la gestion et le suivi des soins orthoprothétiques. Accédez à des outils de pointe dans un environnement sécurisé et intuitif.</p>
+        <div class="hero-stats">
+          <div class="stat"><span class="stat-num">3000+</span><span class="stat-label">Utilisateurs</span></div>
+          <div class="stat-divider"></div>
+          <div class="stat"><span class="stat-num">98%</span><span class="stat-label">Satisfaction</span></div>
+          <div class="stat-divider"></div>
+          <div class="stat"><span class="stat-num">24/7</span><span class="stat-label">Support</span></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="visual-card main-card">
+          <div class="vc-icon"><i class="fas fa-heartbeat"></i></div>
+          <div>
+            <div class="vc-title">Système actif</div>
+            <div class="vc-sub">Tous les services opérationnels</div>
+          </div>
+          <span class="badge badge-success"><i class="fas fa-circle" style="font-size:0.5rem"></i> Live</span>
+        </div>
+        <div class="visual-card float-card fc-1">
+          <i class="fas fa-user-md"></i>
+          <span>Experts médicaux</span>
+        </div>
+        <div class="visual-card float-card fc-2">
+          <i class="fas fa-cube"></i>
+          <span>Modèles 3D</span>
+        </div>
+        <div class="visual-card float-card fc-3">
+          <i class="fas fa-chart-line"></i>
+          <span>Analytiques</span>
+        </div>
+        <svg class="hero-svg" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="150" cy="150" r="120" stroke="rgba(14,124,140,0.12)" stroke-width="1.5" stroke-dasharray="6 4"/>
+          <circle cx="150" cy="150" r="80" stroke="rgba(14,124,140,0.2)" stroke-width="1.5"/>
+          <path d="M70,150 Q110,90 150,150 Q190,210 230,150" stroke="rgba(14,124,140,0.5)" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <circle cx="150" cy="150" r="20" fill="rgba(14,124,140,0.15)" stroke="rgba(14,124,140,0.4)" stroke-width="1.5"/>
+          <circle cx="150" cy="150" r="8" fill="#0e7c8c"/>
+        </svg>
+      </div>
+    </section>
+
+    <!-- Portals -->
+    <section class="portals">
+      <div class="section-header">
+        <h2>Accédez à votre <span class="highlight">espace</span></h2>
+        <p>Choisissez votre profil pour accéder à votre espace personnalisé</p>
+      </div>
+      <div class="portal-grid">
+        <a href="student.html" class="portal-card student-card">
+          <div class="portal-icon-wrap">
+            <i class="fas fa-graduation-cap"></i>
+          </div>
+          <div class="portal-body">
+            <h3>Espace Étudiant</h3>
+            <p>Accédez aux ressources éducatives, tutoriels et guides sur l'orthoprothésie et l'impression 3D.</p>
+          </div>
+          <div class="portal-footer">
+            <span>Accéder</span>
+            <i class="fas fa-arrow-right"></i>
+          </div>
+        </a>
+
+        <a href="teacher.html" class="portal-card teacher-card">
+          <div class="portal-icon-wrap">
+            <i class="fas fa-chalkboard-teacher"></i>
+          </div>
+          <div class="portal-body">
+            <h3>Espace Enseignant</h3>
+            <p>Gérez vos cours, accédez à la bibliothèque de modèles 3D et suivez les progrès de vos étudiants.</p>
+          </div>
+          <div class="portal-footer">
+            <span>Accéder</span>
+            <i class="fas fa-arrow-right"></i>
+          </div>
+        </a>
+
+        <a href="admin.html" class="portal-card admin-card">
+          <div class="portal-icon-wrap">
+            <i class="fas fa-user-shield"></i>
+          </div>
+          <div class="portal-body">
+            <h3>Espace Administrateur</h3>
+            <p>Gérez les comptes enseignants, accédez aux outils d'approvisionnement et supervisez la plateforme.</p>
+          </div>
+          <div class="portal-footer">
+            <span>Accéder</span>
+            <i class="fas fa-arrow-right"></i>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features">
+      <div class="section-header">
+        <h2>Fonctionnalités <span class="highlight">innovantes</span></h2>
+        <p>Des outils pensés pour les professionnels de l'orthoprothésie</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-item">
+          <div class="feature-icon"><i class="fas fa-user-md"></i></div>
+          <h4>Expertise professionnelle</h4>
+          <p>Accédez aux ressources et outils spécialisés adaptés à votre profil</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon"><i class="fas fa-cube"></i></div>
+          <h4>Modèles 3D interactifs</h4>
+          <p>Bibliothèque de modèles 3D pour l'orthoprothésie et la réhabilitation</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+          <h4>Sécurité renforcée</h4>
+          <p>Vos données médicales protégées avec les meilleurs standards de sécurité</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon"><i class="fas fa-chart-bar"></i></div>
+          <h4>Analytiques avancées</h4>
+          <p>Suivi et analyse des performances en temps réel pour tous les profils</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon"><i class="fas fa-calendar-check"></i></div>
+          <h4>Gestion des rendez-vous</h4>
+          <p>Planification et suivi des consultations orthoprothétiques</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon"><i class="fas fa-mobile-alt"></i></div>
+          <h4>100% Responsive</h4>
+          <p>Accédez à la plateforme depuis n'importe quel appareil, n'importe où</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="logo">
+          <div class="logo-icon logo-icon-sm">
+            <svg width="20" height="20" viewBox="0 0 32 32" fill="none">
+              <circle cx="16" cy="16" r="14" stroke="white" stroke-width="2" stroke-opacity="0.4"/>
+              <path d="M8,16 Q16,6 24,16 T8,16" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+              <circle cx="16" cy="16" r="4" fill="white"/>
+            </svg>
+          </div>
+          <span class="logo-name">Ortho<strong>Pro+</strong></span>
+        </div>
+        <p>La référence en orthoprothésie médicale depuis 2020.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h5>Plateforme</h5>
+          <a href="index.html">Accueil</a>
+          <a href="about.html">À propos</a>
+          <a href="contact.html">Contact</a>
+        </div>
+        <div class="footer-col">
+          <h5>Accès</h5>
+          <a href="student.html">Espace Étudiant</a>
+          <a href="teacher.html">Espace Enseignant</a>
+          <a href="admin.html">Espace Admin</a>
+        </div>
+        <div class="footer-col">
+          <h5>Légal</h5>
+          <a href="#">Confidentialité</a>
+          <a href="#">Mentions légales</a>
+          <a href="#">CGU</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 OrthoPro+ — Tous droits réservés</p>
+      <div class="social-links">
+        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+      </div>
+    </div>
+  </footer>
+
 </body>
 </html>
