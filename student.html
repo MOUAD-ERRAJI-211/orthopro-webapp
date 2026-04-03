@@ -1096,7 +1096,7 @@
                             <p>Un guide complet sur l'anatomie du pied pour les étudiants en orthoprothésie.</p>
                             <div class="resource-meta">
                                 <span class="meta-item"><i class="fas fa-calendar-alt"></i> 12 Mars 2025</span>
-                                <span class="meta-item"><i class="fas fa-eye"></i> 245</span>
+                                
                             </div>
                         </div>
                     </div>
@@ -1283,7 +1283,7 @@
                 <div class="popup-footer">
                     <div class="popup-info-item">
                         <i class="fas fa-eye"></i>
-                        <span>245 vues</span>
+                        <span>${item.downloadCount || 0} vues</span>
                     </div>
                     <div class="popup-actions">
                         <a href="#" id="print-link" class="btn btn-outline">
@@ -1605,6 +1605,7 @@
                     type: fileType,
                     description: resource.description || `Document ${displayType}`,
                     fileSize: resource.fileSize || resource.size || "",
+                    id: resource.id,
                     path: resource.filePath || resource.relativePath,
                     date: dateDisplay,
                     isResource: true
@@ -1676,6 +1677,7 @@
                     description: test.description || `Test d'évaluation - Niveau ${levelText}`,
                     duration: test.duration || '30 min',
                     questions: test.questions || '15',
+                    id: test.id,
                     path: test.relativePath,
                     date: dateDisplay,
                     isResource: false
@@ -2031,5 +2033,7 @@
     </script>
 </body>
 </html>
+
+
 
 
