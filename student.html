@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -1415,7 +1415,7 @@
             const baseUrl = getApiBaseUrl();
             
             // Appel à l'API pour récupérer les documents
-            fetch(`${baseUrl}/api/documents/list-files`)
+            fetch(`${baseUrl}/api/documents`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(`Erreur HTTP: ${response.status} ${response.statusText}`);
@@ -1482,7 +1482,7 @@
             const baseUrl = getApiBaseUrl();
             
             // Appel à l'API pour récupérer les tests
-            fetch(`${baseUrl}/api/tests/list-files`)
+            fetch(`${baseUrl}/api/tests`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(`Erreur HTTP: ${response.status} ${response.statusText}`);
@@ -1539,7 +1539,7 @@
          */
         function getApiBaseUrl() {
             // En développement, utilisez le port 8081 (port Spring Boot)
-            return 'https://mouad-erraji-211-orthopro-api.hf.space';
+            return 'https://web-production-47eca.up.railway.app';
         }
 
         /**
@@ -2031,3 +2031,4 @@
     </script>
 </body>
 </html>
+
