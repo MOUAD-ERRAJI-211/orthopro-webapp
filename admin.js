@@ -1,4 +1,12 @@
-﻿document.addEventListener('DOMContentLoaded', () => {
+﻿// Auto-redirect if already logged in
+document.addEventListener('DOMContentLoaded', function() {
+    const token = localStorage.getItem('adminAuthToken');
+    const adminId = localStorage.getItem('adminId');
+    if (token && adminId) {
+        window.location.href = 'admin-dashboard.html';
+    }
+});
+document.addEventListener('DOMContentLoaded', () => {
     // Initialize password toggle
     initPasswordToggle();
     
@@ -198,3 +206,4 @@ function removeAuthToken() {
     localStorage.removeItem('adminEmail');
     localStorage.removeItem('adminId');
 }
+

@@ -1,4 +1,12 @@
-﻿document.addEventListener('DOMContentLoaded', () => {
+﻿// Auto-redirect if already logged in
+document.addEventListener('DOMContentLoaded', function() {
+    const token = localStorage.getItem('teacherAuthToken');
+    const teacherId = localStorage.getItem('teacherId');
+    if (token && teacherId) {
+        window.location.href = 'teacher-dashboard.html';
+    }
+});
+document.addEventListener('DOMContentLoaded', () => {
     // Initialize tabs for login/signup
     initTabs();
     
@@ -698,3 +706,5 @@ function getSampleModels() {
     // This is just a reference to indicate that the same function would be used
     return [];
 }
+
+

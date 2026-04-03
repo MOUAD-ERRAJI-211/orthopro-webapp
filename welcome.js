@@ -500,16 +500,16 @@ function removeAuthToken() {
 function redirectToDashboard(role) {
     switch(role) {
         case 'ETUDIANT':
-            window.location.href = `${getAppBaseUrl()}/etudiant/dashboard`;
+            window.location.href = `${getAppBaseUrl()}/student.html`;
             break;
         case 'ENSEIGNANT':
-            window.location.href = `${getAppBaseUrl()}/enseignant/dashboard`;
+            window.location.href = `${getAppBaseUrl()}/teacher-dashboard.html`;
             break;
         case 'RESPONSABLE':
-            window.location.href = `${getAppBaseUrl()}/responsable/dashboard`;
+            window.location.href = `${getAppBaseUrl()}/admin-dashboard.html`;
             break;
         case 'PATIENT':
-            window.location.href = `${getAppBaseUrl()}/patient/dashboard`;
+            window.location.href = `${getAppBaseUrl()}/index.html`;
             break;
         default:
             // En cas de rôle non reconnu, rester sur la page d'accueil
@@ -529,3 +529,4 @@ function getAppBaseUrl() {
     // Par défaut, on utilise l'URL actuelle
     return window.location.origin;
 }
+
