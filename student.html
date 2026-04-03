@@ -1281,10 +1281,7 @@
                     <iframe src="/api/placeholder/800/600" title="Aperçu du document"></iframe>
                 </div>
                 <div class="popup-footer">
-                    <div class="popup-info-item">
-                        <i class="fas fa-eye"></i>
-                        <span>${item.downloadCount || 0} vues</span>
-                    </div>
+
                     <div class="popup-actions">
                         <a href="#" id="print-link" class="btn btn-outline">
                             <i class="fas fa-print"></i> Imprimer
@@ -1949,7 +1946,7 @@
                 }
                 
                 // Configurer le lien de téléchargement pour les ressources
-                downloadLink.href = `${baseUrl}${item.path}`;
+                downloadLink.href = `${baseUrl}/api/documents/download/${item.id}`;
                 downloadLink.setAttribute('download', '');
                 downloadLink.innerHTML = `<i class="fas fa-download"></i> Télécharger`;
                 
@@ -2008,7 +2005,7 @@
                 `;
                 
                 // Configurer le lien pour démarrer le test
-                downloadLink.href = `${baseUrl}${item.path}`;
+                downloadLink.href = `${baseUrl}/api/tests/start/${item.id}`;
                 downloadLink.removeAttribute('download');
                 downloadLink.innerHTML = `<i class="fas fa-play"></i> Commencer le test`;
                 
@@ -2033,6 +2030,7 @@
     </script>
 </body>
 </html>
+
 
 
 
