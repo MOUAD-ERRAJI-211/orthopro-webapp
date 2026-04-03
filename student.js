@@ -62,7 +62,7 @@ function loadResources() {
     const baseUrl = getApiBaseUrl();
     
     // Appel à l'API pour récupérer les documents
-    fetch(`${baseUrl}/api/documents/list-files`)
+    fetch(`${baseUrl}/api/documents`)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`Erreur HTTP: ${response.status} ${response.statusText}`);
@@ -121,7 +121,7 @@ function loadTests() {
     const baseUrl = getApiBaseUrl();
     
     // Appel à l'API pour récupérer les tests
-    fetch(`${baseUrl}/api/tests/list-files`)
+    fetch(`${baseUrl}/api/tests`)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`Erreur HTTP: ${response.status} ${response.statusText}`);
@@ -181,11 +181,11 @@ function getApiBaseUrl() {
 function createResourceCard(resource) {
     const card = document.createElement('div');
     card.className = 'resource-card';
-    card.dataset.type = resource.type;
+    card.dataset.type = resource.fileType || resource.type;
     
     // Déterminer l'icône en fonction du type de fichier
     let typeIcon = '';
-    let fileType = resource.type.toLowerCase();
+    let fileType = (resource.fileType || resource.type || "pdf").toLowerCase();
     
     if (fileType === 'pdf') {
         typeIcon = '<i class="far fa-file-pdf"></i>';
@@ -218,7 +218,7 @@ function createResourceCard(resource) {
             <h3>${resource.title}</h3>
             <p>${resource.description || `Document ${displayType}`}</p>
             <div class="resource-meta">
-                <span>${typeIcon} ${resource.size}</span>
+                <span>${typeIcon} ${resource.fileSize || resource.size || ""}</span>
                 <span><i class="far fa-calendar-alt"></i> ${dateDisplay}</span>
             </div>
         </div>
@@ -230,8 +230,8 @@ function createResourceCard(resource) {
             title: resource.title,
             type: fileType,
             description: resource.description || `Document ${displayType}`,
-            fileSize: resource.size,
-            path: resource.relativePath,
+            fileSize: resource.fileSize || resource.size,
+            path: resource.filePath || resource.relativePath,
             date: dateDisplay,
             isResource: true
         });
@@ -539,3 +539,5 @@ function openDocumentPopup(item) {
     // Afficher le popup
     popup.classList.add('show');
 }
+
+
