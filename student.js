@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+﻿document.addEventListener('DOMContentLoaded', () => {
     // Initialiser les fonctionnalités de la page
     initResourcesAndTests();
     initPopup();
@@ -170,7 +170,7 @@ function loadTests() {
  */
 function getApiBaseUrl() {
     // En développement, utilisez le port 8081 (port Spring Boot)
-    return 'https://mouad-erraji-211-orthopro-api.hf.space';
+    return 'https://web-production-47eca.up.railway.app';
 }
 
 /**

@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+﻿document.addEventListener('DOMContentLoaded', () => {
     // Initialisation des éléments interactifs
     initTabs();
     initPasswordToggles();
@@ -520,7 +520,7 @@ function redirectToDashboard(role) {
 // Obtenir l'URL de base pour l'API backend
 function getAPIBaseUrl() {
     // Adresse du serveur backend, à ajuster selon l'environnement
-    return 'https://mouad-erraji-211-orthopro-api.hf.space';
+    return 'https://web-production-47eca.up.railway.app';
 }
 
 // Obtenir l'URL de base pour l'application frontend

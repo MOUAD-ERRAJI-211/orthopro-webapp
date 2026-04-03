@@ -1,4 +1,4 @@
-/**
+﻿/**
  * API Service for OrthoPro+ Dashboard
  * Handles communication with the backend services
  */
@@ -8,7 +8,7 @@ class ApiService {
      * Base URL for API requests
      */
     constructor() {
-      this.baseUrl = 'https://mouad-erraji-211-orthopro-api.hf.space/api';    }
+      this.baseUrl = 'https://web-production-47eca.up.railway.app/api';    }
 
     /**
      * Get all documents from the database

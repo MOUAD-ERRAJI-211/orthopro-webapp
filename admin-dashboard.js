@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+﻿document.addEventListener('DOMContentLoaded', () => {
     // Initialize dashboard components
     initDashboard();
     initUserInfo();
@@ -708,7 +708,7 @@ function getAuthToken() {
 // Get API base URL
 function getAPIBaseUrl() {
     // Backend server address, adjust based on environment
-    return 'https://mouad-erraji-211-orthopro-api.hf.space';
+    return 'https://web-production-47eca.up.railway.app';
 }
 
 // Show notification to user

@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+﻿document.addEventListener('DOMContentLoaded', () => {
     // Initialize tabs for login/signup
     initTabs();
     
@@ -392,7 +392,7 @@ function showNotification(message, type = 'info') {
 // Get API base URL
 function getAPIBaseUrl() {
     // Backend server address, adjust based on environment
-    return 'https://mouad-erraji-211-orthopro-api.hf.space';
+    return 'https://web-production-47eca.up.railway.app';
 }
 
 // Get app base URL
@@ -547,7 +547,7 @@ function handleLogin(event) {
     if (typeof getAPIBaseUrl === 'function') {
         apiUrl = `${getAPIBaseUrl()}/api/teachers/login`;
     } else {
-        apiUrl = 'https://mouad-erraji-211-orthopro-api.hf.space/api/teachers/login';
+        apiUrl = 'https://web-production-47eca.up.railway.app/api/teachers/login';
     }
     
     console.log('Attempting login to:', apiUrl);
