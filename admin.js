@@ -2,7 +2,8 @@
 document.addEventListener('DOMContentLoaded', function() {
     const token = localStorage.getItem('adminAuthToken');
     const adminId = localStorage.getItem('adminId');
-    if (token && adminId) {
+    const currentPage = window.location.pathname;
+    if (token && adminId && currentPage.includes('admin.html')) {
         window.location.href = 'admin-dashboard.html';
     }
 });
@@ -206,4 +207,5 @@ function removeAuthToken() {
     localStorage.removeItem('adminEmail');
     localStorage.removeItem('adminId');
 }
+
 

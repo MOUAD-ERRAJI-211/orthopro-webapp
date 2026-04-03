@@ -2,7 +2,8 @@
 document.addEventListener('DOMContentLoaded', function() {
     const token = localStorage.getItem('teacherAuthToken');
     const teacherId = localStorage.getItem('teacherId');
-    if (token && teacherId) {
+    const currentPage = window.location.pathname;
+    if (token && teacherId && currentPage.includes('teacher.html')) {
         window.location.href = 'teacher-dashboard.html';
     }
 });
@@ -706,5 +707,6 @@ function getSampleModels() {
     // This is just a reference to indicate that the same function would be used
     return [];
 }
+
 
 
