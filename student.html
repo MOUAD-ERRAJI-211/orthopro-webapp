@@ -1550,12 +1550,12 @@
         function createResourceCard(resource) {
             const card = document.createElement('div');
             card.className = 'resource-card';
-            card.dataset.type = resource.type;
+            card.dataset.type = (resource.fileType || resource.type);
             
             // Déterminer la classe de fond et l'icône en fonction du type de fichier
             let bgClass = 'pdf-bg';
             let iconClass = 'fa-file-pdf';
-            let fileType = resource.type.toLowerCase();
+            let fileType = (resource.fileType || resource.type || "pdf").toLowerCase();
             
             if (fileType === 'pdf') {
                 bgClass = 'pdf-bg';
@@ -1578,8 +1578,8 @@
             
             // Formater la date si disponible
             let dateDisplay = '';
-            if (resource.lastModified) {
-                const date = new Date(resource.lastModified);
+            if (resource.uploadDate || resource.lastModified) {
+                const date = new Date(resource.uploadDate || resource.lastModified);
                 dateDisplay = date.toLocaleDateString();
             }
             
@@ -1593,7 +1593,7 @@
                     <p>${resource.description || `Document ${displayType}`}</p>
                     <div class="resource-meta">
                         <span class="meta-item"><i class="fas fa-calendar-alt"></i> ${dateDisplay || 'N/A'}</span>
-                        <span class="meta-item"><i class="fas fa-file-alt"></i> ${resource.size || 'N/A'}</span>
+                        <span class="meta-item"><i class="fas fa-file-alt"></i> ${resource.fileSize || resource.size || "" || 'N/A'}</span>
                     </div>
                 </div>
             `;
@@ -1604,8 +1604,8 @@
                     title: resource.title,
                     type: fileType,
                     description: resource.description || `Document ${displayType}`,
-                    fileSize: resource.size,
-                    path: resource.relativePath,
+                    fileSize: resource.fileSize || resource.size || "",
+                    path: resource.filePath || resource.relativePath,
                     date: dateDisplay,
                     isResource: true
                 });
@@ -2031,4 +2031,5 @@
     </script>
 </body>
 </html>
+
 
