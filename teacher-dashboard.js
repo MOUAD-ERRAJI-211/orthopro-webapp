@@ -3705,3 +3705,21 @@ function formatFileSize(bytes) {
 }
 
 
+
+// Logout functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            localStorage.removeItem('teacherAuthToken');
+            localStorage.removeItem('teacherId');
+            localStorage.removeItem('teacherName');
+            localStorage.removeItem('teacherEmail');
+            localStorage.removeItem('teacherIsApproved');
+            localStorage.removeItem('firstname');
+            localStorage.removeItem('lastname');
+            window.location.href = 'teacher.html';
+        });
+    }
+});
