@@ -199,8 +199,7 @@ function handleSignup(event) {
             lastname: lastname,
             email: email,
             institution: institution,
-            password: password,
-            isApproved: false // default to not approved
+            password: password
         })
     })
     .then(response => {
@@ -707,6 +706,8 @@ function getSampleModels() {
     // This is just a reference to indicate that the same function would be used
     return [];
 }
+
+
 
 
 
