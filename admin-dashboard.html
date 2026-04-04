@@ -1,684 +1,745 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OrthoPro+ | Tableau de Bord Administrateur</title>
-    <link rel="stylesheet" href="welcome.css">
-    <link rel="stylesheet" href="admin.css">
-    <link rel="stylesheet" href="admin-dashboard.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OrthoPro+ | Tableau de Bord Administrateur</title>
+  <link rel="stylesheet" href="assets/css/design-system.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body { background: var(--bg); }
+
+    /* ── Top Navbar ── */
+    .navbar {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem; height: 64px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+    }
+    .nav-brand { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+    .nav-brand-icon {
+      width: 36px; height: 36px; border-radius: 9px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 1rem;
+    }
+    .nav-brand-text { font-family: var(--font-display); font-size: 1rem; font-weight: 700; color: var(--text); }
+    .nav-brand-text span { color: var(--primary); }
+
+    .nav-right { display: flex; align-items: center; gap: 1rem; }
+    .nav-badge {
+      padding: 0.3rem 0.8rem; border-radius: 100px;
+      background: var(--primary-glow); color: var(--primary);
+      font-size: 0.78rem; font-weight: 600;
+    }
+    .user-info { display: flex; align-items: center; gap: 0.6rem; }
+    .user-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 0.82rem; font-weight: 700;
+    }
+    .user-name { font-size: 0.88rem; font-weight: 600; color: var(--text); }
+    .logout-btn {
+      display: flex; align-items: center; gap: 0.4rem;
+      padding: 0.4rem 0.9rem; border-radius: var(--radius);
+      border: 1.5px solid var(--border); background: none;
+      font-size: 0.82rem; color: var(--text-muted); cursor: pointer;
+      transition: var(--transition); font-family: var(--font-body);
+    }
+    .logout-btn:hover { border-color: var(--danger); color: var(--danger); }
+
+    /* ── Page Container ── */
+    .page-container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
+
+    /* ── Page Header ── */
+    .page-header { margin-bottom: 2rem; }
+    .page-header h1 {
+      font-family: var(--font-display); font-size: 1.8rem;
+      color: var(--text); margin-bottom: 0.3rem;
+    }
+    .page-header h1 span { color: var(--primary); }
+    .page-header p { color: var(--text-muted); font-size: 0.9rem; }
+
+    /* ── Dashboard Tabs ── */
+    .dash-tabs {
+      display: flex; gap: 0.5rem; margin-bottom: 2rem;
+      background: var(--surface); padding: 0.4rem;
+      border-radius: var(--radius-md); border: 1px solid var(--border);
+      width: fit-content;
+    }
+    .dash-tab {
+      display: flex; align-items: center; gap: 0.5rem;
+      padding: 0.6rem 1.25rem; border-radius: var(--radius);
+      border: none; background: none; cursor: pointer;
+      font-family: var(--font-body); font-size: 0.88rem;
+      font-weight: 600; color: var(--text-muted);
+      transition: var(--transition);
+    }
+    .dash-tab:hover { color: var(--text); background: var(--bg); }
+    .dash-tab.active { background: var(--primary); color: white; }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* ── Stats Cards ── */
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-bottom: 2rem; }
+    .stat-card {
+      background: var(--surface); border-radius: var(--radius-md);
+      border: 1px solid var(--border); padding: 1.5rem;
+      display: flex; align-items: center; gap: 1.25rem;
+    }
+    .stat-icon {
+      width: 52px; height: 52px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; flex-shrink: 0;
+    }
+    .stat-card.total .stat-icon { background: var(--primary-glow); color: var(--primary); }
+    .stat-card.approved .stat-icon { background: var(--success-light); color: #16a34a; }
+    .stat-card.pending .stat-icon { background: var(--warning-light); color: #d97706; }
+    .stat-label { font-size: 0.82rem; color: var(--text-muted); font-weight: 500; margin-bottom: 0.3rem; }
+    .stat-number { font-size: 2rem; font-weight: 700; color: var(--text); line-height: 1; }
+
+    /* ── Controls Bar ── */
+    .controls-bar {
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;
+      padding: 1rem 1.25rem;
+      background: var(--surface); border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+    }
+    .search-filters { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; flex: 1; }
+    .search-box {
+      position: relative; flex: 1; min-width: 200px;
+    }
+    .search-box i { position: absolute; left: 0.9rem; top: 50%; transform: translateY(-50%); color: var(--text-light); font-size: 0.85rem; }
+    .search-box input {
+      width: 100%; padding: 0.55rem 1rem 0.55rem 2.4rem;
+      border: 1.5px solid var(--border); border-radius: var(--radius);
+      font-family: var(--font-body); font-size: 0.88rem;
+      color: var(--text); outline: none; transition: var(--transition);
+    }
+    .search-box input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-glow); }
+    .filter-select {
+      padding: 0.55rem 1rem; border-radius: var(--radius);
+      border: 1.5px solid var(--border); background: var(--surface);
+      font-family: var(--font-body); font-size: 0.88rem;
+      color: var(--text); cursor: pointer; outline: none; transition: var(--transition);
+    }
+    .filter-select:focus { border-color: var(--primary); }
+    .filter-label { font-size: 0.82rem; font-weight: 600; color: var(--text-muted); white-space: nowrap; }
+    .filter-group { display: flex; align-items: center; gap: 0.4rem; }
+    .action-buttons { display: flex; gap: 0.6rem; }
+
+    /* ── Cards Grid ── */
+    .cards-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.25rem; margin-bottom: 1.5rem;
+    }
+
+    /* ── Teacher Card ── */
+    .teacher-card {
+      background: var(--surface); border-radius: var(--radius-md);
+      border: 1px solid var(--border); overflow: hidden;
+      transition: all 0.25s ease;
+    }
+    .teacher-card:hover { box-shadow: var(--shadow-md); }
+    .teacher-card.approved { border-left: 3px solid var(--success); }
+    .teacher-card.pending { border-left: 3px solid var(--warning); }
+    .teacher-card.rejected { border-left: 3px solid var(--danger); }
+
+    .card-head {
+      padding: 1.25rem; display: flex; align-items: flex-start;
+      justify-content: space-between; gap: 1rem;
+    }
+    .card-avatar {
+      width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 0.9rem; font-weight: 700;
+    }
+    .card-info { flex: 1; min-width: 0; }
+    .card-info h3 { font-size: 0.95rem; font-weight: 600; color: var(--text); margin-bottom: 0.2rem; }
+    .card-info p { font-size: 0.82rem; color: var(--text-muted); }
+    .status-badge {
+      padding: 0.25rem 0.7rem; border-radius: 100px;
+      font-size: 0.72rem; font-weight: 700; white-space: nowrap;
+    }
+    .status-badge.approved { background: var(--success-light); color: #16a34a; }
+    .status-badge.pending { background: var(--warning-light); color: #d97706; }
+    .status-badge.rejected { background: var(--danger-light); color: var(--danger); }
+
+    .card-body { padding: 0 1.25rem 1rem; display: flex; flex-direction: column; gap: 0.4rem; }
+    .card-detail { display: flex; align-items: center; gap: 0.5rem; font-size: 0.82rem; color: var(--text-muted); }
+    .card-detail i { color: var(--primary); width: 14px; font-size: 0.78rem; }
+
+    .card-actions {
+      padding: 0.75rem 1.25rem; border-top: 1px solid var(--border);
+      display: flex; gap: 0.5rem; background: var(--surface-2);
+      flex-wrap: wrap;
+    }
+    .card-toggle {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-size: 0.82rem; color: var(--text-muted); flex: 1;
+    }
+
+    /* Toggle Switch */
+    .switch { position: relative; display: inline-block; width: 36px; height: 20px; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider {
+      position: absolute; cursor: pointer; inset: 0;
+      background: var(--border); border-radius: 100px;
+      transition: var(--transition);
+    }
+    .slider:before {
+      content: ''; position: absolute;
+      width: 14px; height: 14px; border-radius: 50%;
+      background: white; left: 3px; bottom: 3px;
+      transition: var(--transition);
+    }
+    input:checked + .slider { background: var(--success); }
+    input:checked + .slider:before { transform: translateX(16px); }
+
+    .btn-details {
+      display: flex; align-items: center; gap: 0.3rem;
+      padding: 0.35rem 0.75rem; border-radius: var(--radius);
+      border: 1.5px solid var(--border); background: none;
+      font-size: 0.78rem; color: var(--text-muted); cursor: pointer;
+      transition: var(--transition); font-family: var(--font-body);
+    }
+    .btn-details:hover { border-color: var(--primary); color: var(--primary); }
+    .btn-details.expanded { border-color: var(--primary); color: var(--primary); }
+
+    .card-details {
+      display: none; border-top: 1px solid var(--border);
+      padding: 1rem 1.25rem; background: var(--surface-2);
+    }
+    .card-details.expanded { display: block; }
+    .detail-row { display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 0.4rem; }
+    .detail-label { color: var(--text-muted); }
+    .detail-value { color: var(--text); font-weight: 500; }
+    .detail-actions { display: flex; gap: 0.5rem; margin-top: 0.75rem; }
+
+    /* ── Appointment Card ── */
+    .appointment-card { }
+    .appointment-card.approved { border-left: 3px solid var(--success); }
+    .appointment-card.pending { border-left: 3px solid var(--warning); }
+    .appointment-card.rejected { border-left: 3px solid var(--danger); }
+
+    /* ── Pagination ── */
+    .pagination {
+      display: flex; justify-content: center; align-items: center;
+      gap: 1rem; margin-top: 1.5rem;
+    }
+    .pagination-btn {
+      width: 36px; height: 36px; border-radius: 50%;
+      border: 1.5px solid var(--border); background: var(--surface);
+      color: var(--text-muted); cursor: pointer; display: flex;
+      align-items: center; justify-content: center; transition: var(--transition);
+    }
+    .pagination-btn:hover:not(:disabled) { background: var(--primary); color: white; border-color: var(--primary); }
+    .pagination-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .pagination-info { font-size: 0.88rem; color: var(--text-muted); font-weight: 500; }
+
+    /* ── Loading ── */
+    .loading-indicator {
+      grid-column: 1/-1; display: flex; flex-direction: column;
+      align-items: center; gap: 1rem; padding: 3rem;
+      color: var(--text-muted); font-size: 0.9rem;
+    }
+    .loading-indicator i { font-size: 1.5rem; color: var(--primary); }
+
+    /* ── Notification ── */
+    .notification {
+      position: fixed; bottom: 1.5rem; right: 1.5rem;
+      padding: 1rem 1.4rem; background: var(--surface);
+      border-radius: var(--radius-md); box-shadow: var(--shadow-lg);
+      display: flex; align-items: center; gap: 0.8rem;
+      transform: translateY(120%);
+      transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+      z-index: 9999; max-width: 360px;
+      border-left: 4px solid var(--primary);
+    }
+    .notification.show { transform: translateY(0); }
+    .notification.success { border-color: var(--success); }
+    .notification.error { border-color: var(--danger); }
+    .notification.warning { border-color: var(--warning); }
+    .notification-icon { font-size: 1.1rem; color: var(--primary); }
+    .notification.success .notification-icon { color: var(--success); }
+    .notification.error .notification-icon { color: var(--danger); }
+    .notification-message { flex: 1; font-size: 0.9rem; color: var(--text); font-weight: 500; }
+    .notification-close { background: none; border: none; color: var(--text-light); cursor: pointer; }
+
+    /* ── Modals ── */
+    .modal {
+      display: none; position: fixed; inset: 0;
+      background: rgba(10,20,35,0.5); backdrop-filter: blur(6px);
+      z-index: 1000; justify-content: center; align-items: center;
+    }
+    .modal.show { display: flex; animation: fadeIn 0.25s ease; }
+    .modal-content {
+      width: 100%; max-width: 520px;
+      background: var(--surface); border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg); overflow: hidden;
+      animation: slideUp 0.3s ease; max-height: 90vh; overflow-y: auto;
+    }
+    .modal-header {
+      padding: 1.25rem 1.5rem;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      display: flex; justify-content: space-between; align-items: center;
+      position: sticky; top: 0;
+    }
+    .modal-header h3 { font-size: 1.05rem; color: white; font-weight: 600; }
+    .modal-close {
+      background: rgba(255,255,255,0.15); border: none; color: white;
+      width: 30px; height: 30px; border-radius: 50%; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem; transition: var(--transition);
+    }
+    .modal-close:hover { background: rgba(255,255,255,0.3); }
+    .modal-body { padding: 1.5rem; }
+    .modal-footer {
+      padding: 1rem 1.5rem; border-top: 1px solid var(--border);
+      display: flex; justify-content: flex-end; gap: 0.75rem;
+      background: var(--surface-2);
+    }
+    .form-group { margin-bottom: 1rem; }
+    .form-group label {
+      display: block; font-size: 0.8rem; font-weight: 600;
+      color: var(--text-muted); text-transform: uppercase;
+      letter-spacing: 0.05em; margin-bottom: 0.4rem;
+    }
+    .form-control {
+      width: 100%; padding: 0.65rem 1rem;
+      border: 1.5px solid var(--border); border-radius: var(--radius);
+      font-family: var(--font-body); font-size: 0.9rem;
+      color: var(--text); background: var(--surface);
+      transition: var(--transition); outline: none;
+    }
+    .form-control:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-glow); }
+    textarea.form-control { resize: vertical; min-height: 80px; }
+
+    /* ── Confirmation Modal ── */
+    .confirm-modal-content { max-width: 400px; }
+    .confirm-icon { text-align: center; margin-bottom: 1rem; font-size: 2.5rem; color: var(--warning); }
+    .confirm-text { text-align: center; color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+    @media (max-width: 768px) {
+      .stats-grid { grid-template-columns: 1fr; }
+      .controls-bar { flex-direction: column; align-items: stretch; }
+      .search-filters { flex-direction: column; }
+      .dash-tabs { width: 100%; }
+      .cards-grid { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
-    <div class="page-container">
-        <div class="background-shapes">
-            <div class="shape circle shape-1"></div>
-            <div class="shape square shape-2"></div>
-            <div class="shape triangle shape-3"></div>
-            <div class="shape circle shape-4"></div>
-        </div>
-        
-        <header class="site-header">
-            <div class="logo">
-                <svg width="60" height="60" viewBox="0 0 60 60">
-                    <circle cx="30" cy="30" r="25" fill="#7E57C2" fill-opacity="0.2"/>
-                    <path d="M18,30 Q30,12 42,30 T18,30" stroke="#7E57C2" stroke-width="3" fill="none"/>
-                    <circle cx="30" cy="30" r="6" fill="#7E57C2"/>
-                    <circle cx="30" cy="30" r="28" stroke="#7E57C2" stroke-width="1" stroke-dasharray="4 2" fill="none"/>
-                </svg>
-                <div class="logo-text">
-                    <span>Ortho<strong>Pro+</strong></span>
-                    <span class="tagline">Tableau de Bord Administrateur</span>
-                </div>
-            </div>
-            
-            <nav class="top-nav">
-                <a href="index.html" class="nav-link">Accueil</a>
-                <a href="about.html" class="nav-link">À propos</a>
-                <div class="user-menu">
-                    <button class="user-menu-btn">
-                        <div class="user-avatar" id="admin-avatar">AD</div>
-                        <span id="admin-name">Admin</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </button>
-                    <div class="user-dropdown">
-                        <a href="#" class="dropdown-item">
-                            <i class="fas fa-user"></i>
-                            <span>Mon profil</span>
-                        </a>
-                        <a href="#" class="dropdown-item">
-                            <i class="fas fa-cog"></i>
-                            <span>Paramètres</span>
-                        </a>
-                        <a href="#" class="dropdown-item" id="logout-btn">
-                            <i class="fas fa-sign-out-alt"></i>
-                            <span>Déconnexion</span>
-                        </a>
-                    </div>
-                </div>
-            </nav>
-        </header>
-        
-        <main class="dashboard-main">
-            <div class="dashboard-container">
-                <div class="dashboard-header">
-                    <h1>Tableau de Bord <span class="text-gradient">Administrateur</span></h1>
-                    <p class="last-update">Dernière mise à jour: <span id="last-update-time">Chargement...</span></p>
-                </div>
-                
-                <div class="dashboard-tabs">
-                    <button class="tab-btn" data-tab="passions">
-                        <i class="fas fa-heart"></i>
-                        <span>Patients</span>
-                    </button>
-                    <button class="tab-btn active" data-tab="enseignants">
-                        <i class="fas fa-chalkboard-teacher"></i>
-                        <span>Gestion Enseignants</span>
-                    </button>
-                </div>
-                
-                <div class="dashboard-content">
-                    <!-- Tab Content - Passions -->
-                    <!-- Tab Content - Passions -->
-<div class="tab-content" id="passions-content">
-    <div class="dashboard-header">
-        <h2>Gestion des Rendez-vous</h2>
-        <p class="sub-heading">Voir et gérer les rendez-vous orthoprothésiques</p>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <a href="index.html" class="nav-brand">
+      <div class="nav-brand-icon"><i class="fas fa-heartbeat"></i></div>
+      <span class="nav-brand-text">Ortho<span>Pro+</span></span>
+    </a>
+    <div class="nav-right">
+      <span class="nav-badge"><i class="fas fa-shield-alt"></i> Administrateur</span>
+      <div class="user-info">
+        <div class="user-avatar" id="admin-avatar">AD</div>
+        <span class="user-name" id="admin-name">Admin</span>
+      </div>
+      <button class="logout-btn" id="logout-btn">
+        <i class="fas fa-sign-out-alt"></i> Déconnexion
+      </button>
     </div>
-    
-    <!-- Appointments Statistics Cards -->
-    <div class="stats-cards">
+  </nav>
+
+  <!-- Page -->
+  <div class="page-container">
+
+    <!-- Header -->
+    <div class="page-header">
+      <h1>Tableau de Bord <span>Administrateur</span></h1>
+      <p>Dernière mise à jour: <span id="last-update-time">—</span></p>
+    </div>
+
+    <!-- Tabs -->
+    <div class="dash-tabs">
+      <button class="dash-tab" data-tab="passions">
+        <i class="fas fa-calendar-check"></i> Rendez-vous
+      </button>
+      <button class="dash-tab active" data-tab="enseignants">
+        <i class="fas fa-chalkboard-teacher"></i> Gestion Enseignants
+      </button>
+    </div>
+
+    <!-- ── Tab: Appointments ── -->
+    <div class="tab-content" id="passions-content">
+      <div class="stats-grid">
         <div class="stat-card total">
-            <div class="stat-icon">
-                <i class="fas fa-calendar-check"></i>
-            </div>
-            <div class="stat-info">
-                <h3>Total Rendez-vous</h3>
-                <p class="stat-number" id="total-appointments">-</p>
-            </div>
+          <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
+          <div>
+            <div class="stat-label">Total Rendez-vous</div>
+            <div class="stat-number" id="total-appointments">—</div>
+          </div>
         </div>
-        
         <div class="stat-card approved">
-            <div class="stat-icon">
-                <i class="fas fa-check-circle"></i>
-            </div>
-            <div class="stat-info">
-                <h3>Terminés</h3>
-                <p class="stat-number" id="completed-appointments">-</p>
-            </div>
+          <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+          <div>
+            <div class="stat-label">Terminés</div>
+            <div class="stat-number" id="completed-appointments">—</div>
+          </div>
         </div>
-        
         <div class="stat-card pending">
-            <div class="stat-icon">
-                <i class="fas fa-clock"></i>
-            </div>
-            <div class="stat-info">
-                <h3>Planifiés</h3>
-                <p class="stat-number" id="scheduled-appointments">-</p>
-            </div>
+          <div class="stat-icon"><i class="fas fa-clock"></i></div>
+          <div>
+            <div class="stat-label">Planifiés</div>
+            <div class="stat-number" id="scheduled-appointments">—</div>
+          </div>
         </div>
-    </div>
-    
-    <!-- Appointments Management Controls -->
-    <div class="management-controls">
-        <div class="search-filters">
-            <div class="search-box">
-                <i class="fas fa-search"></i>
-                <input type="text" id="appointment-search" placeholder="Rechercher par nom ou téléphone...">
-            </div>
-            
-            <div class="filter-group">
-                <label for="appointment-status-filter">Statut:</label>
-                <select id="appointment-status-filter">
-                    <option value="all">Tous</option>
-                    <option value="SCHEDULED">Planifiés</option>
-                    <option value="COMPLETED">Terminés</option>
-                    <option value="CANCELLED">Annulés</option>
-                </select>
-            </div>
-            
-            <div class="filter-group">
-                <label for="department-filter">Service:</label>
-                <select id="department-filter">
-                    <option value="all">Tous</option>
-                    <option value="Orthoprothèses">Orthoprothèses</option>
-                    <option value="Prothèses">Prothèses</option>
-                    <option value="Orthèses plantaires">Orthèses plantaires</option>
-                    <option value="Orthèses de genou">Orthèses de genou</option>
-                    <option value="Orthèses de cheville">Orthèses de cheville</option>
-                    <option value="Orthèses de tronc">Orthèses de tronc</option>
-                    <option value="Réadaptation">Réadaptation</option>
-                </select>
-            </div>
-            
-            <div class="filter-group">
-                <label for="appointment-sort">Trier par:</label>
-                <select id="appointment-sort">
-                    <option value="date-desc">Date (récent)</option>
-                    <option value="date-asc">Date (ancien)</option>
-                    <option value="name-asc">Nom (A-Z)</option>
-                    <option value="name-desc">Nom (Z-A)</option>
-                </select>
-            </div>
-        </div>
-        
-        <div class="action-buttons">
-            <button class="btn btn-outline" id="refresh-appointments-btn">
-                <i class="fas fa-sync-alt"></i>
-                <span>Actualiser</span>
-            </button>
-            <button class="btn btn-primary" id="export-appointments">
-                <i class="fas fa-file-export"></i>
-                <span>Exporter</span>
-            </button>
-            <button class="btn btn-primary" id="new-appointment">
-                <i class="fas fa-plus"></i>
-                <span>Nouveau</span>
-            </button>
-        </div>
-    </div>
-    
-    <!-- Appointments List -->
-    <div class="teachers-container">
-        <div class="teachers-grid" id="appointments-grid">
-            <!-- Appointment cards will be inserted here dynamically -->
-            <div class="loading-indicator">
-                <i class="fas fa-circle-notch fa-spin"></i>
-                <p>Chargement des rendez-vous...</p>
-            </div>
-        </div>
-        
-        <!-- Pagination -->
-        <div class="pagination" id="appointments-pagination">
-            <button class="pagination-btn" id="appointments-prev-page" disabled>
-                <i class="fas fa-chevron-left"></i>
-            </button>
-            <div class="pagination-info">
-                Page <span id="appointments-current-page">1</span> sur <span id="appointments-total-pages">1</span>
-            </div>
-            <button class="pagination-btn" id="appointments-next-page">
-                <i class="fas fa-chevron-right"></i>
-            </button>
-        </div>
-    </div>
-</div>
+      </div>
 
-<!-- Appointment Card Template -->
-<template id="appointment-card-template">
-    <div class="teacher-card appointment-card" data-appointment-id="">
-        <div class="card-header">
-            <div class="teacher-avatar">JD</div>
-            <div class="status-indicator">
-                <span class="status-badge pending">Planifié</span>
-            </div>
-        </div>
-        <div class="card-body">
-            <h3 class="teacher-name patient-name">John Doe</h3>
-            <p class="teacher-institution department">Service: Orthoprothèses</p>
-            <div class="teacher-contact">
-                <i class="fas fa-phone"></i>
-                <span class="patient-phone">06 12 34 56 78</span>
-            </div>
-            <div class="teacher-date">
-                <i class="fas fa-calendar-alt"></i>
-                <span class="appointment-date">01/04/2025</span>
-            </div>
-            <div class="teacher-date">
-                <i class="fas fa-clock"></i>
-                <span class="appointment-time">14:30</span>
-            </div>
-        </div>
-        <div class="card-actions">
-            <div class="approval-toggle">
-                <label class="switch">
-                    <input type="checkbox" class="appointment-completed-checkbox">
-                    <span class="slider round"></span>
-                </label>
-                <span class="toggle-label">Terminé</span>
-            </div>
-            <button class="btn-details">
-                <i class="fas fa-chevron-down"></i>
-                <span>Détails</span>
-            </button>
-        </div>
-        <div class="card-details">
-            <div class="details-content">
-                <div class="detail-item">
-                    <span class="detail-label">ID:</span>
-                    <span class="detail-value appointment-id">1234</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Email:</span>
-                    <span class="detail-value patient-email">patient@exemple.com</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Motif:</span>
-                    <span class="detail-value appointment-reason">Consultation initiale</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Notes:</span>
-                    <span class="detail-value appointment-notes">Notes supplémentaires...</span>
-                </div>
-                <div class="detail-actions">
-                    <button class="btn-reject cancel-appointment">
-                        <i class="fas fa-ban"></i>
-                        <span>Annuler</span>
-                    </button>
-                    <button class="btn-edit edit-appointment">
-                        <i class="fas fa-pen"></i>
-                        <span>Modifier</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-</template>
-                    
-                    <!-- Tab Content - Produits -->
-                    <!-- Tab Content - Produits -->
-<div class="tab-content" id="produits-content">
-    <div class="dashboard-header">
-        <h2>Catalogue Otto Book</h2>
-        <p class="sub-heading">Référence pour les orthoprothésistes</p>
-    </div>
-    
-    <!-- Products Management Controls -->
-    <div class="management-controls">
+      <div class="controls-bar">
         <div class="search-filters">
-            <div class="search-box">
-                <i class="fas fa-search"></i>
-                <input type="text" id="product-search" placeholder="Rechercher par nom, référence...">
-            </div>
-            
-            <div class="filter-group">
-                <label for="category-filter">Catégorie:</label>
-                <select id="category-filter">
-                    <option value="all">Toutes</option>
-                    <option value="orthoses">Orthèses</option>
-                    <option value="prostheses">Prothèses</option>
-                    <option value="components">Composants</option>
-                </select>
-            </div>
-            
-            <div class="filter-group">
-                <label for="material-filter">Matériau:</label>
-                <select id="material-filter">
-                    <option value="all">Tous</option>
-                    <option value="thermoplastic">Thermoplastiques</option>
-                    <option value="metal">Métaux</option>
-                    <option value="foam">Mousses</option>
-                    <option value="fabric">Textiles</option>
-                    <option value="composite">Composites</option>
-                </select>
-            </div>
-            
-            <div class="filter-group">
-                <label for="products-sort">Trier par:</label>
-                <select id="products-sort">
-                    <option value="name-asc">Nom (A-Z)</option>
-                    <option value="name-desc">Nom (Z-A)</option>
-                    <option value="ref-asc">Référence (croissant)</option>
-                    <option value="ref-desc">Référence (décroissant)</option>
-                </select>
-            </div>
+          <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="appointment-search" placeholder="Rechercher par nom ou téléphone...">
+          </div>
+          <div class="filter-group">
+            <span class="filter-label">Statut:</span>
+            <select id="appointment-status-filter" class="filter-select">
+              <option value="all">Tous</option>
+              <option value="SCHEDULED">Planifiés</option>
+              <option value="COMPLETED">Terminés</option>
+              <option value="CANCELLED">Annulés</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <span class="filter-label">Service:</span>
+            <select id="department-filter" class="filter-select">
+              <option value="all">Tous</option>
+              <option value="Orthoprothèses">Orthoprothèses</option>
+              <option value="Prothèses">Prothèses</option>
+              <option value="Orthèses plantaires">Orthèses plantaires</option>
+              <option value="Réadaptation">Réadaptation</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <span class="filter-label">Trier:</span>
+            <select id="appointment-sort" class="filter-select">
+              <option value="date-desc">Date (récent)</option>
+              <option value="date-asc">Date (ancien)</option>
+              <option value="name-asc">Nom (A-Z)</option>
+            </select>
+          </div>
         </div>
-        
         <div class="action-buttons">
-            <button class="btn btn-outline" id="refresh-products-btn">
-                <i class="fas fa-sync-alt"></i>
-                <span>Actualiser</span>
-            </button>
-            <button class="btn btn-primary" id="export-products">
-                <i class="fas fa-file-export"></i>
-                <span>Exporter</span>
-            </button>
+          <button class="btn btn-outline btn-sm" id="refresh-appointments-btn">
+            <i class="fas fa-sync-alt"></i> Actualiser
+          </button>
+          <button class="btn btn-ghost btn-sm" id="export-appointments">
+            <i class="fas fa-file-export"></i> Exporter
+          </button>
+          <button class="btn btn-primary btn-sm" id="new-appointment">
+            <i class="fas fa-plus"></i> Nouveau
+          </button>
         </div>
-    </div>
-    
-    <!-- Products List -->
-</div>
+      </div>
 
-                    
-                    <!-- Tab Content - Gestion Enseignants -->
-                    <div class="tab-content active" id="enseignants-content">
-                        <!-- Statistics Cards -->
-                        <div class="stats-cards">
-                            <div class="stat-card total">
-                                <div class="stat-icon">
-                                    <i class="fas fa-users"></i>
-                                </div>
-                                <div class="stat-info">
-                                    <h3>Total Enseignants</h3>
-                                    <p class="stat-number" id="total-teachers">-</p>
-                                </div>
-                            </div>
-                            
-                            <div class="stat-card approved">
-                                <div class="stat-icon">
-                                    <i class="fas fa-user-check"></i>
-                                </div>
-                                <div class="stat-info">
-                                    <h3>Approuvés</h3>
-                                    <p class="stat-number" id="approved-teachers">-</p>
-                                </div>
-                            </div>
-                            
-                            <div class="stat-card pending">
-                                <div class="stat-icon">
-                                    <i class="fas fa-user-clock"></i>
-                                </div>
-                                <div class="stat-info">
-                                    <h3>En attente</h3>
-                                    <p class="stat-number" id="pending-teachers">-</p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Teachers Management Controls -->
-                        <div class="management-controls">
-                            <div class="search-filters">
-                                <div class="search-box">
-                                    <i class="fas fa-search"></i>
-                                    <input type="text" id="teacher-search" placeholder="Rechercher par nom ou email...">
-                                </div>
-                                
-                                <div class="filter-group">
-                                    <label for="status-filter">Statut:</label>
-                                    <select id="status-filter">
-                                        <option value="all">Tous</option>
-                                        <option value="approved">Approuvés</option>
-                                        <option value="pending">En attente</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="filter-group">
-                                    <label for="sort-by">Trier par:</label>
-                                    <select id="sort-by">
-                                        <option value="date-desc">Date (récent)</option>
-                                        <option value="date-asc">Date (ancien)</option>
-                                        <option value="name-asc">Nom (A-Z)</option>
-                                        <option value="name-desc">Nom (Z-A)</option>
-                                    </select>
-                                </div>
-                            </div>
-                            
-                            <div class="action-buttons">
-                                <button class="btn btn-outline" id="refresh-btn">
-                                    <i class="fas fa-sync-alt"></i>
-                                    <span>Actualiser</span>
-                                </button>
-                                <button class="btn btn-primary" id="export-csv">
-                                    <i class="fas fa-file-export"></i>
-                                    <span>Exporter CSV</span>
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <!-- Teachers List -->
-                        <div class="teachers-container">
-                            <div class="teachers-grid" id="teachers-grid">
-                                <!-- Teacher cards will be inserted here dynamically -->
-                                <div class="loading-indicator">
-                                    <i class="fas fa-circle-notch fa-spin"></i>
-                                    <p>Chargement des données...</p>
-                                </div>
-                            </div>
-                            
-                            <!-- Pagination -->
-                            <div class="pagination" id="pagination">
-                                <button class="pagination-btn" id="prev-page" disabled>
-                                    <i class="fas fa-chevron-left"></i>
-                                </button>
-                                <div class="pagination-info">
-                                    Page <span id="current-page">1</span> sur <span id="total-pages">1</span>
-                                </div>
-                                <button class="pagination-btn" id="next-page">
-                                    <i class="fas fa-chevron-right"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-        
-        <footer class="site-footer">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <div class="logo footer-logo">
-                        <svg width="40" height="40" viewBox="0 0 60 60">
-                            <circle cx="30" cy="30" r="25" fill="#7E57C2" fill-opacity="0.2"/>
-                            <path d="M18,30 Q30,12 42,30 T18,30" stroke="#7E57C2" stroke-width="3" fill="none"/>
-                            <circle cx="30" cy="30" r="6" fill="#7E57C2"/>
-                        </svg>
-                        <span>Ortho<strong>Pro+</strong></span>
-                    </div>
-                    <p>La référence en orthoprothésie médicale depuis 2020.</p>
-                </div>
-                
-                <div class="footer-links-container">
-                    <div class="footer-links-group">
-                        <h4>Plateforme</h4>
-                        <a href="index.html">Accueil</a>
-                        <a href="about.html">À propos</a>
-                        <a href="#">Contact</a>
-                        <a href="#">FAQ</a>
-                    </div>
-                    
-                    <div class="footer-links-group">
-                        <h4>Accès</h4>
-                        <a href="student.html">Espace Étudiant</a>
-                        <a href="teacher.html">Espace Enseignant</a>
-                        <a href="admin.html">Espace Administrateur</a>
-                    </div>
-                    
-                    <div class="footer-links-group">
-                        <h4>Légal</h4>
-                        <a href="#">Confidentialité</a>
-                        <a href="#">Mentions légales</a>
-                        <a href="#">CGU</a>
-                        <a href="#">RGPD</a>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="footer-bottom">
-                <p>&copy; 2025 OrthoPro+ - Tous droits réservés</p>
-                <div class="social-links">
-                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                </div>
-            </div>
-        </footer>
-    </div>
-    
-    <!-- Notification -->
-    <div id="notification" class="notification">
-        <div class="notification-icon">
-            <i class="fas fa-info-circle"></i>
+      <div class="cards-grid" id="appointments-grid">
+        <div class="loading-indicator">
+          <i class="fas fa-circle-notch fa-spin"></i>
+          <p>Chargement des rendez-vous...</p>
         </div>
-        <div class="notification-message"></div>
-        <button class="notification-close">
-            <i class="fas fa-times"></i>
+      </div>
+
+      <div class="pagination" id="appointments-pagination">
+        <button class="pagination-btn" id="appointments-prev-page" disabled>
+          <i class="fas fa-chevron-left"></i>
         </button>
-    </div>
-    
-    <!-- Confirmation Modal -->
-    <div class="modal" id="confirmation-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Confirmation</h3>
-                <button class="modal-close">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p id="modal-message">Êtes-vous sûr de vouloir effectuer cette action ?</p>
-                <div class="form-group" id="comments-group">
-                    <label for="rejection-comments">Commentaires (optionnel):</label>
-                    <textarea id="rejection-comments" rows="3" placeholder="Expliquez la raison du rejet..."></textarea>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-outline" id="modal-cancel">Annuler</button>
-                <button class="btn btn-primary" id="modal-confirm">Confirmer</button>
-            </div>
+        <div class="pagination-info">
+          Page <span id="appointments-current-page">1</span> sur <span id="appointments-total-pages">1</span>
         </div>
+        <button class="pagination-btn" id="appointments-next-page">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
     </div>
-    
-    <!-- Teacher Card Template -->
-    <template id="teacher-card-template">
-        <div class="teacher-card" data-teacher-id="">
-            <div class="card-header">
-                <div class="teacher-avatar">JD</div>
-                <div class="status-indicator">
-                    <span class="status-badge pending">En attente</span>
-                </div>
-            </div>
-            <div class="card-body">
-                <h3 class="teacher-name">John Doe</h3>
-                <p class="teacher-institution">Université Paris</p>
-                <div class="teacher-contact">
-                    <i class="fas fa-envelope"></i>
-                    <span class="teacher-email">john.doe@universite.fr</span>
-                </div>
-                <div class="teacher-date">
-                    <i class="fas fa-calendar-alt"></i>
-                    <span class="registration-date">Inscrit le 01/03/2025</span>
-                </div>
-            </div>
-            <div class="card-actions">
-                <div class="approval-toggle">
-                    <label class="switch">
-                        <input type="checkbox" class="approval-checkbox">
-                        <span class="slider round"></span>
-                    </label>
-                    <span class="toggle-label">Approuver</span>
-                </div>
-                <button class="btn-details">
-                    <i class="fas fa-chevron-down"></i>
-                    <span>Détails</span>
-                </button>
-            </div>
-            <div class="card-details">
-                <div class="details-content">
-                    <div class="detail-item">
-                        <span class="detail-label">ID:</span>
-                        <span class="detail-value teacher-id">1234</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Dernière connexion:</span>
-                        <span class="detail-value last-login">Jamais</span>
-                    </div>
-                    <div class="detail-actions">
-                        <button class="btn-reject">
-                            <i class="fas fa-ban"></i>
-                            <span>Rejeter</span>
-                        </button>
-                        <button class="btn-edit">
-                            <i class="fas fa-pen"></i>
-                            <span>Modifier</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </template>
-    
-    <script src="admin.js"></script>
-    <script src="admin-dashboard.js"></script>
 
-    <!-- New Appointment Modal -->
-<div class="modal" id="new-appointment-modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3>Nouveau Rendez-vous</h3>
-            <button class="modal-close">
-                <i class="fas fa-times"></i>
-            </button>
+    <!-- ── Tab: Teachers ── -->
+    <div class="tab-content active" id="enseignants-content">
+      <div class="stats-grid">
+        <div class="stat-card total">
+          <div class="stat-icon"><i class="fas fa-users"></i></div>
+          <div>
+            <div class="stat-label">Total Enseignants</div>
+            <div class="stat-number" id="total-teachers">—</div>
+          </div>
         </div>
-        <div class="modal-body">
-            <form id="new-appointment-form">
-                <!-- Patient Information -->
-                <div class="form-section">
-                    <h4>Informations du patient</h4>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="patient-name">Nom complet*</label>
-                            <input type="text" id="patient-name" required>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="patient-phone">Téléphone*</label>
-                            <input type="tel" id="patient-phone" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="patient-email">Email</label>
-                            <input type="email" id="patient-email">
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Appointment Details -->
-                <div class="form-section">
-                    <h4>Détails du rendez-vous</h4>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="appointment-date">Date*</label>
-                            <input type="date" id="appointment-date" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="appointment-time">Heure*</label>
-                            <input type="time" id="appointment-time" required>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="department-select">Service*</label>
-                            <select id="department-select" required>
-                                <option value="">Sélectionnez un service</option>
-                                <option value="Orthoprothèses">Orthoprothèses</option>
-                                <option value="Prothèses">Prothèses</option>
-                                <option value="Orthèses plantaires">Orthèses plantaires</option>
-                                <option value="Orthèses de genou">Orthèses de genou</option>
-                                <option value="Orthèses de cheville">Orthèses de cheville</option>
-                                <option value="Orthèses de tronc">Orthèses de tronc</option>
-                                <option value="Réadaptation">Réadaptation</option>
-                                <option value="Consultation générale">Consultation générale</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group full-width">
-                            <label for="appointment-reason">Motif du rendez-vous*</label>
-                            <input type="text" id="appointment-reason" required>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group full-width">
-                            <label for="appointment-notes">Notes supplémentaires</label>
-                            <textarea id="appointment-notes" rows="3"></textarea>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="form-message" id="form-message"></div>
-            </form>
+        <div class="stat-card approved">
+          <div class="stat-icon"><i class="fas fa-user-check"></i></div>
+          <div>
+            <div class="stat-label">Approuvés</div>
+            <div class="stat-number" id="approved-teachers">—</div>
+          </div>
         </div>
-        <div class="modal-footer">
-            <button class="btn btn-outline" id="modal-cancel-appointment">Annuler</button>
-            <button class="btn btn-primary" id="modal-save-appointment">
-                <i class="fas fa-save"></i>
-                <span>Enregistrer</span>
-            </button>
+        <div class="stat-card pending">
+          <div class="stat-icon"><i class="fas fa-user-clock"></i></div>
+          <div>
+            <div class="stat-label">En attente</div>
+            <div class="stat-number" id="pending-teachers">—</div>
+          </div>
         </div>
+      </div>
+
+      <div class="controls-bar">
+        <div class="search-filters">
+          <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="teacher-search" placeholder="Rechercher par nom ou email...">
+          </div>
+          <div class="filter-group">
+            <span class="filter-label">Statut:</span>
+            <select id="status-filter" class="filter-select">
+              <option value="all">Tous</option>
+              <option value="approved">Approuvés</option>
+              <option value="pending">En attente</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <span class="filter-label">Trier:</span>
+            <select id="sort-by" class="filter-select">
+              <option value="date-desc">Date (récent)</option>
+              <option value="date-asc">Date (ancien)</option>
+              <option value="name-asc">Nom (A-Z)</option>
+              <option value="name-desc">Nom (Z-A)</option>
+            </select>
+          </div>
+        </div>
+        <div class="action-buttons">
+          <button class="btn btn-outline btn-sm" id="refresh-btn">
+            <i class="fas fa-sync-alt"></i> Actualiser
+          </button>
+          <button class="btn btn-ghost btn-sm" id="export-csv">
+            <i class="fas fa-file-export"></i> Exporter CSV
+          </button>
+        </div>
+      </div>
+
+      <div class="cards-grid" id="teachers-grid">
+        <div class="loading-indicator">
+          <i class="fas fa-circle-notch fa-spin"></i>
+          <p>Chargement des données...</p>
+        </div>
+      </div>
+
+      <div class="pagination" id="pagination">
+        <button class="pagination-btn" id="prev-page" disabled>
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <div class="pagination-info">
+          Page <span id="current-page">1</span> sur <span id="total-pages">1</span>
+        </div>
+        <button class="pagination-btn" id="next-page">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
     </div>
-</div>
+
+  </div><!-- /page-container -->
+
+  <!-- Appointment Card Template -->
+  <template id="appointment-card-template">
+    <div class="teacher-card appointment-card" data-appointment-id="">
+      <div class="card-head">
+        <div class="card-avatar">JD</div>
+        <div class="card-info">
+          <h3 class="patient-name">John Doe</h3>
+          <p class="department">Service: Orthoprothèses</p>
+        </div>
+        <span class="status-badge pending">Planifié</span>
+      </div>
+      <div class="card-body">
+        <div class="card-detail"><i class="fas fa-phone"></i><span class="patient-phone">—</span></div>
+        <div class="card-detail"><i class="fas fa-calendar-alt"></i><span class="appointment-date">—</span></div>
+        <div class="card-detail"><i class="fas fa-clock"></i><span class="appointment-time">—</span></div>
+      </div>
+      <div class="card-actions">
+        <div class="card-toggle">
+          <label class="switch">
+            <input type="checkbox" class="appointment-completed-checkbox">
+            <span class="slider"></span>
+          </label>
+          <span>Terminé</span>
+        </div>
+        <button class="btn-details">
+          <i class="fas fa-chevron-down"></i> <span>Détails</span>
+        </button>
+      </div>
+      <div class="card-details">
+        <div class="detail-row"><span class="detail-label">ID:</span><span class="detail-value appointment-id">—</span></div>
+        <div class="detail-row"><span class="detail-label">Email:</span><span class="detail-value patient-email">—</span></div>
+        <div class="detail-row"><span class="detail-label">Motif:</span><span class="detail-value appointment-reason">—</span></div>
+        <div class="detail-row"><span class="detail-label">Notes:</span><span class="detail-value appointment-notes">—</span></div>
+        <div class="detail-actions">
+          <button class="btn btn-danger btn-sm cancel-appointment"><i class="fas fa-ban"></i> Annuler</button>
+          <button class="btn btn-outline btn-sm edit-appointment"><i class="fas fa-pen"></i> Modifier</button>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <!-- Appointment Modal -->
+  <div class="modal" id="appointment-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="appointment-modal-title">Nouveau rendez-vous</h3>
+        <button class="modal-close"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Nom du patient</label>
+          <input type="text" id="appointment-patient-name" class="form-control" placeholder="Nom complet" required>
+        </div>
+        <div class="form-group">
+          <label>Téléphone</label>
+          <input type="tel" id="appointment-patient-phone" class="form-control" placeholder="06 12 34 56 78" required>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="appointment-patient-email" class="form-control" placeholder="patient@exemple.com">
+        </div>
+        <div class="form-group">
+          <label>Service</label>
+          <select id="appointment-department" class="form-control" required>
+            <option value="">Sélectionner un service</option>
+            <option value="Orthoprothèses">Orthoprothèses</option>
+            <option value="Prothèses">Prothèses</option>
+            <option value="Orthèses plantaires">Orthèses plantaires</option>
+            <option value="Orthèses de genou">Orthèses de genou</option>
+            <option value="Orthèses de cheville">Orthèses de cheville</option>
+            <option value="Réadaptation">Réadaptation</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Date</label>
+          <input type="date" id="appointment-date" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label>Heure</label>
+          <input type="time" id="appointment-time" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label>Motif</label>
+          <input type="text" id="appointment-reason" class="form-control" placeholder="Motif de la consultation" required>
+        </div>
+        <div class="form-group">
+          <label>Notes</label>
+          <textarea id="appointment-notes" class="form-control" placeholder="Notes supplémentaires..." rows="3"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost btn-sm" id="cancel-appointment-modal">Annuler</button>
+        <button class="btn btn-primary btn-sm" id="save-appointment">
+          <i class="fas fa-save"></i> Enregistrer
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirmation Modal -->
+  <div class="modal" id="confirmation-modal">
+    <div class="modal-content confirm-modal-content">
+      <div class="modal-header">
+        <h3>Confirmation</h3>
+        <button class="modal-close"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="confirm-icon"><i class="fas fa-exclamation-triangle"></i></div>
+        <p class="confirm-text" id="confirmation-message">Êtes-vous sûr de vouloir effectuer cette action?</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost btn-sm" id="cancel-confirmation">Annuler</button>
+        <button class="btn btn-primary btn-sm" id="confirm-action">Confirmer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reject Modal -->
+  <div class="modal" id="reject-modal">
+    <div class="modal-content confirm-modal-content">
+      <div class="modal-header">
+        <h3>Rejeter l'enseignant</h3>
+        <button class="modal-close"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Raison du rejet</label>
+          <textarea id="rejection-comments" class="form-control" placeholder="Expliquez la raison du rejet..." rows="4"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost btn-sm" id="cancel-rejection">Annuler</button>
+        <button class="btn btn-danger btn-sm" id="confirm-rejection">
+          <i class="fas fa-times-circle"></i> Rejeter
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cancel Appointment Modal -->
+  <div class="modal" id="cancel-appointment-modal">
+    <div class="modal-content confirm-modal-content">
+      <div class="modal-header">
+        <h3>Annuler le rendez-vous</h3>
+        <button class="modal-close"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Raison de l'annulation</label>
+          <textarea id="cancel-appointment-comments" class="form-control" placeholder="Raison de l'annulation..." rows="3"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost btn-sm" id="cancel-cancel-appointment">Fermer</button>
+        <button class="btn btn-danger btn-sm" id="confirm-cancel-appointment">
+          <i class="fas fa-ban"></i> Annuler le RDV
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification -->
+  <div id="notification" class="notification">
+    <div class="notification-icon"><i class="fas fa-info-circle"></i></div>
+    <div class="notification-message"></div>
+    <button class="notification-close"><i class="fas fa-times"></i></button>
+  </div>
+
+  <!-- Tab switching script -->
+  <script>
+    document.querySelectorAll('.dash-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.dash-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        tab.classList.add('active');
+        const target = tab.dataset.tab;
+        document.getElementById(target + '-content').classList.add('active');
+      });
+    });
+
+    // Modal close buttons
+    document.querySelectorAll('.modal-close').forEach(btn => {
+      btn.addEventListener('click', () => {
+        btn.closest('.modal').classList.remove('show');
+      });
+    });
+  </script>
+
+  <script src="admin-dashboard.js"></script>
 </body>
 </html>

@@ -1,702 +1,954 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OrthoPro+ | Espace Enseignant</title>
-    <link rel="stylesheet" href="teacher-dashboard.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OrthoPro+ | Tableau de bord Enseignant</title>
+  <link rel="stylesheet" href="assets/css/design-system.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* ── Layout ── */
+    body { background: var(--bg); overflow-x: hidden; }
+    .dashboard-wrapper { display: flex; min-height: 100vh; }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: 240px; flex-shrink: 0;
+      background: var(--text);
+      display: flex; flex-direction: column;
+      position: fixed; top: 0; left: 0; bottom: 0;
+      z-index: 200; transition: transform 0.3s ease;
+    }
+    .sidebar-header {
+      padding: 1.5rem 1.25rem 1rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .sidebar-brand { display: flex; align-items: center; gap: 0.6rem; text-decoration: none; }
+    .sidebar-brand-icon {
+      width: 34px; height: 34px; border-radius: 9px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 1rem;
+    }
+    .sidebar-brand-name { font-family: var(--font-display); font-size: 1rem; color: white; font-weight: 700; }
+    .sidebar-brand-name span { color: var(--primary-light); }
+
+    .mobile-toggle {
+      display: none; background: rgba(255,255,255,0.1); border: none;
+      color: white; width: 32px; height: 32px; border-radius: 8px;
+      cursor: pointer; font-size: 0.9rem;
+      align-items: center; justify-content: center;
+    }
+
+    .sidebar-nav { flex: 1; padding: 1rem 0; overflow-y: auto; }
+    .nav-section { margin-bottom: 0.5rem; }
+    .nav-section-title {
+      padding: 0.5rem 1.25rem; font-size: 0.68rem; font-weight: 700;
+      color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.1em;
+    }
+    .nav-item {
+      display: flex; align-items: center; gap: 0.75rem;
+      padding: 0.65rem 1.25rem; margin: 0.1rem 0.5rem;
+      border-radius: var(--radius); color: rgba(255,255,255,0.6);
+      text-decoration: none; font-size: 0.88rem; font-weight: 500;
+      transition: var(--transition); cursor: pointer;
+    }
+    .nav-item:hover { color: white; background: rgba(255,255,255,0.08); }
+    .nav-item.active { color: white; background: var(--primary); }
+    .nav-item i { width: 16px; text-align: center; font-size: 0.9rem; }
+
+    .sidebar-footer {
+      padding: 1rem 1.25rem;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      font-size: 0.75rem; color: rgba(255,255,255,0.3); text-align: center;
+    }
+
+    /* ── Main Content ── */
+    .main-content {
+      margin-left: 240px; flex: 1;
+      display: flex; flex-direction: column; min-height: 100vh;
+    }
+
+    /* ── Top Header ── */
+    .top-header {
+      background: var(--surface); border-bottom: 1px solid var(--border);
+      padding: 0 2rem; height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+      box-shadow: var(--shadow-sm);
+    }
+    .header-left h1 { font-size: 1.1rem; font-weight: 600; color: var(--text); }
+    .breadcrumb { font-size: 0.82rem; color: var(--text-muted); margin-top: 0.1rem; }
+    .breadcrumb a { color: var(--primary); text-decoration: none; }
+
+    .header-right { display: flex; align-items: center; gap: 1rem; }
+    .user-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 0.85rem; font-weight: 600;
+    }
+    .user-name { font-size: 0.88rem; font-weight: 600; color: var(--text); }
+
+    /* ── Page Content ── */
+    .page-content { padding: 2rem; flex: 1; }
+
+    /* ── Content Sections ── */
+    .content-section { display: none; }
+    .content-section.active { display: block; }
+
+    /* ── Dashboard Cards ── */
+    .dashboard-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-bottom: 2rem; }
+    .dashboard-card {
+      background: var(--surface); border-radius: var(--radius-md);
+      border: 1px solid var(--border); padding: 1.5rem;
+      cursor: pointer; transition: all 0.25s ease;
+      display: flex; flex-direction: column; gap: 1rem;
+    }
+    .dashboard-card:hover { border-color: var(--primary); box-shadow: var(--shadow-md); transform: translateY(-3px); }
+    .card-icon-wrap {
+      width: 52px; height: 52px; border-radius: 14px;
+      background: var(--primary-glow); color: var(--primary);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; transition: var(--transition);
+    }
+    .dashboard-card:hover .card-icon-wrap { background: var(--primary); color: white; }
+    .dashboard-card h3 { font-size: 1rem; font-weight: 600; color: var(--text); margin-bottom: 0.3rem; }
+    .dashboard-card p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; }
+
+    /* ── Section Header ── */
+    .section-head {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;
+    }
+    .section-head h2 { font-size: 1.3rem; font-weight: 700; color: var(--text); }
+    .section-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+
+    /* ── Tabs ── */
+    .tabs-bar {
+      display: flex; gap: 0.25rem;
+      border-bottom: 2px solid var(--border);
+      margin-bottom: 1.5rem;
+    }
+    .tab-btn {
+      padding: 0.65rem 1.25rem; background: none; border: none;
+      font-family: var(--font-body); font-size: 0.9rem; font-weight: 600;
+      color: var(--text-muted); cursor: pointer; transition: var(--transition);
+      border-bottom: 2px solid transparent; margin-bottom: -2px;
+      border-radius: var(--radius) var(--radius) 0 0;
+    }
+    .tab-btn:hover { color: var(--text); background: var(--bg); }
+    .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* ── Filter Chips ── */
+    .filter-chips { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.25rem; }
+    .chip {
+      padding: 0.35rem 0.9rem; border-radius: 100px;
+      border: 1.5px solid var(--border); background: var(--surface);
+      font-size: 0.82rem; font-weight: 600; color: var(--text-muted);
+      cursor: pointer; transition: var(--transition);
+    }
+    .chip:hover { border-color: var(--primary); color: var(--primary); }
+    .chip.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+    /* ── Resource Grid ── */
+    .resources-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.25rem;
+    }
+    .resource-card {
+      background: var(--surface); border-radius: var(--radius-md);
+      border: 1px solid var(--border); overflow: hidden;
+      transition: all 0.25s ease;
+    }
+    .resource-card:hover { border-color: var(--primary); box-shadow: var(--shadow-md); transform: translateY(-2px); }
+    .resource-card-top { padding: 1.25rem; display: flex; gap: 1rem; align-items: flex-start; }
+    .res-icon {
+      width: 44px; height: 44px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; flex-shrink: 0;
+    }
+    .res-icon.pdf { background: rgba(239,68,68,0.1); color: #ef4444; }
+    .res-icon.doc, .res-icon.docx { background: rgba(59,130,246,0.1); color: #3b82f6; }
+    .res-icon.ppt, .res-icon.pptx { background: rgba(245,158,11,0.1); color: #f59e0b; }
+    .res-icon.xls, .res-icon.xlsx { background: rgba(34,197,94,0.1); color: #22c55e; }
+    .res-icon.default { background: var(--primary-glow); color: var(--primary); }
+    .res-info h3 { font-size: 0.9rem; font-weight: 600; color: var(--text); margin-bottom: 0.3rem; line-height: 1.3; }
+    .res-info p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; }
+    .resource-card-footer {
+      padding: 0.7rem 1.25rem;
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      background: var(--surface-2);
+    }
+    .res-meta { font-size: 0.76rem; color: var(--text-light); display: flex; align-items: center; gap: 0.3rem; }
+    .res-actions { display: flex; gap: 0.4rem; }
+    .res-btn {
+      width: 28px; height: 28px; border-radius: 7px; border: none;
+      background: var(--bg); color: var(--text-muted);
+      cursor: pointer; font-size: 0.78rem; display: flex;
+      align-items: center; justify-content: center; transition: var(--transition);
+    }
+    .res-btn:hover { background: var(--primary); color: white; }
+    .res-btn.danger:hover { background: var(--danger); }
+
+    /* ── Models Grid ── */
+    .models-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1.25rem;
+    }
+    .model-card {
+      background: var(--surface); border-radius: var(--radius-md);
+      border: 1px solid var(--border); overflow: hidden;
+      transition: all 0.25s ease; cursor: pointer;
+    }
+    .model-card:hover { border-color: var(--primary); box-shadow: var(--shadow-md); transform: translateY(-2px); }
+    .model-card-preview {
+      height: 140px; background: linear-gradient(135deg, #f0f7f9, #e8f4f7);
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+    }
+    .model-card-preview i { font-size: 2.5rem; color: var(--primary); opacity: 0.6; }
+    .model-badge {
+      position: absolute; top: 0.6rem; right: 0.6rem;
+      padding: 0.2rem 0.6rem; border-radius: 100px;
+      font-size: 0.7rem; font-weight: 700;
+    }
+    .badge-public { background: var(--success-light); color: #16a34a; }
+    .badge-private { background: var(--warning-light); color: #d97706; }
+    .model-card-body { padding: 1rem; }
+    .model-card-body h3 { font-size: 0.9rem; font-weight: 600; color: var(--text); margin-bottom: 0.3rem; }
+    .model-card-body p { font-size: 0.78rem; color: var(--text-muted); }
+    .model-card-footer {
+      padding: 0.7rem 1rem;
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      background: var(--surface-2);
+    }
+
+    /* ── Empty / Loading ── */
+    .empty-state {
+      grid-column: 1/-1; text-align: center; padding: 3rem;
+      color: var(--text-muted);
+    }
+    .empty-state i { font-size: 2.5rem; margin-bottom: 1rem; opacity: 0.4; display: block; }
+    .empty-state h3 { font-size: 1rem; margin-bottom: 0.4rem; color: var(--text); }
+    .empty-state p { font-size: 0.85rem; }
+    .loading-state {
+      grid-column: 1/-1; text-align: center; padding: 3rem;
+      display: flex; flex-direction: column; align-items: center; gap: 1rem;
+      color: var(--text-muted);
+    }
+
+    /* ── Filter Dropdown ── */
+    .filter-select {
+      padding: 0.55rem 1rem; border-radius: var(--radius);
+      border: 1.5px solid var(--border); background: var(--surface);
+      font-family: var(--font-body); font-size: 0.88rem;
+      color: var(--text); cursor: pointer; outline: none; transition: var(--transition);
+    }
+    .filter-select:focus { border-color: var(--primary); }
+
+    /* ── Modals ── */
+    .modal {
+      display: none; position: fixed; inset: 0;
+      background: rgba(10,20,35,0.5); backdrop-filter: blur(6px);
+      z-index: 1000; justify-content: center; align-items: center;
+    }
+    .modal.show { display: flex; animation: fadeIn 0.25s ease; }
+    .modal-content {
+      width: 100%; max-width: 500px;
+      background: var(--surface); border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg); overflow: hidden;
+      animation: slideUp 0.3s ease; max-height: 90vh; overflow-y: auto;
+    }
+    .modal-header {
+      padding: 1.25rem 1.5rem;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      display: flex; justify-content: space-between; align-items: center;
+      position: sticky; top: 0;
+    }
+    .modal-header h2 { font-size: 1.05rem; color: white; font-weight: 600; }
+    .modal-close {
+      background: rgba(255,255,255,0.15); border: none; color: white;
+      width: 30px; height: 30px; border-radius: 50%; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; font-size: 0.85rem;
+      transition: var(--transition);
+    }
+    .modal-close:hover { background: rgba(255,255,255,0.3); }
+    .modal-body { padding: 1.5rem; }
+    .modal-footer {
+      padding: 1rem 1.5rem; border-top: 1px solid var(--border);
+      display: flex; justify-content: flex-end; gap: 0.75rem;
+      background: var(--surface-2); position: sticky; bottom: 0;
+    }
+
+    .form-group { margin-bottom: 1.1rem; }
+    .form-group label {
+      display: block; font-size: 0.8rem; font-weight: 600;
+      color: var(--text-muted); text-transform: uppercase;
+      letter-spacing: 0.05em; margin-bottom: 0.4rem;
+    }
+    .form-control {
+      width: 100%; padding: 0.65rem 1rem;
+      border: 1.5px solid var(--border); border-radius: var(--radius);
+      font-family: var(--font-body); font-size: 0.9rem;
+      color: var(--text); background: var(--surface);
+      transition: var(--transition); outline: none;
+    }
+    .form-control:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-glow); }
+    textarea.form-control { resize: vertical; min-height: 80px; }
+
+    /* ── File Upload ── */
+    .file-upload-area {
+      border: 2px dashed var(--border); border-radius: var(--radius-md);
+      padding: 2rem; text-align: center; cursor: pointer;
+      transition: var(--transition); background: var(--surface-2);
+    }
+    .file-upload-area:hover { border-color: var(--primary); background: var(--primary-glow); }
+    .file-upload-area i { font-size: 2rem; color: var(--text-light); margin-bottom: 0.75rem; display: block; }
+    .file-upload-area p { font-size: 0.88rem; color: var(--text-muted); }
+    .file-upload-area input[type="file"] { display: none; }
+    .file-info-display {
+      margin-top: 0.75rem; font-size: 0.82rem; color: var(--primary);
+      font-weight: 500;
+    }
+
+    /* ── Radio Options ── */
+    .radio-group { display: flex; flex-direction: column; gap: 0.6rem; }
+    .radio-option {
+      display: flex; align-items: center; gap: 0.6rem;
+      padding: 0.75rem 1rem; border-radius: var(--radius);
+      border: 1.5px solid var(--border); cursor: pointer;
+      transition: var(--transition); font-size: 0.88rem; color: var(--text-muted);
+    }
+    .radio-option:has(input:checked) { border-color: var(--primary); background: var(--primary-glow); color: var(--primary); }
+    .radio-option input { accent-color: var(--primary); }
+    .radio-option label { cursor: pointer; display: flex; align-items: center; gap: 0.5rem; }
+
+    /* ── 3D Viewer Modal ── */
+    .viewer-modal {
+      display: none; position: fixed; inset: 0;
+      background: rgba(10,20,35,0.85); backdrop-filter: blur(8px);
+      z-index: 2000; justify-content: center; align-items: center;
+    }
+    .viewer-modal.show { display: flex; }
+    .viewer-container {
+      width: 95vw; height: 90vh; max-width: 1200px;
+      background: var(--surface); border-radius: var(--radius-lg);
+      overflow: hidden; display: flex; flex-direction: column;
+      box-shadow: var(--shadow-lg);
+    }
+    .viewer-header {
+      padding: 1rem 1.5rem;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      display: flex; justify-content: space-between; align-items: center;
+      flex-shrink: 0;
+    }
+    .viewer-header h2 { color: white; font-size: 1rem; font-weight: 600; }
+    .viewer-close {
+      background: rgba(255,255,255,0.15); border: none; color: white;
+      width: 32px; height: 32px; border-radius: 50%; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: var(--transition);
+    }
+    .viewer-close:hover { background: rgba(255,255,255,0.3); }
+    .viewer-body { display: flex; flex: 1; overflow: hidden; }
+    .viewer-display {
+      flex: 1; background: #1a2535;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+    }
+    .viewer-controls {
+      width: 260px; flex-shrink: 0;
+      overflow-y: auto; padding: 1.25rem;
+      border-left: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .controls-section { margin-bottom: 1.5rem; }
+    .controls-section h3 {
+      font-size: 0.8rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 0.75rem;
+    }
+    .control-group { margin-bottom: 0.75rem; }
+    .control-group label { display: block; font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.3rem; }
+    .spinner-input {
+      display: flex; align-items: center; gap: 0.4rem;
+    }
+    .spinner-btn {
+      width: 28px; height: 28px; border-radius: 7px;
+      border: 1.5px solid var(--border); background: var(--surface);
+      color: var(--text-muted); cursor: pointer; font-size: 0.75rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: var(--transition);
+    }
+    .spinner-btn:hover { border-color: var(--primary); color: var(--primary); }
+    .spinner-input input {
+      flex: 1; padding: 0.4rem 0.6rem; text-align: center;
+      border: 1.5px solid var(--border); border-radius: var(--radius);
+      font-size: 0.85rem; color: var(--text); outline: none;
+    }
+    .range-slider { width: 100%; accent-color: var(--primary); }
+    .range-value { font-size: 0.82rem; color: var(--text-muted); text-align: right; margin-top: 0.2rem; }
+
+    .material-options { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    .material-btn {
+      display: flex; align-items: center; gap: 0.4rem;
+      padding: 0.4rem 0.7rem; border-radius: var(--radius);
+      border: 1.5px solid var(--border); background: var(--surface);
+      font-size: 0.78rem; cursor: pointer; transition: var(--transition);
+      color: var(--text-muted);
+    }
+    .material-btn.active { border-color: var(--primary); color: var(--primary); background: var(--primary-glow); }
+    .material-swatch {
+      width: 14px; height: 14px; border-radius: 3px;
+    }
+    .material-swatch.plastic { background: #4a90e2; }
+    .material-swatch.metal { background: #9ca3af; }
+    .material-swatch.rubber { background: #374151; }
+
+    .color-swatches { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    .color-swatch {
+      width: 24px; height: 24px; border-radius: 50%;
+      background: var(--color); border: 2px solid transparent;
+      cursor: pointer; transition: var(--transition);
+    }
+    .color-swatch.active { border-color: var(--primary); transform: scale(1.2); }
+
+    .tools-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+    .tool-btn {
+      display: flex; flex-direction: column; align-items: center; gap: 0.3rem;
+      padding: 0.6rem; border-radius: var(--radius);
+      border: 1.5px solid var(--border); background: var(--surface);
+      font-size: 0.75rem; color: var(--text-muted); cursor: pointer;
+      transition: var(--transition);
+    }
+    .tool-btn:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-glow); }
+    .tool-btn i { font-size: 1rem; }
+
+    .export-options { display: flex; gap: 0.5rem; }
+    .export-btn {
+      flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.3rem;
+      padding: 0.6rem; border-radius: var(--radius);
+      border: 1.5px solid var(--border); background: var(--surface);
+      font-size: 0.75rem; color: var(--text-muted); cursor: pointer;
+      transition: var(--transition);
+    }
+    .export-btn:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-glow); }
+
+    .info-list { display: flex; flex-direction: column; gap: 0.5rem; }
+    .info-item { display: flex; justify-content: space-between; font-size: 0.82rem; }
+    .info-label { color: var(--text-muted); }
+    .info-value { color: var(--text); font-weight: 500; }
+
+    /* ── Toast ── */
+    .toast {
+      position: fixed; bottom: 1.5rem; right: 1.5rem;
+      padding: 1rem 1.4rem; background: var(--surface);
+      border-radius: var(--radius-md); box-shadow: var(--shadow-lg);
+      display: flex; align-items: center; gap: 0.8rem;
+      transform: translateY(120%); transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+      z-index: 9999; max-width: 360px; border-left: 4px solid var(--primary);
+    }
+    .toast.show { transform: translateY(0); }
+    .toast.success { border-color: var(--success); }
+    .toast.error { border-color: var(--danger); }
+    .toast-icon { font-size: 1.1rem; color: var(--primary); }
+    .toast.success .toast-icon { color: var(--success); }
+    .toast.error .toast-icon { color: var(--danger); }
+    .toast-message { flex: 1; font-size: 0.9rem; color: var(--text); font-weight: 500; }
+    .toast-close { background: none; border: none; color: var(--text-light); cursor: pointer; font-size: 0.9rem; }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+    /* ── Responsive ── */
+    @media (max-width: 1024px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .main-content { margin-left: 0; }
+      .mobile-toggle { display: flex; }
+      .dashboard-grid { grid-template-columns: 1fr; }
+      .viewer-controls { width: 200px; }
+    }
+    @media (max-width: 640px) {
+      .page-content { padding: 1rem; }
+      .resources-grid { grid-template-columns: 1fr; }
+      .models-grid { grid-template-columns: 1fr; }
+      .section-head { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
 </head>
 <body>
-    <div class="dashboard-wrapper">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <div class="logo">
-                    <svg width="40" height="40" viewBox="0 0 60 60">
-                        <circle cx="30" cy="30" r="25" fill="#33a6b8" fill-opacity="0.2"/>
-                        <path d="M18,30 Q30,12 42,30 T18,30" stroke="#33a6b8" stroke-width="3" fill="none"/>
-                        <circle cx="30" cy="30" r="6" fill="#33a6b8"/>
-                    </svg>
-                    <h1>OrthoPro<span>+</span></h1>
-                </div>
-                <button class="mobile-toggle" id="mobile-toggle">
-                    <i class="fas fa-bars"></i>
-                </button>
+<div class="dashboard-wrapper">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <a href="index.html" class="sidebar-brand">
+        <div class="sidebar-brand-icon"><i class="fas fa-heartbeat"></i></div>
+        <span class="sidebar-brand-name">Ortho<span>Pro+</span></span>
+      </a>
+      <button class="mobile-toggle" id="mobile-toggle"><i class="fas fa-times"></i></button>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <div class="nav-section-title">PRINCIPAL</div>
+        <a href="#" class="nav-item active" data-section="dashboard">
+          <i class="fas fa-home"></i><span>Tableau de bord</span>
+        </a>
+        <a href="#" class="nav-item" data-section="resources">
+          <i class="fas fa-file-alt"></i><span>Ressources</span>
+        </a>
+        <a href="#" class="nav-item" data-section="models">
+          <i class="fas fa-cubes"></i><span>Bibliothèque 3D</span>
+        </a>
+      </div>
+      <div class="nav-section" style="margin-top: auto;">
+        <div class="nav-section-title">COMPTE</div>
+        <a href="#" id="logout-btn" class="nav-item">
+          <i class="fas fa-sign-out-alt"></i><span>Déconnexion</span>
+        </a>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <p>OrthoPro+ v2.5.0 &copy; 2025</p>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main-content">
+
+    <!-- Top Header -->
+    <header class="top-header">
+      <div class="header-left">
+        <h1 id="page-title">Tableau de bord</h1>
+        <div class="breadcrumb"><a href="#">Accueil</a> / <span id="page-breadcrumb">Dashboard</span></div>
+      </div>
+      <div class="header-right">
+        <button class="mobile-toggle" id="mobile-toggle-top" style="display:none; background: var(--bg); border: 1.5px solid var(--border); color: var(--text-muted); width: 36px; height: 36px; border-radius: var(--radius); cursor: pointer; font-size: 0.9rem;">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div style="display: flex; align-items: center; gap: 0.6rem;">
+          <div class="user-avatar" id="user-avatar-initials">EN</div>
+          <span class="user-name" id="teacher-name-display">Enseignant</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="page-content">
+
+      <!-- Dashboard Section -->
+      <section class="content-section active" id="dashboard-section">
+        <div class="section-head">
+          <h2>Tableau de bord</h2>
+        </div>
+        <div class="dashboard-grid">
+          <div class="dashboard-card" id="resources-card">
+            <div class="card-icon-wrap"><i class="fas fa-file-alt"></i></div>
+            <div>
+              <h3>Ressources pédagogiques</h3>
+              <p>Gérez et partagez les documents d'orthoprothésie avec vos étudiants.</p>
             </div>
-
-            <nav class="sidebar-nav">
-                <ul>
-                    <li class="nav-section">
-                        <span class="nav-section-title">PRINCIPAL</span>
-                        <ul>
-                            <li>
-                                <a href="#" class="nav-item" data-section="dashboard">
-                                    <i class="fas fa-home"></i>
-                                    <span>Tableau de bord</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="nav-item active" data-section="resources">
-                                    <i class="fas fa-file-alt"></i>
-                                    <span>Ressources</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="nav-item" data-section="models">
-                                    <i class="fas fa-cubes"></i>
-                                    <span>Bibliothèque 3D</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    
-                    <li class="nav-section">
-                        <span class="nav-section-title">PARAMÈTRES</span>
-                        <ul>
-                            <li>
-                                <a href="#" id="logout-btn" class="nav-item">
-                                    <i class="fas fa-sign-out-alt"></i>
-                                    <span>Déconnexion</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </nav>
-
-            <div class="sidebar-footer">
-                <p>OrthoPro+ v2.5.0</p>
-                <p>&copy; 2025 Tous droits réservés</p>
+            <button class="btn btn-primary btn-sm" style="align-self: flex-start;">Accéder</button>
+          </div>
+          <div class="dashboard-card" id="tests-card">
+            <div class="card-icon-wrap"><i class="fas fa-tasks"></i></div>
+            <div>
+              <h3>Tests et évaluations</h3>
+              <p>Créez et supervisez des tests pour évaluer les connaissances des étudiants.</p>
             </div>
-        </aside>
+            <button class="btn btn-primary btn-sm" style="align-self: flex-start;">Accéder</button>
+          </div>
+          <div class="dashboard-card" id="models-card">
+            <div class="card-icon-wrap"><i class="fas fa-cubes"></i></div>
+            <div>
+              <h3>Bibliothèque 3D</h3>
+              <p>Explorez et utilisez des modèles 3D pour l'enseignement de l'orthoprothésie.</p>
+            </div>
+            <button class="btn btn-primary btn-sm" style="align-self: flex-start;">Accéder</button>
+          </div>
+        </div>
+      </section>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <header class="content-header">
-                <div class="header-title">
-                    <h1>Espace Enseignant</h1>
-                    <p class="breadcrumbs">
-                        <a href="#">Accueil</a> / 
-                        <span class="current-page">Ressources</span>
-                    </p>
-                </div>
-            </header>
-
-            <!-- Dashboard Section -->
-            <section id="dashboard-section" class="content-section active">
-                <div class="section-header">
-                    <h2>Tableau de bord</h2>
-                </div>
-                
-                <div class="dashboard-cards">
-                    <div class="dashboard-card" id="resources-card">
-                        <div class="card-icon">
-                            <i class="fas fa-file-alt"></i>
-                        </div>
-                        <div class="card-content">
-                            <h3>Ressources pédagogiques</h3>
-                            <p>Gérez et partagez les documents d'orthoprothésie avec vos étudiants.</p>
-                            <button class="primary-btn">Accéder</button>
-                        </div>
-                    </div>
-                    
-                    <div class="dashboard-card" id="tests-card">
-                        <div class="card-icon">
-                            <i class="fas fa-tasks"></i>
-                        </div>
-                        <div class="card-content">
-                            <h3>Tests et évaluations</h3>
-                            <p>Créez et supervisez des tests pour évaluer les connaissances des étudiants.</p>
-                            <button class="primary-btn">Accéder</button>
-                        </div>
-                    </div>
-                    
-                    <div class="dashboard-card" id="models-card">
-                        <div class="card-icon">
-                            <i class="fas fa-cubes"></i>
-                        </div>
-                        <div class="card-content">
-                            <h3>Bibliothèque 3D</h3>
-                            <p>Explorez et utilisez des modèles 3D pour l'enseignement de l'orthoprothésie.</p>
-                            <button class="primary-btn">Accéder</button>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Resources Section -->
-<section id="resources-section" class="content-section">
-    <div class="section-header">
-        <h2>Ressources pédagogiques</h2>
-        <div class="section-actions">
-            <button class="primary-btn" id="upload-document-btn">
-                <i class="fas fa-file-upload"></i>
-                Nouveau document
+      <!-- Resources Section -->
+      <section class="content-section" id="resources-section">
+        <div class="section-head">
+          <h2>Ressources pédagogiques</h2>
+          <div class="section-actions">
+            <button class="btn btn-outline btn-sm" id="upload-document-btn">
+              <i class="fas fa-file-upload"></i> Nouveau document
             </button>
-            <button class="primary-btn" id="upload-test-btn">
-                <i class="fas fa-tasks"></i>
-                Nouveau test
+            <button class="btn btn-primary btn-sm" id="upload-test-btn">
+              <i class="fas fa-tasks"></i> Nouveau test
             </button>
-        </div>
-    </div>
-
-    <div class="resources-tabs">
-        <button class="tab-btn active" data-tab="documents-tab">Documents</button>
-        <button class="tab-btn" data-tab="tests-tab">Tests et évaluations</button>
-    </div>
-
-    <div class="resources-tabs-content">
-        <!-- Documents Tab -->
-        <div id="documents-tab" class="tab-content active">
-            <div class="filter-wrapper">
-                <div class="resources-categories">
-                    <button class="category-btn active" data-category="all">Tous</button>
-                    <button class="category-btn" data-category="Documentation">Documentation</button>
-                    <button class="category-btn" data-category="Guide">Guides</button>
-                    <button class="category-btn" data-category="Présentation">Présentations</button>
-                    <button class="category-btn" data-category="Données">Données</button>
-                </div>
-            </div>
-
-            <div class="resources-grid" id="documents-grid">
-                <!-- Documents will be loaded here -->
-                <div class="loading-state">
-                    <div class="spinner"></div>
-                    <p>Chargement des documents...</p>
-                </div>
-            </div>
+          </div>
         </div>
 
-        <!-- Tests Tab -->
-        <div id="tests-tab" class="tab-content">
-            <div class="filter-wrapper">
-                <div class="resources-categories">
-                    <button class="level-btn active" data-level="all">Tous les niveaux</button>
-                    <button class="level-btn" data-level="beginner">Débutant</button>
-                    <button class="level-btn" data-level="intermediate">Intermédiaire</button>
-                    <button class="level-btn" data-level="advanced">Avancé</button>
-                </div>
-            </div>
-
-            <div class="resources-grid" id="tests-grid">
-                <!-- Tests will be loaded here -->
-                <div class="loading-state">
-                    <div class="spinner"></div>
-                    <p>Chargement des tests...</p>
-                </div>
-            </div>
+        <div class="tabs-bar">
+          <button class="tab-btn active" data-tab="documents-tab">Documents</button>
+          <button class="tab-btn" data-tab="tests-tab">Tests et évaluations</button>
         </div>
-    </div>
-</section>
 
-            <!-- 3D Models Library Section -->
-            <!-- Update to the models section in teacher-dashboard.html -->
+        <div class="tab-content active" id="documents-tab">
+          <div class="filter-chips">
+            <button class="chip active" data-category="all">Tous</button>
+            <button class="chip" data-category="Documentation">Documentation</button>
+            <button class="chip" data-category="Guide">Guides</button>
+            <button class="chip" data-category="Présentation">Présentations</button>
+            <button class="chip" data-category="Données">Données</button>
+          </div>
+          <div class="resources-grid" id="documents-grid">
+            <div class="loading-state"><div class="spinner"></div><p>Chargement des documents...</p></div>
+          </div>
+        </div>
 
-<section id="models-section" class="content-section">
-    <div class="section-header">
-        <h2>Bibliothèque de modèles 3D</h2>
-        <div class="section-actions">
-            <div class="filter-dropdown">
-                <select id="model-category-filter">
-                    <option value="all">Toutes catégories</option>
-                    <option value="orthese">Orthèses</option>
-                    <option value="prothese">Prothèses</option>
-                    <option value="support">Supports</option>
-                    <option value="exosquelette">Exosquelettes</option>
-                </select>
-            </div>
-            <div class="filter-dropdown">
-                <select id="model-sort">
-                    <option value="name-asc">Nom (A-Z)</option>
-                    <option value="name-desc">Nom (Z-A)</option>
-                    <option value="date-desc">Date (récent)</option>
-                    <option value="date-asc">Date (ancien)</option>
-                </select>
-            </div>
-            <button class="primary-btn" id="upload-model-btn">
-                <i class="fas fa-upload"></i>
-                Importer un modèle
+        <div class="tab-content" id="tests-tab">
+          <div class="filter-chips">
+            <button class="chip active" data-level="all">Tous les niveaux</button>
+            <button class="chip" data-level="beginner">Débutant</button>
+            <button class="chip" data-level="intermediate">Intermédiaire</button>
+            <button class="chip" data-level="advanced">Avancé</button>
+          </div>
+          <div class="resources-grid" id="tests-grid">
+            <div class="loading-state"><div class="spinner"></div><p>Chargement des tests...</p></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Models Section -->
+      <section class="content-section" id="models-section">
+        <div class="section-head">
+          <h2>Bibliothèque de modèles 3D</h2>
+          <div class="section-actions">
+            <select class="filter-select" id="model-category-filter">
+              <option value="all">Toutes catégories</option>
+              <option value="orthese">Orthèses</option>
+              <option value="prothese">Prothèses</option>
+              <option value="support">Supports</option>
+              <option value="exosquelette">Exosquelettes</option>
+            </select>
+            <select class="filter-select" id="model-sort">
+              <option value="name-asc">Nom (A-Z)</option>
+              <option value="name-desc">Nom (Z-A)</option>
+              <option value="date-desc">Date (récent)</option>
+            </select>
+            <button class="btn btn-primary btn-sm" id="upload-model-btn">
+              <i class="fas fa-upload"></i> Importer un modèle
             </button>
-        </div>
-    </div>
-
-    <div class="resources-tabs">
-        <button class="tab-btn active" data-tab="my-models-tab">Mes modèles</button>
-        <button class="tab-btn" data-tab="public-models-tab">Bibliothèque publique</button>
-    </div>
-
-    <div class="resources-tabs-content">
-        <!-- My Models Tab -->
-        <div id="my-models-tab" class="tab-content active">
-            <div class="filter-wrapper">
-                <div class="resources-categories">
-                    <button class="visibility-btn active" data-visibility="all">Tous</button>
-                    <button class="visibility-btn" data-visibility="private">Privés</button>
-                    <button class="visibility-btn" data-visibility="public">Publics</button>
-                </div>
-            </div>
-
-            <div class="models-grid" id="my-models-grid">
-                <!-- User's models will be loaded here -->
-                <div class="loading-state">
-                    <div class="spinner"></div>
-                    <p>Chargement de vos modèles...</p>
-                </div>
-            </div>
+          </div>
         </div>
 
-        <!-- Public Models Tab -->
-        <div id="public-models-tab" class="tab-content">
-            <div class="models-grid" id="public-models-grid">
-                <!-- Public models will be loaded here -->
-                <div class="loading-state">
-                    <div class="spinner"></div>
-                    <p>Chargement des modèles publics...</p>
-                </div>
-            </div>
+        <div class="tabs-bar">
+          <button class="tab-btn active" data-tab="my-models-tab">Mes modèles</button>
+          <button class="tab-btn" data-tab="public-models-tab">Bibliothèque publique</button>
         </div>
+
+        <div class="tab-content active" id="my-models-tab">
+          <div class="filter-chips">
+            <button class="chip active" data-visibility="all">Tous</button>
+            <button class="chip" data-visibility="private">Privés</button>
+            <button class="chip" data-visibility="public">Publics</button>
+          </div>
+          <div class="models-grid" id="my-models-grid">
+            <div class="loading-state"><div class="spinner"></div><p>Chargement de vos modèles...</p></div>
+          </div>
+        </div>
+
+        <div class="tab-content" id="public-models-tab">
+          <div class="models-grid" id="public-models-grid">
+            <div class="loading-state"><div class="spinner"></div><p>Chargement des modèles publics...</p></div>
+          </div>
+        </div>
+      </section>
+
     </div>
-</section>
+  </main>
+</div>
+
+<!-- Upload Document Modal -->
+<div class="modal" id="upload-document-modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Ajouter un document</h2>
+      <button class="modal-close close-modal"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <form id="document-upload-form">
+        <div class="form-group">
+          <label>Titre</label>
+          <input type="text" id="document-title" class="form-control" placeholder="Titre du document" required>
+        </div>
+        <div class="form-group">
+          <label>Catégorie</label>
+          <select id="document-category" class="form-control" required>
+            <option value="">Sélectionner une catégorie</option>
+            <option value="Documentation">Documentation</option>
+            <option value="Guide">Guide</option>
+            <option value="Présentation">Présentation</option>
+            <option value="Données">Données</option>
+            <option value="Divers">Divers</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="document-description" class="form-control" placeholder="Description du document" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Fichier</label>
+          <div class="file-upload-area" onclick="document.getElementById('document-file').click()">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <p>Déposer un fichier ou cliquer pour parcourir</p>
+            <p style="font-size:0.75rem; margin-top:0.3rem;">PDF, DOC, DOCX, PPT, PPTX, XLS, XLSX</p>
+            <input type="file" id="document-file" class="file-input" accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx">
+          </div>
+          <div class="file-info-display" id="document-file-info"></div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost btn-sm" id="cancel-document-upload">Annuler</button>
+      <button class="btn btn-primary btn-sm" id="submit-document">
+        <i class="fas fa-upload"></i> Télécharger
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Upload Test Modal -->
+<div class="modal" id="upload-test-modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Ajouter un test</h2>
+      <button class="modal-close close-modal"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <form id="test-upload-form">
+        <div class="form-group">
+          <label>Titre</label>
+          <input type="text" id="test-title" class="form-control" placeholder="Titre du test" required>
+        </div>
+        <div class="form-group">
+          <label>Niveau</label>
+          <select id="test-level" class="form-control" required>
+            <option value="">Sélectionner un niveau</option>
+            <option value="beginner">Débutant</option>
+            <option value="intermediate">Intermédiaire</option>
+            <option value="advanced">Avancé</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Durée</label>
+          <input type="text" id="test-duration" class="form-control" placeholder="ex: 30 min" required>
+        </div>
+        <div class="form-group">
+          <label>Nombre de questions</label>
+          <input type="number" id="test-questions" class="form-control" min="1" placeholder="ex: 20" required>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="test-description" class="form-control" placeholder="Description du test" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Fichier HTML</label>
+          <div class="file-upload-area" onclick="document.getElementById('test-file').click()">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <p>Déposer un fichier HTML ou cliquer pour parcourir</p>
+            <input type="file" id="test-file" class="file-input" accept=".html">
+          </div>
+          <div class="file-info-display" id="test-file-info"></div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost btn-sm" id="cancel-test-upload">Annuler</button>
+      <button class="btn btn-primary btn-sm" id="submit-test">
+        <i class="fas fa-upload"></i> Télécharger
+      </button>
+    </div>
+  </div>
+</div>
 
 <!-- Upload Model Modal -->
 <div class="modal" id="upload-model-modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2>Ajouter un modèle 3D</h2>
-            <button class="close-modal">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <div class="modal-body">
-            <form id="model-upload-form">
-                <div class="form-group">
-                    <label for="model-name">Nom du modèle</label>
-                    <input type="text" id="model-name" placeholder="Nom du modèle" required>
-                </div>
-                <div class="form-group">
-                    <label for="model-category">Catégorie</label>
-                    <select id="model-category" required>
-                        <option value="">Sélectionner une catégorie</option>
-                        <option value="orthese">Orthèse</option>
-                        <option value="prothese">Prothèse</option>
-                        <option value="support">Support</option>
-                        <option value="exosquelette">Exosquelette</option>
-                        <option value="autre">Autre</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="model-description">Description</label>
-                    <textarea id="model-description" placeholder="Description du modèle" rows="3"></textarea>
-                </div>
-                <div class="form-group">
-                    <label>Visibilité</label>
-                    <div class="visibility-options">
-                        <div class="radio-option">
-                            <input type="radio" id="visibility-private" name="model-visibility" value="private" checked>
-                            <label for="visibility-private">
-                                <i class="fas fa-lock"></i>
-                                Privé (uniquement visible par vous)
-                            </label>
-                        </div>
-                        <div class="radio-option">
-                            <input type="radio" id="visibility-public" name="model-visibility" value="public">
-                            <label for="visibility-public">
-                                <i class="fas fa-globe"></i>
-                                Public (visible par tous les enseignants)
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Fichier STL</label>
-                    <div class="file-upload-container">
-                        <input type="file" id="model-file" class="file-input" accept=".stl">
-                        <label for="model-file" class="file-label">
-                            <i class="fas fa-cloud-upload-alt"></i>
-                            <span>Déposer un fichier STL ou cliquer pour parcourir</span>
-                        </label>
-                        <div class="file-info" id="model-file-info">Aucun fichier sélectionné</div>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <button class="secondary-btn" id="cancel-model-upload">Annuler</button>
-            <button class="primary-btn" id="submit-model">
-                <i class="fas fa-upload"></i>
-                Télécharger
-            </button>
-        </div>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Ajouter un modèle 3D</h2>
+      <button class="modal-close close-modal"><i class="fas fa-times"></i></button>
     </div>
-</div>
-        </main>
-    </div>
-
-    <!-- Upload Resource Modal -->
-    <div class="modal" id="upload-resource-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Ajouter une ressource</h2>
-                <button class="close-modal">
-                    <i class="fas fa-times"></i>
-                </button>
+    <div class="modal-body">
+      <form id="model-upload-form">
+        <div class="form-group">
+          <label>Nom du modèle</label>
+          <input type="text" id="model-name" class="form-control" placeholder="Nom du modèle" required>
+        </div>
+        <div class="form-group">
+          <label>Catégorie</label>
+          <select id="model-category" class="form-control" required>
+            <option value="">Sélectionner une catégorie</option>
+            <option value="orthese">Orthèse</option>
+            <option value="prothese">Prothèse</option>
+            <option value="support">Support</option>
+            <option value="exosquelette">Exosquelette</option>
+            <option value="autre">Autre</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="model-description" class="form-control" placeholder="Description du modèle" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Visibilité</label>
+          <div class="radio-group">
+            <div class="radio-option">
+              <input type="radio" id="visibility-private" name="model-visibility" value="private" checked>
+              <label for="visibility-private"><i class="fas fa-lock"></i> Privé (uniquement visible par vous)</label>
             </div>
-            <div class="modal-body">
-                <form id="resource-upload-form">
-                    <div class="form-group">
-                        <label for="resource-title">Titre</label>
-                        <input type="text" id="resource-title" placeholder="Titre de la ressource" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="resource-type">Type de ressource</label>
-                        <select id="resource-type" required>
-                            <option value="">Sélectionner un type</option>
-                            <option value="document">Document</option>
-                            <option value="presentation">Présentation</option>
-                            <option value="video">Vidéo</option>
-                            <option value="other">Autre</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="resource-description">Description</label>
-                        <textarea id="resource-description" placeholder="Description de la ressource" rows="3"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Fichier</label>
-                        <div class="file-upload-container">
-                            <input type="file" id="resource-file" class="file-input">
-                            <label for="resource-file" class="file-label">
-                                <i class="fas fa-cloud-upload-alt"></i>
-                                <span>Déposer un fichier ou cliquer pour parcourir</span>
-                            </label>
-                            <div class="file-info" id="file-info">Aucun fichier sélectionné</div>
-                            <button type="button" class="upload-btn" id="browse-file-btn">
-                                <i class="fas fa-folder-open"></i>
-                                Parcourir
-                            </button>
-                        </div>
-                        <div class="modal-footer">
-                            <button class="secondary-btn" id="cancel-upload">Annuler</button>
-                            <button class="primary-btn" id="submit-resource">
-                                <i class="fas fa-upload"></i>
-                                Télécharger le fichier
-                            </button>
-                        </div>
-                    </div>
-                </form>
+            <div class="radio-option">
+              <input type="radio" id="visibility-public" name="model-visibility" value="public">
+              <label for="visibility-public"><i class="fas fa-globe"></i> Public (visible par tous les enseignants)</label>
             </div>
-            <div class="modal-footer">
-                <button class="secondary-btn" id="cancel-upload">Annuler</button>
-                <button class="primary-btn" id="submit-resource">Ajouter</button>
-            </div>
+          </div>
         </div>
+        <div class="form-group">
+          <label>Fichier STL</label>
+          <div class="file-upload-area" onclick="document.getElementById('model-file').click()">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <p>Déposer un fichier STL ou cliquer pour parcourir</p>
+            <input type="file" id="model-file" class="file-input" accept=".stl">
+          </div>
+          <div class="file-info-display" id="model-file-info"></div>
+        </div>
+      </form>
     </div>
-
-
-    <!-- Document Upload Modal -->
-<div class="modal" id="upload-document-modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2>Ajouter un document</h2>
-            <button class="close-modal">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <div class="modal-body">
-            <form id="document-upload-form">
-                <div class="form-group">
-                    <label for="document-title">Titre</label>
-                    <input type="text" id="document-title" placeholder="Titre du document" required>
-                </div>
-                <div class="form-group">
-                    <label for="document-category">Catégorie</label>
-                    <select id="document-category" required>
-                        <option value="">Sélectionner une catégorie</option>
-                        <option value="Documentation">Documentation</option>
-                        <option value="Guide">Guide</option>
-                        <option value="Présentation">Présentation</option>
-                        <option value="Données">Données</option>
-                        <option value="Divers">Divers</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="document-description">Description</label>
-                    <textarea id="document-description" placeholder="Description du document" rows="3"></textarea>
-                </div>
-                <div class="form-group">
-                    <label>Fichier</label>
-                    <div class="file-upload-container">
-                        <input type="file" id="document-file" class="file-input" accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx">
-                        <label for="document-file" class="file-label">
-                            <i class="fas fa-cloud-upload-alt"></i>
-                            <span>Déposer un fichier ou cliquer pour parcourir</span>
-                        </label>
-                        <div class="file-info" id="document-file-info">Aucun fichier sélectionné</div>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <button class="secondary-btn" id="cancel-document-upload">Annuler</button>
-            <button class="primary-btn" id="submit-document">
-                <i class="fas fa-upload"></i>
-                Télécharger
-            </button>
-        </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost btn-sm" id="cancel-model-upload">Annuler</button>
+      <button class="btn btn-primary btn-sm" id="submit-model">
+        <i class="fas fa-upload"></i> Télécharger
+      </button>
     </div>
+  </div>
 </div>
 
-<!-- Test Upload Modal -->
-<div class="modal" id="upload-test-modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2>Ajouter un test</h2>
-            <button class="close-modal">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <div class="modal-body">
-            <form id="test-upload-form">
-                <div class="form-group">
-                    <label for="test-title">Titre</label>
-                    <input type="text" id="test-title" placeholder="Titre du test" required>
-                </div>
-                <div class="form-group">
-                    <label for="test-level">Niveau</label>
-                    <select id="test-level" required>
-                        <option value="">Sélectionner un niveau</option>
-                        <option value="beginner">Débutant</option>
-                        <option value="intermediate">Intermédiaire</option>
-                        <option value="advanced">Avancé</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="test-duration">Durée</label>
-                    <input type="text" id="test-duration" placeholder="ex: 30 min" required>
-                </div>
-                <div class="form-group">
-                    <label for="test-questions">Nombre de questions</label>
-                    <input type="number" id="test-questions" min="1" placeholder="ex: 20" required>
-                </div>
-                <div class="form-group">
-                    <label for="test-description">Description</label>
-                    <textarea id="test-description" placeholder="Description du test" rows="3"></textarea>
-                </div>
-                <div class="form-group">
-                    <label>Fichier</label>
-                    <div class="file-upload-container">
-                        <input type="file" id="test-file" class="file-input" accept=".html">
-                        <label for="test-file" class="file-label">
-                            <i class="fas fa-cloud-upload-alt"></i>
-                            <span>Déposer un fichier ou cliquer pour parcourir</span>
-                        </label>
-                        <div class="file-info" id="test-file-info">Aucun fichier sélectionné</div>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <button class="secondary-btn" id="cancel-test-upload">Annuler</button>
-            <button class="primary-btn" id="submit-test">
-                <i class="fas fa-upload"></i>
-                Télécharger
-            </button>
-        </div>
+<!-- 3D Model Viewer -->
+<div class="viewer-modal" id="model-viewer-modal">
+  <div class="viewer-container">
+    <div class="viewer-header">
+      <h2 id="model-viewer-name">Modèle 3D</h2>
+      <button class="viewer-close" id="close-viewer"><i class="fas fa-times"></i></button>
     </div>
+    <div class="viewer-body">
+      <div class="viewer-display" id="model-display">
+        <div class="loading-spinner" style="text-align:center; color: rgba(255,255,255,0.6);">
+          <div class="spinner" style="border-color: rgba(255,255,255,0.2); border-top-color: var(--primary); margin: 0 auto 1rem;"></div>
+          <p>Chargement du modèle...</p>
+        </div>
+      </div>
+      <div class="viewer-controls">
+        <div class="controls-section">
+          <h3>Dimensions</h3>
+          <div class="control-group">
+            <label>Largeur (mm)</label>
+            <div class="spinner-input">
+              <button class="spinner-btn minus"><i class="fas fa-minus"></i></button>
+              <input type="number" id="width" value="100" min="1">
+              <button class="spinner-btn plus"><i class="fas fa-plus"></i></button>
+            </div>
+          </div>
+          <div class="control-group">
+            <label>Hauteur (mm)</label>
+            <div class="spinner-input">
+              <button class="spinner-btn minus"><i class="fas fa-minus"></i></button>
+              <input type="number" id="height" value="100" min="1">
+              <button class="spinner-btn plus"><i class="fas fa-plus"></i></button>
+            </div>
+          </div>
+          <div class="control-group">
+            <label>Profondeur (mm)</label>
+            <div class="spinner-input">
+              <button class="spinner-btn minus"><i class="fas fa-minus"></i></button>
+              <input type="number" id="depth" value="100" min="1">
+              <button class="spinner-btn plus"><i class="fas fa-plus"></i></button>
+            </div>
+          </div>
+          <div class="control-group">
+            <label>Échelle (%)</label>
+            <input type="range" id="scale" min="50" max="200" value="100" class="range-slider">
+            <div class="range-value">100%</div>
+          </div>
+        </div>
+        <div class="controls-section">
+          <h3>Apparence</h3>
+          <div class="control-group">
+            <label>Matériau</label>
+            <div class="material-options">
+              <button class="material-btn active" data-material="plastic"><span class="material-swatch plastic"></span> Plastique</button>
+              <button class="material-btn" data-material="metal"><span class="material-swatch metal"></span> Métal</button>
+              <button class="material-btn" data-material="rubber"><span class="material-swatch rubber"></span> Caoutchouc</button>
+            </div>
+          </div>
+          <div class="control-group">
+            <label>Couleur</label>
+            <div class="color-swatches">
+              <button class="color-swatch active" style="--color: #4a90e2" data-color="#4a90e2"></button>
+              <button class="color-swatch" style="--color: #50e3c2" data-color="#50e3c2"></button>
+              <button class="color-swatch" style="--color: #e3506e" data-color="#e3506e"></button>
+              <button class="color-swatch" style="--color: #fcb150" data-color="#fcb150"></button>
+              <button class="color-swatch" style="--color: #8560e3" data-color="#8560e3"></button>
+              <button class="color-swatch" style="--color: #ffffff; border: 1px solid #ddd;" data-color="#ffffff"></button>
+            </div>
+          </div>
+        </div>
+        <div class="controls-section">
+          <h3>Outils</h3>
+          <div class="tools-grid">
+            <button class="tool-btn" id="reset-view-btn"><i class="fas fa-sync-alt"></i><span>Réinitialiser</span></button>
+            <button class="tool-btn" id="measure-btn"><i class="fas fa-ruler"></i><span>Mesurer</span></button>
+            <button class="tool-btn" id="section-btn"><i class="fas fa-cut"></i><span>Coupe</span></button>
+            <button class="tool-btn" id="screenshot-btn"><i class="fas fa-camera"></i><span>Capture</span></button>
+          </div>
+        </div>
+        <div class="controls-section">
+          <h3>Exporter</h3>
+          <div class="export-options">
+            <button class="export-btn" data-format="stl"><i class="fas fa-download"></i><span>STL</span></button>
+            <button class="export-btn" data-format="obj"><i class="fas fa-download"></i><span>OBJ</span></button>
+            <button class="export-btn" data-format="gltf"><i class="fas fa-download"></i><span>GLTF</span></button>
+          </div>
+        </div>
+        <div class="controls-section">
+          <h3>Informations</h3>
+          <div class="info-list">
+            <div class="info-item"><span class="info-label">Catégorie:</span><span class="info-value" id="model-category">—</span></div>
+            <div class="info-item"><span class="info-label">Taille:</span><span class="info-value" id="model-size">—</span></div>
+            <div class="info-item"><span class="info-label">Date:</span><span class="info-value" id="model-date">—</span></div>
+            <div class="info-item"><span class="info-label">Format:</span><span class="info-value" id="model-format">STL</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
-    <!-- 3D Model Viewer Modal -->
-    <div class="model-viewer-modal" id="model-viewer-modal">
-        <div class="model-viewer-container">
-            <div class="model-viewer-header">
-                <h2 id="model-name">Nom du modèle</h2>
-                <button class="close-viewer" id="close-viewer">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="model-viewer-content">
-                <div class="model-display" id="model-display">
-                    <!-- 3D model will be rendered here -->
-                    <div class="loading-spinner">
-                        <div class="spinner"></div>
-                        <p>Chargement du modèle...</p>
-                    </div>
-                </div>
-                <div class="model-controls">
-                    <div class="controls-section">
-                        <h3>Dimensions</h3>
-                        <div class="control-group">
-                            <label for="width">Largeur (mm)</label>
-                            <div class="spinner-input">
-                                <button class="spinner-btn minus">
-                                    <i class="fas fa-minus"></i>
-                                </button>
-                                <input type="number" id="width" value="100" min="1">
-                                <button class="spinner-btn plus">
-                                    <i class="fas fa-plus"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label for="height">Hauteur (mm)</label>
-                            <div class="spinner-input">
-                                <button class="spinner-btn minus">
-                                    <i class="fas fa-minus"></i>
-                                </button>
-                                <input type="number" id="height" value="100" min="1">
-                                <button class="spinner-btn plus">
-                                    <i class="fas fa-plus"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label for="depth">Profondeur (mm)</label>
-                            <div class="spinner-input">
-                                <button class="spinner-btn minus">
-                                    <i class="fas fa-minus"></i>
-                                </button>
-                                <input type="number" id="depth" value="100" min="1">
-                                <button class="spinner-btn plus">
-                                    <i class="fas fa-plus"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label for="scale">Échelle (%)</label>
-                            <input type="range" id="scale" min="50" max="200" value="100" class="range-slider">
-                            <div class="range-value">100%</div>
-                        </div>
-                    </div>
-                    
-                    <div class="controls-section">
-                        <h3>Apparence</h3>
-                        <div class="control-group">
-                            <label>Matériau</label>
-                            <div class="material-options">
-                                <button class="material-btn active" data-material="plastic">
-                                    <span class="material-swatch plastic"></span>
-                                    <span>Plastique</span>
-                                </button>
-                                <button class="material-btn" data-material="metal">
-                                    <span class="material-swatch metal"></span>
-                                    <span>Métal</span>
-                                </button>
-                                <button class="material-btn" data-material="rubber">
-                                    <span class="material-swatch rubber"></span>
-                                    <span>Caoutchouc</span>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label>Couleur</label>
-                            <div class="color-swatches">
-                                <button class="color-swatch active" style="--color: #4a90e2" data-color="#4a90e2"></button>
-                                <button class="color-swatch" style="--color: #50e3c2" data-color="#50e3c2"></button>
-                                <button class="color-swatch" style="--color: #e3506e" data-color="#e3506e"></button>
-                                <button class="color-swatch" style="--color: #fcb150" data-color="#fcb150"></button>
-                                <button class="color-swatch" style="--color: #8560e3" data-color="#8560e3"></button>
-                                <button class="color-swatch" style="--color: #ffffff" data-color="#ffffff"></button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="controls-section">
-                        <h3>Outils</h3>
-                        <div class="tools-grid">
-                            <button class="tool-btn" id="reset-view-btn">
-                                <i class="fas fa-sync-alt"></i>
-                                <span>Réinitialiser</span>
-                            </button>
-                            <button class="tool-btn" id="measure-btn">
-                                <i class="fas fa-ruler"></i>
-                                <span>Mesurer</span>
-                            </button>
-                            <button class="tool-btn" id="section-btn">
-                                <i class="fas fa-cut"></i>
-                                <span>Coupe</span>
-                            </button>
-                            <button class="tool-btn" id="screenshot-btn">
-                                <i class="fas fa-camera"></i>
-                                <span>Capture</span>
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="controls-section">
-                        <h3>Exporter</h3>
-                        <div class="export-options">
-                            <button class="export-btn" data-format="stl">
-                                <i class="fas fa-download"></i>
-                                <span>STL</span>
-                            </button>
-                            <button class="export-btn" data-format="obj">
-                                <i class="fas fa-download"></i>
-                                <span>OBJ</span>
-                            </button>
-                            <button class="export-btn" data-format="gltf">
-                                <i class="fas fa-download"></i>
-                                <span>GLTF</span>
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="controls-section info-section">
-                        <h3>Informations</h3>
-                        <div class="info-list">
-                            <div class="info-item">
-                                <span class="info-label">Catégorie:</span>
-                                <span class="info-value" id="model-category">Orthèse</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">Taille du fichier:</span>
-                                <span class="info-value" id="model-size">1.2 MB</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">Date d'ajout:</span>
-                                <span class="info-value" id="model-date">15/03/2025</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">Format:</span>
-                                <span class="info-value" id="model-format">STL</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<!-- Toast -->
+<div class="toast" id="toast">
+  <div class="toast-icon"><i class="fas fa-info-circle"></i></div>
+  <div class="toast-message"></div>
+  <button class="toast-close"><i class="fas fa-times"></i></button>
+</div>
 
-    <!-- Notification Toast -->
-    <div class="toast" id="toast">
-        <div class="toast-icon">
-            <i class="fas fa-info-circle"></i>
-        </div>
-        <div class="toast-content">
-            <p class="toast-message"></p>
-        </div>
-        <button class="toast-close">
-            <i class="fas fa-times"></i>
-        </button>
-    </div>
-
-    <!-- Load Three.js for 3D Model Viewing -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/exporters/STLExporter.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/exporters/OBJExporter.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/exporters/GLTFExporter.min.js"></script>
-<!-- Load Three.js for 3D Model Viewing -->
+<!-- Scripts -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.min.js"></script>
-    
-    
-    <!-- Custom JavaScript -->
-    <script src="teacher-dashboard.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/exporters/STLExporter.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/exporters/OBJExporter.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/exporters/GLTFExporter.min.js"></script>
+<script src="teacher-dashboard.js"></script>
 </body>
 </html>
